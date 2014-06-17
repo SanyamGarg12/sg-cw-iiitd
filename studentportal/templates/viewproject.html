@@ -1,0 +1,11 @@
+{% extends 'core.html' %}
+
+{% block content %}
+
+	<center>
+		{{ project.title }}
+	</center>
+
+	<a href=" {% url 'editproject' project.id %} ">Edit your project details</a>
+
+{% endblock %}

@@ -1,17 +1,17 @@
-<html>
+{% extends 'core.html' %}
 
-<h1>Student home</h1>
-
+{% block my_projects %}
+{% if user.projects %}
+	<center><h3>Projects</h3></center>
+	<ul>
+	{% for p in user.projects.all %}
+		<li> <a href=" {% url 'viewproject' p.id %} "> {{ p.title }} </a></li>
+	{% endfor %}
+{% else %}
+	<center> You have not done any CW Project yet. </center>
+{% endif %}
 <a href = " {% url 'addproject' %} ">Add new project</a>
 
-<center><h3>Projects</h3></center>
 
-{% if recent_projects %}
-<ul>
-	{% for p in recent_projects %}
-		<li>{{ p.title }}, {{ p.date_created }}</li>
-	{% endfor %}
-</ul>
-{% endif %}
+{% endblock %}
 
-</html>

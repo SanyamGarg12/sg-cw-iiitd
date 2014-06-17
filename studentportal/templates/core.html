@@ -1,0 +1,51 @@
+<html>
+<head>
+	<title>
+		Community Work Portal - IITD
+	</title>
+</head>
+<body>
+
+<!-- head-->
+<a href="{% url 'index' %}">CWPortal-IIITD</a>
+
+{% block header %}
+{% if user.is_authenticated %}
+<center>Welcome {{ user.first_name }}. </center>
+<center><a href='/logout'>Logout here</a></center>
+{% else %}
+<center>
+Please login <a href="/accounts/login">here</a>
+</center> 
+{% endif %}
+{% endblock %}
+
+<hr />
+<!-- endhead-->
+{% block content %}
+
+{% block popular_projects %}
+	{% if popular_projects %}
+		<ul>
+		{% for p in popular_projects %}
+			<li> {{ p.title }} by {{ p.student.id }} </li>
+		{% endfor %}
+		</ul>
+	{% endif %}
+{% endblock %}
+
+{% block my_projects %}
+{% endblock %}
+
+{% endblock %}
+<hr />
+
+<!-- footer-->
+Contact Us | Made @ IIIT-D
+<hr />
+<!-- endfooter-->
+
+</body>
+
+
+</html>

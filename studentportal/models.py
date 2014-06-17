@@ -4,9 +4,7 @@ from django.contrib.auth.models import User
 
 from django.forms import ModelForm
 
-class Student(models.Model):
-	#building this will lead to instant access to self-projects
-	pass
+from django import forms
 
 class NGO(models.Model):
 	name 	= models.CharField(max_length=255)
@@ -14,7 +12,7 @@ class NGO(models.Model):
 	details = models.TextField()
 
 class Document(models.Model):
-	#FILE ACCESS URL
+	#FILE ACCESS PATH FIELD
 	date_added 	= models.DateTimeField(default=timezone.now)
 	#category has the following options -> proposal, log, submission
 	category	= models.CharField(max_length=16)
@@ -31,9 +29,7 @@ class Project(models.Model):
 	expected_finish_date 	= models.DateTimeField(blank = True, null = True)
 	schedule_text 			= models.TextField()
 	documents 				= models.ForeignKey(Document, blank = True, null = True)
-	#until I've not thrashed out the Student Model
-	student 				= models.ForeignKey(User, blank = True, null = True,
-								related_name='projects')
+	student 				= models.ForeignKey(User, related_name='projects')
 
 	def __unicode__(self):
 		return self.title
@@ -53,11 +49,10 @@ class Example(models.Model):
 
 
 class ProjectForm(ModelForm):
+	def __init__(self, user, *args, **kwargs):
+		super(ProjectForm, self).__init__(*args, **kwargs)
 	class Meta:
 		model = Project
 		fields = ['title', 'credits', 'NGO_name', 'NGO_details',
-				'NGO_super', 'goals', 'expected_finish_date',
+				'NGO_super', 'goals',
 				'schedule_text']
-
-
-#class ProjectForm(forms.Form):
