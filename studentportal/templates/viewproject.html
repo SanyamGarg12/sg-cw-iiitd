@@ -11,7 +11,10 @@
 
 	<center>DOCUMENTS</center>
 	{% for doc in project.documents.all %}
-		{{ doc.document.name }}<br />
+		<a href = "{% url 'download_document' doc.id %}">
+		{{ doc.document.name }}</a>
+		<br />
+
 	{% endfor %}
 
 {% endblock %}

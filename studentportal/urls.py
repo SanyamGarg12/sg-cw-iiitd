@@ -8,4 +8,5 @@ urlpatterns = patterns('',
 	url(r'^project/(?P<project_id>[0-9])/edit/$', views.editproject, name='editproject'),	
 	url(r'^project/(?P<project_id>[0-9])/$', views.viewproject, name='viewproject'),
 	url(r'^project/(?P<project_id>[0-9])/upload/$', views._upload, name='upload_document'),
+	url(r'^download/(?P<document_id>[0-9])/$', views.download, name='download_document'),
 )

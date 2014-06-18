@@ -87,6 +87,13 @@ def _upload(request, project_id):
 		return render(request, 'upload_document.html', {'form': form, 'id': project_id})
 	return HttpResponseRedirect(reverse('index'))
 
+@login_required
+def download(request, document_id):
+	doc = get_object_or_404(Document, pk=document_id)
+	if doc.project.student == request.user:
+		return HttpResponseRedirect(doc.document.url)
+	return HttpResponseRedirect(reverse('index'))
+
 
 @login_required
 def _logout(request):
