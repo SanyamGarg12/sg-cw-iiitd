@@ -6,6 +6,12 @@
 		{{ project.title }}
 	</center>
 
-	<a href=" {% url 'editproject' project.id %} ">Edit your project details</a>
+	<a href="{% url 'editproject' project.id %}">Edit your project details</a>
+	<a href="{% url 'upload_document' project.id %}">Upload logs</a>
+
+	<center>DOCUMENTS</center>
+	{% for doc in project.documents.all %}
+		{{ doc.document.name }}<br />
+	{% endfor %}
 
 {% endblock %}

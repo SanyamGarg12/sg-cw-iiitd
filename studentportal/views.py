@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 from PrivateData import *
 
-from models import ProjectForm, Project
+from models import ProjectForm, Project, Document, UploadDocumentForm
 
 from django.db.models.signals import pre_save
 
@@ -65,6 +65,26 @@ def editproject(request, project_id):
 				form.save()
 		return render(request, 'editproject.html',
 		 {'form': form, 'instance': instance})
+	return HttpResponseRedirect(reverse('index'))
+
+@login_required
+def _upload(request, project_id):
+	project = get_object_or_404(Project, pk = project_id)
+	if project.student == request.user:
+		form = UploadDocumentForm()
+		if request.method == "POST":
+			form = UploadDocumentForm(request.POST, request.FILES)
+			if form.is_valid():
+				import pdb
+				pdb.set_trace()
+				Document.objects.create(document=request.FILES['document'],
+				 project=project, category="submission")
+				return HttpResponseRedirect(reverse('index'))
+
+				print "SAVED"
+			else:
+				print "INVALID"
+		return render(request, 'upload_document.html', {'form': form, 'id': project_id})
 	return HttpResponseRedirect(reverse('index'))
 
 

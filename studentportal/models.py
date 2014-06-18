@@ -11,12 +11,6 @@ class NGO(models.Model):
 	link 	= models.URLField()
 	details = models.TextField()
 
-class Document(models.Model):
-	#FILE ACCESS PATH FIELD
-	date_added 	= models.DateTimeField(default=timezone.now)
-	#category has the following options -> proposal, log, submission
-	category	= models.CharField(max_length=16)
-
 class Project(models.Model):
 	credits 				= models.IntegerField(default=2)
 	title 					= models.CharField(max_length=1024)
@@ -28,11 +22,17 @@ class Project(models.Model):
 	goals 					= models.TextField()
 	expected_finish_date 	= models.DateTimeField(blank = True, null = True)
 	schedule_text 			= models.TextField()
-	documents 				= models.ForeignKey(Document, blank = True, null = True)
 	student 				= models.ForeignKey(User, related_name='projects')
 
 	def __unicode__(self):
 		return self.title
+
+class Document(models.Model):
+	document = models.FileField(upload_to='uploads/%Y/')
+	date_added 	= models.DateTimeField(default=timezone.now)
+	#category has the following options -> proposal, log, submission
+	category	= models.CharField(max_length=16)
+	project = models.ForeignKey(Project, related_name = 'documents')
 
 class Notification(models.Model):
 	noti_type 	= models.CharField(max_length=16)
@@ -56,3 +56,9 @@ class ProjectForm(ModelForm):
 		fields = ['title', 'credits', 'NGO_name', 'NGO_details',
 				'NGO_super', 'goals',
 				'schedule_text']
+
+class UploadDocumentForm(forms.Form):
+	document = forms.FileField(
+        label='Select a file',
+        help_text='max. 42 megabytes'
+    )

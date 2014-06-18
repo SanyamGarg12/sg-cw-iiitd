@@ -7,4 +7,5 @@ urlpatterns = patterns('',
 	url(r'^add/$', views.addproject, name='addproject'),
 	url(r'^project/(?P<project_id>[0-9])/edit/$', views.editproject, name='editproject'),	
 	url(r'^project/(?P<project_id>[0-9])/$', views.viewproject, name='viewproject'),
+	url(r'^project/(?P<project_id>[0-9])/upload/$', views._upload, name='upload_document'),
 )
