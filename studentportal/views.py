@@ -6,14 +6,16 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from PrivateData import *
+from PrivateData import SUPERVISOR_EMAIL
 
 from models import ProjectForm, Project, Document, UploadDocumentForm
 
 from django.db.models.signals import pre_save
 
 def index(request):
-	#if user is not admin
+	if request.user.is_authenticated():
+		if request.user.email == SUPERVISOR_EMAIL:
+			return HttpResponseRedirect(reverse('supervisor_home'))
 	return HttpResponseRedirect(reverse('studenthome'))
 
 def home(request):
@@ -39,7 +41,7 @@ def addproject(request):
 			pre_save.connect(add_user)
 			form.save()
 			pre_save.disconnect(add_user)
-			return HttpResponseRedirect(reverse('studenthome'))
+			return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': Project.objects.last().id}))
 	else:
 		form = ProjectForm(request.user)
 	return render(request, 'newproject.html',
@@ -55,7 +57,6 @@ def viewproject(request, project_id):
 
 @login_required
 def editproject(request, project_id):
-
 	instance = get_object_or_404(Project, pk = project_id)
 	if instance.student == request.user:
 		form = ProjectForm(request.user, None, instance = instance)
@@ -63,6 +64,7 @@ def editproject(request, project_id):
 			form = ProjectForm(request.user, request.POST, instance = instance)
 			if form.is_valid():
 				form.save()
+			return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
 		return render(request, 'editproject.html',
 		 {'form': form, 'instance': instance})
 	return HttpResponseRedirect(reverse('index'))
@@ -75,17 +77,16 @@ def _upload(request, project_id):
 		if request.method == "POST":
 			form = UploadDocumentForm(request.POST, request.FILES)
 			if form.is_valid():
-				import pdb
-				pdb.set_trace()
 				Document.objects.create(document=request.FILES['document'],
 				 project=project, category="submission")
 				return HttpResponseRedirect(reverse('index'))
-
-				print "SAVED"
-			else:
-				print "INVALID"
 		return render(request, 'upload_document.html', {'form': form, 'id': project_id})
 	return HttpResponseRedirect(reverse('index'))
+
+@login_required
+def profile(request):
+	projects = request.user.projects.all()
+	return render(request, 'studentprofile.html', {'projects': projects})
 
 @login_required
 def download(request, document_id):

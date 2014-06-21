@@ -1,42 +1,132 @@
+{% load staticfiles %}
 <html>
 <head>
-	<title>
-		Community Work Portal - IITD
-	</title>
+
+<style type="text/css">
+
+body {
+  padding-top: 70px;
+}
+
+span.glyphicon-flag {
+    font-size: 0.7em;\
+}
+span.glyphicon-cog {
+    font-size: 0.7em;
+}
+span.glyphicon-ok {
+    font-size: 0.7em;
+}
+</style>
+  
+  <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel = "stylesheet" media="screen">
+  <link href="{% static 'bootstrap/css/bootstrap-theme.min.css' %}" rel="stylesheet" media="screen">
+
+  <title>
+    Community Work Portal - IITD
+  </title>
 </head>
 <body>
 
-<!-- head-->
-<a href="{% url 'index' %}">CWPortal-IIITD</a>
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href=" {% url 'index' %} " style="font-family:verdana;">CW Portal - IIITD</a>
+    </div>
 
-{% block header %}
-{% if user.is_authenticated %}
-<center>Welcome {{ user.first_name }}. </center>
-<center><a href='/logout'>Logout here</a></center>
-{% else %}
-<center>
-Please login <a href="/accounts/login">here</a>
-</center> 
-{% endif %}
-{% endblock %}
+    <div class="collapse navbar-collapse" id="navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        {% if user.is_authenticated %}
+          <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.first_name }} <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href=" {% url 'studentprofile' %} ">My CW-Projects</a></li>
+            <li class="divider"></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+          </ul>
+        </li>
+        {% else %}
+        <li class="dropdown">
+        <a href="{% url 'google_login' %}" class="dropdown-toggle">Login</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<nav class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-left">
+      <li style="color:white;">Made @ IIIT-D</li>
+    </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li style="color:white;">Contact us</li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+
 
 <hr />
 <!-- endhead-->
+
 {% block content %}
 
-{% block popular_projects %}
-	{% if popular_projects %}
-		<ul>
-		{% for p in popular_projects %}
-			<li> {{ p.title }} by {{ p.student.id }} </li>
-		{% endfor %}
-		</ul>
-	{% endif %}
+{% block content_start %}
 {% endblock %}
-
+<br />
+{% block popular_projects %}
+  {% if popular_projects %}
+    <center><h3>Sample Projects</h3></center>
+    <hr />
+    <div class = "row">
+    {% for p in popular_projects %}
+      <div class="{% cycle 'col-sm-6 col-md-3 col-md-offset-1' 'col-sm-6 col-md-3' 'col-sm-6 col-md-3' %}">
+      <p> <span class="badge" style="float:right;">  {{p.student.first_name}} {{p.student.last_name}} </span></p>
+      <div class="thumbnail">
+        <div class="caption">
+      <h3>
+      {% ifequal p.stage "to_be_verified" %}
+      <span class="glyphicon glyphicon-flag" title="Unverified"></span>
+      {% endifequal %}
+      {% ifequal p.stage "ongoing" %}
+      <span class="glyphicon glyphicon-cog" title="Ongoing"></span>
+      {% endifequal %}
+      {% ifequal p.stage "completed" %}
+      <span class="glyphicon glyphicon-ok" title="Completed"></span>
+      {% endifequal %}
+      <a href="{% url 'viewproject' p.id %}">{{ p.title|truncatechars:20 }}</a></h3>
+        </div>
+        <p>{{ p.goals|truncatechars:75 }}</p>
+      </div>
+    </div>
+    {% endfor %}
+    </div>
+    </div>
+  {% endif %}
+{% endblock %}
+<hr />
 {% block my_projects %}
 {% endblock %}
-
 {% endblock %}
 <hr />
 
@@ -45,7 +135,7 @@ Contact Us | Made @ IIIT-D
 <hr />
 <!-- endfooter-->
 
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}" type="text/javascript"></script>
 </body>
-
-
 </html>
