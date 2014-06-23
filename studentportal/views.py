@@ -8,9 +8,14 @@ from django.contrib.auth.decorators import login_required
 
 from PrivateData import SUPERVISOR_EMAIL
 
+from supervisor.models import Notification
+
 from models import ProjectForm, Project, Document, UploadDocumentForm
 
 from django.db.models.signals import pre_save
+
+def add_notification(noti_type, project):
+	Notification.objects.create(noti_type=noti_type, project=project)
 
 def index(request):
 	if request.user.is_authenticated():
@@ -41,6 +46,7 @@ def addproject(request):
 			pre_save.connect(add_user)
 			form.save()
 			pre_save.disconnect(add_user)
+			add_notification("new", Project.objects.last())
 			return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': Project.objects.last().id}))
 	else:
 		form = ProjectForm(request.user)
@@ -64,6 +70,7 @@ def editproject(request, project_id):
 			form = ProjectForm(request.user, request.POST, instance = instance)
 			if form.is_valid():
 				form.save()
+				add_notification("edit", instance)
 			return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
 		return render(request, 'editproject.html',
 		 {'form': form, 'instance': instance})
@@ -79,6 +86,7 @@ def _upload(request, project_id):
 			if form.is_valid():
 				Document.objects.create(document=request.FILES['document'],
 				 project=project, category="submission")
+				add_notification("log", project)
 				return HttpResponseRedirect(reverse('index'))
 		return render(request, 'upload_document.html', {'form': form, 'id': project_id})
 	return HttpResponseRedirect(reverse('index'))
