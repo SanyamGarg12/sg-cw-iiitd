@@ -1,9 +1,54 @@
 {% extends 'core.html' %}
 
-{% block content_start %}
-<div align="center">
-<div class="well" align="justify" style="width:75%;">
-Community Work provides students broader connect with society and self. At IIIT Delhi, students have to do minimum 80 hours of Community Work. This activity teaches students about their rights and responsibilities as citizens, and their ability to bring about meaningful change through advocacy and service. It enables students to help to apply skills and content knowledge to real needs in their local community.
-</div>
-</div>
+{% block content %}
+
+    <div class="container">
+
+      <div class="row row-offcanvas row-offcanvas-right">
+
+        <div class="col-xs-12 col-sm-9">
+          <p class="pull-right visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+          </p>
+          <div class="jumbotron">
+            <h1>Community Work @ IIIT-D</h1>
+            <p>Community Work provides students broader connect with society and self. At IIIT Delhi, students have to do minimum 80 hours of Community Work. This activity teaches students about their rights and responsibilities as citizens, and their ability to bring about meaningful change through advocacy and service. It enables students to help to apply skills and content knowledge to real needs in their local community.</p>
+          </div>
+          <div class="row">
+            {% for p in example_projects.all %}
+            <div class="col-6 col-sm-6 col-lg-4">
+      				<p> <span class="badge" style="float:right;">  {{p.student.first_name}} {{p.student.last_name}} </span></p>
+      				<div class="thumbnail">
+        				<div class="caption">
+      						<h3>
+      		 				 {% ifequal p.stage "to_be_verified" %}
+		     						 <span class="glyphicon glyphicon-flag" title="Unverified"></span>
+		     						 {% endifequal %}
+		      					{% ifequal p.stage "ongoing" %}
+		      					  <span class="glyphicon glyphicon-cog" title="Ongoing"></span>
+		     						{% endifequal %}
+		      					{% ifequal p.stage "completed" %}
+		      						<span class="glyphicon glyphicon-ok" title="Completed"></span>
+		      					{% endifequal %}
+     		 						{{ p.title|truncatechars:15 }}</h3>
+      		  			</div>
+        				<p>{{ p.goals|truncatechars:30 }}</p>
+        				<p><a class="btn btn-default" href="{% url 'viewproject' p.id %}" role="button">View details »</a></p>
+      				</div>
+    				</div>
+            {% endfor %}
+          </div><!--/row-->
+        </div><!--/span-->
+
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+          <div class="list-group">
+            <a href="#" class="list-group-item">Principles</a>
+            <a href="#" class="list-group-item">Guidlines</a>
+            <a href="#" class="list-group-item">Some NGOs</a>
+          </div>
+        </div><!--/span-->
+      </div><!--/row-->
+      <hr>
+
+      </div><!--/.container-->
 {% endblock %}

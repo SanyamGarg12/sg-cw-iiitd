@@ -15,7 +15,8 @@ from models import ProjectForm, Project, Document, UploadDocumentForm
 from django.db.models.signals import pre_save
 
 def add_notification(noti_type, project):
-	Notification.objects.create(noti_type=noti_type, project=project)
+	pass
+	# Notification.objects.create(noti_type=noti_type, project=project)
 
 def index(request):
 	if request.user.is_authenticated():
@@ -24,13 +25,13 @@ def index(request):
 	return HttpResponseRedirect(reverse('studenthome'))
 
 def home(request):
-	popular_projects = Project.objects.all()[:10]
+	example_projects = Project.objects.all()[:10]
 	if request.user.is_authenticated():
 		return render(request, 'studenthome.html', 
-		{'popular_projects': popular_projects})
+		{'example_projects': example_projects})
 	else:
 		return render(request, 'core.html',
-			{'popular_projects': popular_projects,})
+			{'example_projects': example_projects,})
 	
 @login_required
 def addproject(request):
@@ -87,7 +88,7 @@ def _upload(request, project_id):
 				Document.objects.create(document=request.FILES['document'],
 				 project=project, category="submission")
 				add_notification("log", project)
-				return HttpResponseRedirect(reverse('index'))
+				return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
 		return render(request, 'upload_document.html', {'form': form, 'id': project_id})
 	return HttpResponseRedirect(reverse('index'))
 

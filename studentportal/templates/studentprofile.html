@@ -11,26 +11,27 @@
 
     <div class = "row">
     {% for p in projects.all %}
-      <div class="{% cycle 'col-sm-6 col-md-3 col-md-offset-1' 'col-sm-6 col-md-3' 'col-sm-6 col-md-3' %}">
-      	<p> <span class="badge" style="float:right;">  {{p.student.first_name}} {{p.student.last_name}} </span></p>
-      	<div class="thumbnail">
-        	<div class="caption">
-      		<h3>
-      		  {% ifequal p.stage "to_be_verified" %}
-		      <span class="glyphicon glyphicon-flag" title="Unverified"></span>
-		      {% endifequal %}
-		      {% ifequal p.stage "ongoing" %}
-		      <span class="glyphicon glyphicon-cog" title="Ongoing"></span>
-		      {% endifequal %}
-		      {% ifequal p.stage "completed" %}
-		      <span class="glyphicon glyphicon-ok" title="Completed"></span>
-		      {% endifequal %}
-     		 <a href="{% url 'viewproject' p.id %}">{{ p.title|truncatechars:20 }}</a></h3>
-      		  </div>
-        <p>{{ p.goals|truncatechars:50 }}</p>
-      </div>
-    </div>
-    {% endfor %}
+      	<div class="{% cycle 'col-sm-6 col-md-3 col-md-offset-1' 'col-sm-6 col-md-3' 'col-sm-6 col-md-3' %}">
+              <p> <span class="badge" style="float:right;">  {{p.student.first_name}} {{p.student.last_name}} </span></p>
+              <div class="thumbnail">
+                <div class="caption">
+                  <h3>
+                   {% ifequal p.stage "to_be_verified" %}
+                     <span class="glyphicon glyphicon-flag" title="Unverified"></span>
+                     {% endifequal %}
+                    {% ifequal p.stage "ongoing" %}
+                      <span class="glyphicon glyphicon-cog" title="Ongoing"></span>
+                    {% endifequal %}
+                    {% ifequal p.stage "completed" %}
+                      <span class="glyphicon glyphicon-ok" title="Completed"></span>
+                    {% endifequal %}
+                    {{ p.title|truncatechars:15 }}</h3>
+                  </div>
+                <p>{{ p.goals|truncatechars:30 }}</p>
+                <p><a class="btn btn-default" href="{% url 'viewproject' p.id %}" role="button">View details »</a></p>
+            </div>
+          </div><!--/row-->
+        {% endfor %}
     </div>
 
 {% else %}
