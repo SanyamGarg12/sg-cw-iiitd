@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect, Http404, HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.core.urlresolvers import reverse
 
 from django.contrib.auth import logout
@@ -8,9 +8,9 @@ from django.contrib.auth.decorators import login_required
 
 from PrivateData import SUPERVISOR_EMAIL
 
-from supervisor.models import Notification, Example
+from supervisor.models import Notification, Example, News
 
-from models import ProjectForm, Project, Document, UploadDocumentForm
+from models import ProjectForm, Project, Document, UploadDocumentForm, NGO, suggest_NGOForm
 
 from django.db.models.signals import pre_save
 
@@ -24,13 +24,13 @@ def index(request):
 	return HttpResponseRedirect(reverse('studenthome'))
 
 def home(request):
-	example_projects = Example.objects.all()[:10]
 	if request.user.is_authenticated():
+		example_projects = Example.objects.all()[:10]
+		news = News.objects.all().order_by('-date_created')[:5]
 		return render(request, 'studenthome.html', 
-		{'example_projects': example_projects})
+		{'example_projects': example_projects, 'news': news})
 	else:
-		return render(request, 'core.html',
-			{'example_projects': example_projects,})
+		return render(request, 'core.html')
 	
 @login_required
 def addproject(request):
@@ -58,6 +58,14 @@ def viewproject(request, project_id):
 	if request.user == project.student:
 		return render(request, 'viewproject.html',
 			{'project': project})
+	return HttpResponseRedirect(reverse('studenthome'))
+
+@login_required
+def view_project_NGO(request, project_id):
+	project = get_object_or_404(Project, pk=project_id)
+	NGOs = NGO.objects.all()
+	if request.user == project.student:
+		return render(request, 'view_project_NGO.html',{'project': project, 'NGOs': NGOs})
 	return HttpResponseRedirect(reverse('studenthome'))
 
 @login_required
@@ -91,6 +99,27 @@ def _upload(request, project_id):
 	return HttpResponseRedirect(reverse('index'))
 
 @login_required
+def link_NGO_project(request, NGO_id, project_id):
+	ngo = get_object_or_404(NGO, pk = NGO_id)
+	project = get_object_or_404(Project, pk = project_id)
+	if project.student == request.user:
+		project.NGO = ngo
+		project.save()
+		return HttpResponseRedirect(reverse('view_project_NGO', 
+			kwargs = {'project_id': project_id}))
+	return HttpResponseRedirect(reverse('index'))
+
+@login_required
+def unlink_NGO_project(request, project_id):
+	project = get_object_or_404(Project, pk = project_id)
+	if project.student == request.user:
+		project.NGO = None
+		project.save()
+		return HttpResponseRedirect(reverse('view_project_NGO', 
+			kwargs = {'project_id': project_id}))
+	return HttpResponseRedirect(reverse('index'))
+
+@login_required
 def profile(request):
 	projects = request.user.projects.all()
 	return render(request, 'studentprofile.html', {'projects': projects})
@@ -107,3 +136,36 @@ def download(request, document_id):
 def _logout(request):
 	logout(request)
 	return HttpResponseRedirect(reverse('studenthome'))
+
+@login_required
+def view_news(request, news_id='0'):
+	if news_id == '0':
+		news = News.objects.all()
+	else:
+		news = get_list_or_404(News, pk=news_id)
+	return render(request, 'view_news.html', {
+		'news': news
+		})
+
+#I am not checking for login on purpose.
+# Anyone should view this acccording to requirements pur forward
+def all_NGOs(request):
+	NGOs = NGO.objects.all()
+	return render(request, 'all_ngos.html', 
+		{'NGOs': NGOs})
+
+def suggest_NGO(request):
+	if request.method == "POST":
+		form = suggest_NGOForm(request.POST)
+		if form.is_valid():
+			Notification.objects.create(noti_type='suggest',
+				NGO_name=form.cleaned_data['name'],
+				NGO_link=form.cleaned_data['link'],
+				NGO_details=form.cleaned_data['details'],
+				NGO_sugg_by=str(request.user.email),
+				project = Project.objects.last())
+			return HttpResponseRedirect(reverse('all_NGO'))
+	else:
+		form = suggest_NGOForm()
+	return render(request, 'suggest_ngo.html', 
+	{'form': form})

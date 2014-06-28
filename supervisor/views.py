@@ -6,8 +6,8 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from supervisor.decorators import supervisor_logged_in, is_int
 
-from studentportal.models import Project
-from models import Example, AdvanceSearchForm
+from studentportal.models import Project, NGO, Category
+from models import Example, AdvanceSearchForm, NewsForm, News, Notification
 
 @supervisor_logged_in
 def home(request):
@@ -117,10 +117,6 @@ def complete(request,project_id):
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project_id}))
 
 @supervisor_logged_in
-def noti_proposal(request):
-	pass
-
-@supervisor_logged_in
 def advance_search(request):
 	if request.method == "POST":
 		form = AdvanceSearchForm(request.POST)
@@ -152,3 +148,61 @@ def advance_search(request):
 		form = AdvanceSearchForm()
 	return render(request, 'advance_search.html',
 		{'form': form})
+
+@supervisor_logged_in
+def add_news(request):
+	if request.method == "POST":
+		form = NewsForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse('all_news'))
+	else:
+		form = NewsForm
+	return render(request, 'add_news.html',
+		{'form': form})
+
+#should i add or not..??
+def view_news(request, news_id):
+	news = get_object_or_404(News, pk=news_id)
+	return render(request, 'view_news.html', {'news': news})
+
+@supervisor_logged_in
+def all_NGO(request):
+	NGOs = NGO.objects.all()
+	return render(request, 'super_all_ngo.html', {'NGOs': NGOs})
+
+@supervisor_logged_in
+def view_NGO(request, NGO_id):
+	ngo = get_object_or_404(NGO, pk = NGO_id)
+	return render(request, 'super_view_ngo.html', {'NGO': ngo})
+
+@supervisor_logged_in
+def all_news(request):
+	news = News.objects.all()
+	return render(request, 'all_news.html', {'news': news})
+
+@supervisor_logged_in
+def newlogs(request):
+	notifications = Notification.objects.filter(noti_type='log').distinct()
+	return render(request, 'newlogs.html', {'notifications': notifications})
+
+@supervisor_logged_in
+def suggested_NGOs(request):
+	notifications = Notification.objects.filter(noti_type='suggest').distinct()
+	return render(request, 'suggested_NGOs.html', {'notifications': notifications})	
+
+@supervisor_logged_in
+def accept_NGO(request, noti_id):
+	noti = get_object_or_404(Notification, pk = noti_id)
+	NGO.objects.create(name=noti.NGO_name,
+		link=noti.NGO_link,
+		details=noti.NGO_details,
+		category=Category.objects.last())
+	noti.delete()
+	return HttpResponseRedirect(reverse('super_suggested_ngos'))
+
+@supervisor_logged_in
+def reject_NGO(request, noti_id):
+	noti = get_object_or_404(Notification, pk=noti_id)
+	noti.delete()
+	return HttpResponseRedirect(reverse('super_suggested_ngos'))
