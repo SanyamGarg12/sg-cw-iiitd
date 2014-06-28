@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect, Http404, HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.core.urlresolvers import reverse
 
 from django.contrib.auth import logout
@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 from PrivateData import SUPERVISOR_EMAIL
 
-from supervisor.models import Notification, Example
+from supervisor.models import Notification, Example, News
 
 from models import ProjectForm, Project, Document, UploadDocumentForm
 
@@ -24,13 +24,13 @@ def index(request):
 	return HttpResponseRedirect(reverse('studenthome'))
 
 def home(request):
-	example_projects = Example.objects.all()[:10]
 	if request.user.is_authenticated():
+		example_projects = Example.objects.all()[:10]
+		news = News.objects.all().order_by('-date_created')[:5]
 		return render(request, 'studenthome.html', 
-		{'example_projects': example_projects})
+		{'example_projects': example_projects, 'news': news})
 	else:
-		return render(request, 'core.html',
-			{'example_projects': example_projects,})
+		return render(request, 'core.html')
 	
 @login_required
 def addproject(request):
@@ -107,3 +107,13 @@ def download(request, document_id):
 def _logout(request):
 	logout(request)
 	return HttpResponseRedirect(reverse('studenthome'))
+
+@login_required
+def view_news(request, news_id='0'):
+	if news_id == '0':
+		news = News.objects.all()
+	else:
+		news = get_list_or_404(News, pk=news_id)
+	return render(request, 'view_news.html', {
+		'news': news
+		})

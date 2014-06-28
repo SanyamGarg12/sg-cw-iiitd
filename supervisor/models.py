@@ -19,6 +19,16 @@ class Example(models.Model):
 	project 	 = models.OneToOneField(Project, primary_key = True)
 	date_created = models.DateTimeField(default = timezone.now)
 
+class News(models.Model):
+    content = models.TextField()
+    date_created = models.DateTimeField(default = timezone.now)
+    priority = models.IntegerField()
+    #from 1,2,3
+    def get_priority(self):
+        if self.priority == 1: return "LOW"
+        elif self.priority == 2: return "MEDIUM"
+        else: return "HIGH"
+
 class AdvanceSearchForm(forms.Form):
     stage = forms.ChoiceField(choices=(
     	('all', 'all'),('ongoing', 'ongoing'),('to_be_verified', 'unverified'), ('completed', 'completed')
@@ -35,3 +45,8 @@ class AdvanceSearchForm(forms.Form):
     # category
     # time_completed_before
     # time_completed_after
+
+class NewsForm(forms.ModelForm):
+    class Meta:
+        model = News
+        fields = ['content', 'priority']

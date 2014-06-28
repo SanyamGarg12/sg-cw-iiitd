@@ -1,0 +1,9 @@
+{% extends 'supervisorcore.html' %}
+{% block content %}
+<form action="{% url 'add_news' %}" method="POST"> {% csrf_token %}
+<table>
+	{{ form.as_table }}
+</table>
+<input type='submit' value='Submit' />
+</form>
+{% endblock %}

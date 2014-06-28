@@ -7,7 +7,7 @@ from django.db.models import Q
 from supervisor.decorators import supervisor_logged_in, is_int
 
 from studentportal.models import Project
-from models import Example, AdvanceSearchForm
+from models import Example, AdvanceSearchForm, NewsForm, News
 
 @supervisor_logged_in
 def home(request):
@@ -117,10 +117,6 @@ def complete(request,project_id):
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project_id}))
 
 @supervisor_logged_in
-def noti_proposal(request):
-	pass
-
-@supervisor_logged_in
 def advance_search(request):
 	if request.method == "POST":
 		form = AdvanceSearchForm(request.POST)
@@ -152,3 +148,24 @@ def advance_search(request):
 		form = AdvanceSearchForm()
 	return render(request, 'advance_search.html',
 		{'form': form})
+
+@supervisor_logged_in
+def add_news(request):
+	if request.method == "POST":
+		form = NewsForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse('all_news'))
+	else:
+		form = NewsForm
+	return render(request, 'add_news.html',
+		{'form': form})
+
+def view_news(request, news_id):
+	news = get_object_or_404(News, pk=news_id)
+	return render(request, 'view_news.html', {'news': news})
+
+@supervisor_logged_in
+def all_news(request):
+	news = News.objects.all()
+	return render(request, 'all_news.html', {'news': news})

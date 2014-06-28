@@ -10,4 +10,5 @@ urlpatterns = patterns('',
 	url(r'^project/(?P<project_id>[0-9]+)/$', views.viewproject, name='viewproject'),
 	url(r'^download/(?P<document_id>[0-9]+)/$', views.download, name='download_document'),
 	url(r'^profile/$', views.profile, name='studentprofile'),
+	url(r'^news/(?P<news_id>[0-9]*)/$', views.view_news, name='student_view_news')
 )
