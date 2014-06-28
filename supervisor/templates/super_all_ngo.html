@@ -21,6 +21,8 @@ Click on the NGO for a list of students who have workied under it.
 	<td> <a href="{% url 'super_view_ngo' n.id %}">{{n.name }}</a> </td>
 	<td> {{n.link }} </td>
 	<td> {{n.details}} </td>
+	<td> <a class="btn btn-danger" role="button"  href = "{% url 'remove_NGO' n.pk %}">Delete NGO</a>
+ </td>
 </tr>
 
 {% empty %}

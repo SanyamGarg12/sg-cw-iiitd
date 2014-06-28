@@ -235,3 +235,9 @@ def reject_NGO(request, noti_id):
 	EmailMessage("Thank you but sorry :|","We have reviewed your suggestion for the NGO but as of now have to reject it. But thank you for your suggestion",
 	 to=[str(noti.NGO_sugg_by)])
 	return HttpResponseRedirect(reverse('super_suggested_ngos'))
+
+@supervisor_logged_in
+def remove_NGO(request, ngo_id):
+	ngo = get_object_or_404(NGO, pk=ngo_id)
+	ngo.delete()
+	return HttpResponseRedirect(reverse('super_all_NGO'))
