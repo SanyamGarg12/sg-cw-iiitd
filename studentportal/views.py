@@ -11,6 +11,7 @@ from PrivateData import SUPERVISOR_EMAIL
 from supervisor.models import Notification, Example, News
 
 from models import ProjectForm, Project, Document, UploadDocumentForm, NGO, suggest_NGOForm
+from models import Feedback, FeedbackForm
 
 from django.db.models.signals import pre_save
 
@@ -155,6 +156,7 @@ def all_NGOs(request):
 	return render(request, 'all_ngos.html', 
 		{'NGOs': NGOs})
 
+@login_required
 def suggest_NGO(request):
 	if request.method == "POST":
 		form = suggest_NGOForm(request.POST)
@@ -169,3 +171,17 @@ def suggest_NGO(request):
 		form = suggest_NGOForm()
 	return render(request, 'suggest_ngo.html', 
 	{'form': form})
+
+@login_required
+def feedback(request, project_id):
+	project = get_object_or_404(Project, pk = project_id)
+	if not project.student == request.user:
+		return HttpResponseRedirect(reverse('index'))
+	if request.method == 'POST':
+		form = FeedbackForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse('index'))
+	else:
+		form = FeedbackForm()
+	return render(request, 'feedback.html', {'form': form, 'id': project_id})

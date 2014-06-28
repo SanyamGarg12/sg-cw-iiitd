@@ -28,7 +28,11 @@
                     {{ p.title|truncatechars:15 }}</h3>
                   </div>
                 <p>{{ p.goals|truncatechars:30 }}</p>
-                <p><a class="btn btn-default" href="{% url 'viewproject' p.id %}" role="button">View details »</a></p>
+                <p><a class="btn btn-default" href="{% url 'viewproject' p.id %}" role="button">View details »</a>
+                {% ifequal p.stage "completed" %}{% if p.feedback.all %}{% else %}
+                <a class="btn btn-default" href="{% url 'feedback' p.id %}" role="button">Give feedback»</a>
+                {% endif %}{% endifequal %}
+                </p>
             </div>
           </div><!--/row-->
         {% endfor %}
