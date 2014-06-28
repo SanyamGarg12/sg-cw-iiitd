@@ -105,9 +105,6 @@ class ProjectForm(ModelForm):
         fields = ['title', 'credits', 'NGO_name', 'NGO_details',
                 'NGO_super', 'NGO_super_contact', 'goals',
                 'schedule_text','category']
-        widgets = {
-        'category' : forms.RadioSelect()
-        }
         category = forms.ModelChoiceField(queryset=Category.objects.all())
 
 

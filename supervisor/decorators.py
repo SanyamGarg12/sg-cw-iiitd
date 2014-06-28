@@ -10,7 +10,7 @@ from django.core.mail import EmailMultiAlternatives
 
 from CW_Portal import globals
 
-from studentportal.models import Feedback
+from studentportal.models import Feedback, Category
 from pygal import Pie, StackedLine
 from pygal.style import CleanStyle as pygal_CleanStyle
 import os
@@ -19,7 +19,6 @@ import datetime
 
 class RenderFeedbackExperiencePieChart(threading.Thread):
 	def __init__(self):
-		print "RENDERING"
 		threading.Thread.__init__(self)
 	def run(self):
 		frequency = [0, 0, 0, 0, 0]
@@ -28,10 +27,8 @@ class RenderFeedbackExperiencePieChart(threading.Thread):
 		pie_chart = Pie(title_font_size = 48)
 		pie_chart.title = "Student experience"
 		for x in range(5):
-			print str(x+1),x,frequency[x]
 			pie_chart.add(str(x+1), frequency[x])
 		pie_chart.render_to_file(os.path.join(BASE_DIR, 'studentportal/static/statistics/feedback_experience_piechart.svg'))
-		print "RENDERED to",os.path.join(BASE_DIR, 'studentportal/static/feedback_experience_piechart.svg')
 
 class RenderProjectToMonthDistribution(threading.Thread):
 	def __init__(self):
@@ -49,7 +46,19 @@ class RenderProjectToMonthDistribution(threading.Thread):
 				month[project.date_created.month] += 1
 			chart.add(str(year),[month[x] for x in sorted(month)] )
 		chart.render_to_file(os.path.join(BASE_DIR, 'studentportal/static/statistics/project_to_month_distribution.svg'))
-		print "RENDEREDasf"
+
+class RenderProjectCategoryPieChart(threading.Thread):
+	def __init__(self):
+		threading.Thread.__init__(self)
+
+	def run(self):
+		pie_chart = Pie(title_font_size=48)
+		category_dict = {c: 0 for c in Category.objects.all()}
+		for project in Project.objects.all():
+			category_dict[project.category] += 1
+		for k,v in category_dict.iteritems():
+			pie_chart.add(k.name, v)
+		pie_chart.render_to_file(os.path.join(BASE_DIR, 'studentportal/static/statistics/project_category_piechart.svg'))		
 
 def supervisor_logged_in(view):
 	def _wrapped_view(request, *args, **kwargs):
