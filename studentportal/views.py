@@ -15,8 +15,7 @@ from models import ProjectForm, Project, Document, UploadDocumentForm
 from django.db.models.signals import pre_save
 
 def add_notification(noti_type, project):
-	pass
-	# Notification.objects.create(noti_type=noti_type, project=project)
+	Notification.objects.create(noti_type=noti_type, project=project)
 
 def index(request):
 	if request.user.is_authenticated():
