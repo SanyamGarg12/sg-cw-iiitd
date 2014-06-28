@@ -9,6 +9,8 @@ from supervisor.decorators import supervisor_logged_in, is_int, EmailMessage
 from studentportal.models import Project, NGO, Category
 from models import Example, AdvanceSearchForm, NewsForm, News, Notification
 
+from CW_Portal import globals
+
 @supervisor_logged_in
 def home(request):
 	recent_projects = Project.objects.extra(order_by=['-date_created'])[:10]
@@ -28,17 +30,21 @@ def unverified_projects(request):
 @supervisor_logged_in
 def verify_project(request, project_id):
 	project = Project.objects.get(pk = project_id)
+	Notification.objects.get(project=project, project__stage='to_be_verified').delete()
 	project.stage = "ongoing"
 	project.save()
 	EmailMessage("Congrats.. now get to work :)","Congratulations, your project has has been verified. Now start working and making a difference", to=[str(project.student.email)])
+	globals.noti_refresh = True
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
 
 @supervisor_logged_in
 def unverify_project(request, project_id):
 	project = Project.objects.get(pk = project_id)
+	Notification.objects.create(project=project, noti_type='new')
 	project.stage = "to_be_verified"
 	project.save()
 	EmailMessage("I got bad news :(","It seems that the supervisor has un-approved your project. Contact him to find out the issue", to=[str(project.student.email)])
+	globals.noti_refresh = True
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
 
 @supervisor_logged_in
@@ -148,8 +154,12 @@ def advance_search(request):
 				projects = projects.filter(student__email__icontains=roll_no)
 			if form.cleaned_data['name']:
 				name = form.cleaned_data['name']
-				projects = projects.filter(Q(student__first_name__icontains=name) | 
-					Q(student__last_name__icontains=name))
+				# projects = projects.filter(Q(student__first_name__icontains=name) | 
+				# 	Q(student__last_name__icontains=name))
+				# projects = projects.filter(student__get_full_name__icontains=name)
+				#LC is the way to go
+				projects = [project for project in projects if ''.join(name.split()).lower() in \
+				''.join([project.student.first_name, project.student.last_name]).lower()]
 			return render(request, 'advance_search_results.html',
 				{'projects': projects})
 	else:
@@ -207,6 +217,7 @@ def accept_NGO(request, noti_id):
 		details=noti.NGO_details,
 		category=Category.objects.last())
 	noti.delete()
+	globals.noti_refresh = True
 	EmailMessage("Thank you :)","We have added the NGO you suggested as a trusted NGO..",
 	 to=[str(noti.NGO_sugg_by)])
 	return HttpResponseRedirect(reverse('super_suggested_ngos'))
@@ -215,6 +226,7 @@ def accept_NGO(request, noti_id):
 def reject_NGO(request, noti_id):
 	noti = get_object_or_404(Notification, pk=noti_id)
 	noti.delete()
+	globals.noti_refresh = True
 	EmailMessage("Thank you but sorry :|","We have reviewed your suggestion for the NGO but as of now have to reject it. But thank you for your suggestion",
 	 to=[str(noti.NGO_sugg_by)])
 	return HttpResponseRedirect(reverse('super_suggested_ngos'))

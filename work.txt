@@ -1,11 +1,8 @@
 LOGGING
 LIST OF STUDENTS year wise
 Feedback after final submission
-email
 categories
-notifications do not update (revisit every function)
 graphs
-
 
 
 
@@ -15,3 +12,7 @@ important announcements --->> DONE..!!
 LIST OF NGO's -->> DONE...!!
 assosciate ngo with students -->> DONE..!!
 suggest NGO -->> DONE..!!
+email -->> DONE..!!
+notifications do not update (revisit every function) -->> DONE..!!
+Removed search bug -->> DONE..!!
+search full name -->> DONE..!!
