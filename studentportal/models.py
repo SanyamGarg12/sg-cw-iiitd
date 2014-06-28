@@ -8,17 +8,23 @@ from django import forms
 
 from decorators import path_and_rename, validate_credits
 
+
+class Category(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=1024)
+
 class NGO(models.Model):
-    name    = models.CharField(max_length=255)
+    name    = models.CharField(max_length=1023)
     link    = models.URLField()
     details = models.TextField()
+    category = models.ForeignKey(Category, related_name='NGOs')
 
 class Project(models.Model):
     credits                 = models.IntegerField(default=2, validators=[validate_credits])
     title                   = models.CharField(max_length=1024)
     date_created            = models.DateTimeField(default=timezone.now)
     NGO_name                = models.CharField(max_length=1024)
-    NGO                     = models.ForeignKey(NGO, blank=True, null = True)
+    NGO                     = models.ForeignKey(NGO, blank=True, null = True, related_name='projects')
     NGO_details             = models.CharField(max_length=2048)
     NGO_super               = models.CharField(max_length=127)
     goals                   = models.TextField()

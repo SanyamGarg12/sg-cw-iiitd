@@ -10,7 +10,7 @@ from PrivateData import SUPERVISOR_EMAIL
 
 from supervisor.models import Notification, Example, News
 
-from models import ProjectForm, Project, Document, UploadDocumentForm
+from models import ProjectForm, Project, Document, UploadDocumentForm, NGO
 
 from django.db.models.signals import pre_save
 
@@ -61,6 +61,14 @@ def viewproject(request, project_id):
 	return HttpResponseRedirect(reverse('studenthome'))
 
 @login_required
+def view_project_NGO(request, project_id):
+	project = get_object_or_404(Project, pk=project_id)
+	NGOs = NGO.objects.all()
+	if request.user == project.student:
+		return render(request, 'view_project_NGO.html',{'project': project, 'NGOs': NGOs})
+	return HttpResponseRedirect(reverse('studenthome'))
+
+@login_required
 def editproject(request, project_id):
 	instance = get_object_or_404(Project, pk = project_id)
 	if instance.student == request.user:
@@ -91,6 +99,27 @@ def _upload(request, project_id):
 	return HttpResponseRedirect(reverse('index'))
 
 @login_required
+def link_NGO_project(request, NGO_id, project_id):
+	ngo = get_object_or_404(NGO, pk = NGO_id)
+	project = get_object_or_404(Project, pk = project_id)
+	if project.student == request.user:
+		project.NGO = ngo
+		project.save()
+		return HttpResponseRedirect(reverse('view_project_NGO', 
+			kwargs = {'project_id': project_id}))
+	return HttpResponseRedirect(reverse('index'))
+
+@login_required
+def unlink_NGO_project(request, project_id):
+	project = get_object_or_404(Project, pk = project_id)
+	if project.student == request.user:
+		project.NGO = None
+		project.save()
+		return HttpResponseRedirect(reverse('view_project_NGO', 
+			kwargs = {'project_id': project_id}))
+	return HttpResponseRedirect(reverse('index'))
+
+@login_required
 def profile(request):
 	projects = request.user.projects.all()
 	return render(request, 'studentprofile.html', {'projects': projects})
@@ -117,3 +146,10 @@ def view_news(request, news_id='0'):
 	return render(request, 'view_news.html', {
 		'news': news
 		})
+
+#I am not checking for login on purpose.
+# Anyone should view this acccording to requirements pur forward
+def all_NGOs(request):
+	NGOs = NGO.objects.all()
+	return render(request, 'all_ngos.html', 
+		{'NGOs': NGOs})

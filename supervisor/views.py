@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from supervisor.decorators import supervisor_logged_in, is_int
 
-from studentportal.models import Project
+from studentportal.models import Project, NGO
 from models import Example, AdvanceSearchForm, NewsForm, News
 
 @supervisor_logged_in
@@ -161,9 +161,20 @@ def add_news(request):
 	return render(request, 'add_news.html',
 		{'form': form})
 
+#should i add or not..??
 def view_news(request, news_id):
 	news = get_object_or_404(News, pk=news_id)
 	return render(request, 'view_news.html', {'news': news})
+
+@supervisor_logged_in
+def all_NGO(request):
+	NGOs = NGO.objects.all()
+	return render(request, 'super_all_ngo.html', {'NGOs': NGOs})
+
+@supervisor_logged_in
+def view_NGO(request, NGO_id):
+	ngo = get_object_or_404(NGO, pk = NGO_id)
+	return render(request, 'super_view_ngo.html', {'NGO': ngo})
 
 @supervisor_logged_in
 def all_news(request):
