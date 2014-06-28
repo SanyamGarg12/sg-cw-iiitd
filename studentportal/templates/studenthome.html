@@ -8,7 +8,7 @@
 
         <div class="col-xs-12 col-sm-9">
           <p class="pull-right visible-xs">
-            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Sticky links</button>
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
           </p>
           <div class="jumbotron">
             <h1>Community Work @ IIIT-D</h1>
@@ -42,22 +42,11 @@
 
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
           <div class="list-group">
-          <center><span class="badge">Sticky Links</span></center>
-            <a href="" class="list-group-item">Principles</a>
+            <a href="#" class="list-group-item">Principles</a>
             <a href="#" class="list-group-item">Guidlines</a>
-            <a href="{% url 'all_NGO' %}" class="list-group-item">Some NGOs</a>
+            <a href="#" class="list-group-item">Some NGOs</a>
           </div>
         </div><!--/span-->
-
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="news_sidebar" role="navigation">
-          <center><span class="badge"><a href="{% url 'student_view_news' 0 %}">Announcements</a></span></center>
-          <div class="list-group">
-            {% for n in news %}
-            <a href="{% url 'student_view_news' n.id %}" class="list-group-item">{{ n.content|truncatechars:75 }}</a>
-            {% endfor %}
-          </div>
-        </div><!--/span-->
-
       </div><!--/row-->
       <hr>
 

@@ -8,23 +8,17 @@ from django import forms
 
 from decorators import path_and_rename, validate_credits
 
-
-class Category(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.CharField(max_length=1024)
-
 class NGO(models.Model):
-    name    = models.CharField(max_length=1023)
+    name    = models.CharField(max_length=255)
     link    = models.URLField()
     details = models.TextField()
-    category = models.ForeignKey(Category, related_name='NGOs')
 
 class Project(models.Model):
     credits                 = models.IntegerField(default=2, validators=[validate_credits])
     title                   = models.CharField(max_length=1024)
     date_created            = models.DateTimeField(default=timezone.now)
     NGO_name                = models.CharField(max_length=1024)
-    NGO                     = models.ForeignKey(NGO, blank=True, null = True, related_name='projects')
+    NGO                     = models.ForeignKey(NGO, blank=True, null = True)
     NGO_details             = models.CharField(max_length=2048)
     NGO_super               = models.CharField(max_length=127)
     goals                   = models.TextField()
@@ -72,9 +66,3 @@ class UploadDocumentForm(forms.Form):
     CHOICES = (('proposal','proposal'),('log', 'log'),('submission', 'submission'),)
     category = forms.ChoiceField(choices=CHOICES,
         help_text = 'Type of Document')
-
-class suggest_NGOForm(forms.Form):
-    name = forms.CharField()
-    link = forms.URLField(required = False)
-    details = forms.CharField(max_length = 2000, required = False)
-    # category

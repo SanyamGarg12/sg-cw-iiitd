@@ -9,11 +9,6 @@
 		{{ project.goals}}
 	<h2>Schedule: </h2>
 		{{ project.schedule_text }}
-	<h2>
-		NGO:
-	</h2>
-	{{ project.NGO_name }}
-	<a href="{% url 'view_project_NGO' project.id %}">Change NGO details</a>
 
 <hr />
 <a class="btn btn-warning" role="button"  href = "{% url 'editproject' project.id %}">Edit CW project details</a>

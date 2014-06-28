@@ -1,19 +1,14 @@
-LOGGING
+important announcements
+LIST OF NGO's
+assosciate ngo with students
 LIST OF STUDENTS year wise
 Feedback after final submission
-email
+
+already approved ngo's
+Manage ngo's
+
 categories
-notifications do not update (revisit every function)
 
+notifications do not update
 
-
-
-
-
-
-
-already approved ngo's -->> DONE..!!
-important announcements --->> DONE..!!
-LIST OF NGO's -->> DONE...!!
-assosciate ngo with students -->> DONE..!!
-suggest NGO -->> DONE..!!
+change notifications counts

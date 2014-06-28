@@ -8,10 +8,10 @@ class Notification(models.Model):
 	noti_id = models.IntegerField(primary_key= True)
 	noti_type 	= models.CharField(max_length=16, null=True, blank=True)
 	#noti_type include -> new, edit, log, finish, suggest
-	project 	= models.ForeignKey(Project, blank = True, null= True, unique= False)
-	NGO_name 	= models.CharField(max_length=255, blank=True)
-	NGO_link 	= models.URLField(max_length=200, blank=True)
-	NGO_details	= models.TextField(blank=True)
+	project 	= models.ForeignKey(Project, blank = True, unique= False)
+	NGO_name 	= models.CharField(max_length=255)
+	NGO_link 	= models.URLField(max_length=200)
+	NGO_details	= models.TextField()
 	NGO_sugg_by = models.CharField(max_length=255)
 	#i should create a seen field too
 
@@ -20,14 +20,8 @@ class Example(models.Model):
 	date_created = models.DateTimeField(default = timezone.now)
 
 class News(models.Model):
-    content = models.TextField()
-    date_created = models.DateTimeField(default = timezone.now)
-    priority = models.IntegerField()
-    #from 1,2,3
-    def get_priority(self):
-        if self.priority == 1: return "LOW"
-        elif self.priority == 2: return "MEDIUM"
-        else: return "HIGH"
+    content = models.
+
 
 class AdvanceSearchForm(forms.Form):
     stage = forms.ChoiceField(choices=(
@@ -45,8 +39,3 @@ class AdvanceSearchForm(forms.Form):
     # category
     # time_completed_before
     # time_completed_after
-
-class NewsForm(forms.ModelForm):
-    class Meta:
-        model = News
-        fields = ['content', 'priority']

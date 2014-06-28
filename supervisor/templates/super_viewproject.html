@@ -9,11 +9,7 @@
 		<h2>Credits: </h2> {{ project.credits }}
 		<h2>Proposed on: </h2>{{ project.date_created }}
 		<h2>Expected completion date: </h2>{{ project.expected_finish_date }}
-		{% if project.NGO %}
-			<h2>NGO: </h2><a href="{% url 'super_view_ngo' project.NGO.id %}">{{ project.NGO.name }}</a>.<br /> <strong>This is a verified NGO.</strong>
-		{% else %}
-			<h2>NGO: </h2>{{ project.NGO_name }}
-		{% endif %}
+		<h2>NGO: </h2>{{ project.NGO_name }}
 		<h2>Details of NGO: </h2>{{ project.NGO_details }}
 		<h2>Working under: </h2>{{ project.NGO_super }}
 		<h2>Goals: </h2> {{ project.goals}}
