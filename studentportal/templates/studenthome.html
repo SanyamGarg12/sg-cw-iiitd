@@ -54,6 +54,8 @@
           <div class="list-group">
             {% for n in news %}
             <a href="{% url 'student_view_news' n.id %}" class="list-group-item">{{ n.content|truncatechars:75 }}</a>
+            {% empty %}
+            <center>No new announcements.</center>
             {% endfor %}
           </div>
         </div><!--/span-->

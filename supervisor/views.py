@@ -4,7 +4,7 @@ from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 
 from django.db.models import Q
-from supervisor.decorators import supervisor_logged_in, is_int
+from supervisor.decorators import supervisor_logged_in, is_int, EmailMessage
 
 from studentportal.models import Project, NGO, Category
 from models import Example, AdvanceSearchForm, NewsForm, News, Notification
@@ -30,6 +30,7 @@ def verify_project(request, project_id):
 	project = Project.objects.get(pk = project_id)
 	project.stage = "ongoing"
 	project.save()
+	EmailMessage("Congrats.. now get to work :)","Congratulations, your project has has been verified. Now start working and making a difference", to=[str(project.student.email)])
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
 
 @supervisor_logged_in
@@ -37,6 +38,7 @@ def unverify_project(request, project_id):
 	project = Project.objects.get(pk = project_id)
 	project.stage = "to_be_verified"
 	project.save()
+	EmailMessage("I got bad news :(","It seems that the supervisor has un-approved your project. Contact him to find out the issue", to=[str(project.student.email)])
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
 
 @supervisor_logged_in
@@ -64,6 +66,8 @@ def example_projects(request):
 def add_to_examples(request, project_id):
 	project = Project.objects.get(pk = project_id)
 	Example.objects.create(project = project)
+	EmailMessage("Congrats.. You deserve this :)","Congratulations, your project has has been selected by the admin as an example project. You must have done a mighty fine job. Keep it up.",
+	 to=[str(project.student.email)])
 	return HttpResponseRedirect(reverse('super_viewproject', 
 		kwargs={'project_id': project_id}))
 
@@ -72,6 +76,8 @@ def remove_from_examples(request, example_project_id):
 	example_project = Example.objects.get(pk = example_project_id)
 	p_id = example_project.project.id
 	example_project.delete()
+	EmailMessage("Thank you :)","Your project has has been removed by the admin from the example project. Thank you for contributing to the community. Keep it up.",
+	 to=[str(Project.objects.get(pk=p_id).student.email)])
 	return HttpResponseRedirect(reverse('super_viewproject',
 		kwargs = {'project_id':p_id}))
 
@@ -113,6 +119,8 @@ def complete(request,project_id):
 	project = get_object_or_404(Project, pk = project_id)
 	project.stage = 'completed'
 	project.save()
+	EmailMessage("Congrats.. you did it :)","Congratulations, your completed project has has been accepted by the admin. Thanks for giving back to the community. Keep it up.",
+	 to=[str(project.student.email)])
 	#send link for feedback form
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project_id}))
 
@@ -199,10 +207,14 @@ def accept_NGO(request, noti_id):
 		details=noti.NGO_details,
 		category=Category.objects.last())
 	noti.delete()
+	EmailMessage("Thank you :)","We have added the NGO you suggested as a trusted NGO..",
+	 to=[str(noti.NGO_sugg_by)])
 	return HttpResponseRedirect(reverse('super_suggested_ngos'))
 
 @supervisor_logged_in
 def reject_NGO(request, noti_id):
 	noti = get_object_or_404(Notification, pk=noti_id)
 	noti.delete()
+	EmailMessage("Thank you but sorry :|","We have reviewed your suggestion for the NGO but as of now have to reject it. But thank you for your suggestion",
+	 to=[str(noti.NGO_sugg_by)])
 	return HttpResponseRedirect(reverse('super_suggested_ngos'))
