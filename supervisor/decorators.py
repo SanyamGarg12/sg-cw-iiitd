@@ -4,7 +4,7 @@ from PrivateData import SUPERVISOR_EMAIL
 
 def supervisor_logged_in(view):
     def _wrapped_view(request, *args, **kwargs):
-        if request.user.email == SUPERVISOR_EMAIL:
+        if request.user.is_authenticated() and request.user.email == SUPERVISOR_EMAIL:
             return view(request, *args, **kwargs)
         raise Http404()
     return _wrapped_view
