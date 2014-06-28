@@ -22,6 +22,7 @@
 	<center><h3>Documents</h3></center>
 	{% if project.documents.all %}
 	{% for doc in project.documents.all %}
+		<strong>{{ doc.category }}: </strong>
 		<a href = "{% url 'download_document' doc.pk %}">
 		{{ doc.document.name }}</a>
 		<br />

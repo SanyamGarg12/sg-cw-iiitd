@@ -31,7 +31,7 @@ def home(request):
 		{'example_projects': example_projects, 'news': news})
 	else:
 		return render(request, 'core.html')
-	
+
 @login_required
 def addproject(request):
 	def add_user(sender, **kwargs):
@@ -92,8 +92,9 @@ def _upload(request, project_id):
 			form = UploadDocumentForm(request.POST, request.FILES)
 			if form.is_valid():
 				Document.objects.create(document=request.FILES['document'],
-				 project=project, category="submission")
-				add_notification("log", project)
+				 project=project, category=form.cleaned_data['category'])
+				if form.cleaned_data['category'] == 'submission':
+					add_notification("finish", project)
 				return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
 		return render(request, 'upload_document.html', {'form': form, 'id': project_id})
 	return HttpResponseRedirect(reverse('index'))
@@ -162,8 +163,7 @@ def suggest_NGO(request):
 				NGO_name=form.cleaned_data['name'],
 				NGO_link=form.cleaned_data['link'],
 				NGO_details=form.cleaned_data['details'],
-				NGO_sugg_by=str(request.user.email),
-				project = Project.objects.last())
+				NGO_sugg_by=str(request.user.email))
 			return HttpResponseRedirect(reverse('all_NGO'))
 	else:
 		form = suggest_NGOForm()

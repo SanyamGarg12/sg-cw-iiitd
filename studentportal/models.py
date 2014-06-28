@@ -13,11 +13,17 @@ class Category(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=1024)
 
+    def __unicode__(self):
+        return self.name
+
 class NGO(models.Model):
     name    = models.CharField(max_length=1023)
-    link    = models.URLField()
-    details = models.TextField()
-    category = models.ForeignKey(Category, related_name='NGOs')
+    link    = models.URLField(blank = True)
+    details = models.TextField(blank=True)
+    category = models.ForeignKey(Category, related_name='NGOs', null=True)
+
+    def __unicode__(self):
+        return self.name
 
 class Project(models.Model):
     credits                 = models.IntegerField(default=2, validators=[validate_credits])
@@ -48,13 +54,15 @@ class Project(models.Model):
                 return True
         return False
 
-
 class Document(models.Model):
     document = models.FileField(upload_to=path_and_rename('uploads/%Y/'))
     date_added  = models.DateTimeField(default=timezone.now)
     #category has the following options -> proposal, log, submission
     category    = models.CharField(max_length=16)
     project = models.ForeignKey(Project, related_name = 'documents')
+
+    def __unicode__(self):
+        return ': '.join([self.project.title, self.document.name])
 
 class ProjectForm(ModelForm):
     def __init__(self, user, *args, **kwargs):

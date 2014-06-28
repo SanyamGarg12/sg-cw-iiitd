@@ -14,6 +14,7 @@ from CW_Portal import globals
 @supervisor_logged_in
 def home(request):
 	recent_projects = Project.objects.extra(order_by=['-date_created'])[:10]
+	print 1
 	return render(request, 'supervisorhome.html', {'recent_projects': recent_projects})
 
 @supervisor_logged_in
@@ -30,7 +31,7 @@ def unverified_projects(request):
 @supervisor_logged_in
 def verify_project(request, project_id):
 	project = Project.objects.get(pk = project_id)
-	Notification.objects.get(project=project, project__stage='to_be_verified').delete()
+	Notification.objects.get(project=project, noti_type='new', project__stage='to_be_verified').delete()
 	project.stage = "ongoing"
 	project.save()
 	EmailMessage("Congrats.. now get to work :)","Congratulations, your project has has been verified. Now start working and making a difference", to=[str(project.student.email)])
