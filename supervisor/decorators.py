@@ -12,11 +12,11 @@ from CW_Portal import globals
 def supervisor_logged_in(view):
 	def _wrapped_view(request, *args, **kwargs):
 		if (globals.noti_refresh == True \
-		or request.session.get('noti_count_log', None) == None \
+		or request.session.get('noti_count_submissions', None) == None \
 		or request.session.get('noti_count_NGO', None) == None \
 		or request.session.get('noti_count_proposal', None) == None ):
 			request.session['noti_count_proposal'] = Notification.objects.filter(noti_type='new').distinct().count()
-			request.session['noti_count_log'] = Notification.objects.filter(noti_type='log').distinct().count()
+			request.session['noti_count_submissions'] = Notification.objects.filter(noti_type='finish').distinct().count()
 			request.session['noti_count_NGO'] = Notification.objects.filter(noti_type='suggest').distinct().count()
 			globals.noti_refresh = False
 		if request.user.is_authenticated() and request.user.email == SUPERVISOR_EMAIL:

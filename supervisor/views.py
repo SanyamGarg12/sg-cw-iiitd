@@ -32,10 +32,10 @@ def unverified_projects(request):
 def verify_project(request, project_id):
 	project = Project.objects.get(pk = project_id)
 	Notification.objects.get(project=project, noti_type='new', project__stage='to_be_verified').delete()
+	globals.noti_refresh = True
 	project.stage = "ongoing"
 	project.save()
 	EmailMessage("Congrats.. now get to work :)","Congratulations, your project has has been verified. Now start working and making a difference", to=[str(project.student.email)])
-	globals.noti_refresh = True
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
 
 @supervisor_logged_in
@@ -124,6 +124,8 @@ def basic_search(request):
 @supervisor_logged_in
 def complete(request,project_id):
 	project = get_object_or_404(Project, pk = project_id)
+	noti = Notification.objects.filter(project=project).delete()
+	globals.noti_refresh = True
 	project.stage = 'completed'
 	project.save()
 	EmailMessage("Congrats.. you did it :)","Congratulations, your completed project has has been accepted by the admin. Thanks for giving back to the community. Keep it up.",
@@ -199,11 +201,6 @@ def view_NGO(request, NGO_id):
 def all_news(request):
 	news = News.objects.all()
 	return render(request, 'all_news.html', {'news': news})
-
-@supervisor_logged_in
-def newlogs(request):
-	notifications = Notification.objects.filter(noti_type='log').distinct()
-	return render(request, 'newlogs.html', {'notifications': notifications})
 
 @supervisor_logged_in
 def suggested_NGOs(request):

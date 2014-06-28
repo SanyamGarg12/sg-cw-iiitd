@@ -53,12 +53,11 @@
             <li class="active">Community Work</li>
             <li><a href="{% url 'ongoing_projects' 0 %}">Ongoing Projects</a></li>
             <li><a href="{% url 'example_projects' %}">Example Projects</a></li>
-            <li><a href="{% url 'submitted_projects' %}">Submitted Projects</a></li>
           </ul>
           <ul class="nav nav-sidebar">
             <li class="active">Notifications</li>
             <li><a href="{% url 'unverified_projects' %}">New Proposals <span class="badge">{{ request.session.noti_count_proposal|add:"0" }}</span> </a></li>
-            <li><a href="{% url 'super_newlogs' %}">New Logs <span class="badge">{{ request.session.noti_count_log|add:"0" }}</span></a></li>
+            <li><a href="{% url 'submitted_projects' %}">New Submissions <span class="badge">{{ request.session.noti_count_submissions|add:"0" }}</span></a></li>
             <li><a href="{% url 'super_suggested_ngos' %}">New NGOs <span class="badge">{{ request.session.noti_count_NGO|add:"0" }}</span></a></li>
           </ul>
           <ul></ul>
