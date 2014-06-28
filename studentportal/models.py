@@ -6,6 +6,8 @@ from django.forms import ModelForm
 
 from django import forms
 
+from decorators import path_and_rename
+
 class NGO(models.Model):
     name    = models.CharField(max_length=255)
     link    = models.URLField()
@@ -35,7 +37,7 @@ class Project(models.Model):
 
 
 class Document(models.Model):
-    document = models.FileField(upload_to='uploads/%Y/')
+    document = models.FileField(upload_to=path_and_rename('uploads/%Y/'))
     date_added  = models.DateTimeField(default=timezone.now)
     #category has the following options -> proposal, log, submission
     category    = models.CharField(max_length=16)

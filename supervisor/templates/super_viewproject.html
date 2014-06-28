@@ -39,5 +39,11 @@
 <a class="btn btn-danger" role="button"  href = "{% url 'unverify_project' project.id %}">Unverify Project</a>
 {% endifequal %}
 
+{% if project.example %}
+<a class="btn btn-danger" role="button"  href = "{% url 'removefromexamples' project.example.pk %}">Remove from examples</a>
+{% else %}
+<a class="btn btn-warning" role="button"  href = "{% url 'addtoexamples' project.pk %}">Add to examples</a>
+{% endif %}
+
 </div>
 {% endblock %}

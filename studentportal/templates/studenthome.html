@@ -17,23 +17,23 @@
           <div class="row">
             {% for p in example_projects.all %}
             <div class="col-6 col-sm-6 col-lg-4">
-      				<p> <span class="badge" style="float:right;">  {{p.student.first_name}} {{p.student.last_name}} </span></p>
+      				<p> <span class="badge" style="float:right;">  {{p.project.student.first_name}} {{p.project.student.last_name}} </span></p>
       				<div class="thumbnail">
         				<div class="caption">
       						<h3>
-      		 				 {% ifequal p.stage "to_be_verified" %}
+      		 				 {% ifequal p.project.stage "to_be_verified" %}
 		     						 <span class="glyphicon glyphicon-flag" title="Unverified"></span>
 		     						 {% endifequal %}
-		      					{% ifequal p.stage "ongoing" %}
+		      					{% ifequal p.project.stage "ongoing" %}
 		      					  <span class="glyphicon glyphicon-cog" title="Ongoing"></span>
 		     						{% endifequal %}
-		      					{% ifequal p.stage "completed" %}
+		      					{% ifequal p.project.stage "completed" %}
 		      						<span class="glyphicon glyphicon-ok" title="Completed"></span>
 		      					{% endifequal %}
-     		 						{{ p.title|truncatechars:15 }}</h3>
+     		 						{{ p.project.title|truncatechars:15 }}</h3>
       		  			</div>
-        				<p>{{ p.goals|truncatechars:30 }}</p>
-        				<p><a class="btn btn-default" href="{% url 'viewproject' p.id %}" role="button">View details »</a></p>
+        				<p>{{ p.project.goals|truncatechars:30 }}</p>
+        				<p><a class="btn btn-default" href="{% url 'viewproject' p.project.id %}" role="button">View details »</a></p>
       				</div>
     				</div>
             {% endfor %}

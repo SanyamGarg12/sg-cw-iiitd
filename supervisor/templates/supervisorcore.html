@@ -52,8 +52,8 @@
             <li class="active">Community Work</li>
             <li><a href="{% url 'unverified_projects'%}">Unverified Projects</a></li>
             <li><a href="{% url 'ongoing_projects' 0 %}">Ongoing Projects</a></li>
-            <li><a href="#">Example Projects</a></li>
-            <li><a href="#">Submitted Projects</a></li>
+            <li><a href="{% url 'example_projects' %}">Example Projects</a></li>
+            <li><a href="{% url 'submitted_projects' %}">Submitted Projects</a></li>
           </ul>
           <ul class="nav nav-sidebar">
             <li class="active">Notifications</li>
@@ -63,7 +63,7 @@
           </ul>
           <ul></ul>
           <ul class="nav nav-sidebar">
-            <li><a href="">All Projects</a></li>
+            <li><a href="{% url 'super_allprojects' %}">All Projects</a></li>
             <li><a href="">All NGOs</a></li>
           </ul>
         </div>

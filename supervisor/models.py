@@ -16,4 +16,4 @@ class Notification(models.Model):
 
 class Example(models.Model):
 	project 	 = models.OneToOneField(Project, primary_key = True)
-	date_created = models.DateTimeField(timezone.now)
+	date_created = models.DateTimeField(default = timezone.now)

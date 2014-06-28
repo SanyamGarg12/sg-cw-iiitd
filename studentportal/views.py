@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 from PrivateData import SUPERVISOR_EMAIL
 
-from supervisor.models import Notification
+from supervisor.models import Notification, Example
 
 from models import ProjectForm, Project, Document, UploadDocumentForm
 
@@ -24,7 +24,7 @@ def index(request):
 	return HttpResponseRedirect(reverse('studenthome'))
 
 def home(request):
-	example_projects = Project.objects.all()[:10]
+	example_projects = Example.objects.all()[:10]
 	if request.user.is_authenticated():
 		return render(request, 'studenthome.html', 
 		{'example_projects': example_projects})
@@ -34,7 +34,6 @@ def home(request):
 	
 @login_required
 def addproject(request):
-
 	def add_user(sender, **kwargs):
 		if sender == Project:
 			obj = kwargs['instance']
@@ -56,6 +55,7 @@ def addproject(request):
 @login_required
 def viewproject(request, project_id):
 	project = get_object_or_404(Project, pk = project_id)
+
 	if request.user == project.student:
 		return render(request, 'viewproject.html',
 			{'project': project})

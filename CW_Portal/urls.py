@@ -7,8 +7,10 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 admin.autodiscover()
 
+from studentportal.views import index
+
 urlpatterns = patterns('',
-    url(r'^$', include('studentportal.urls')),
+    url(r'^$', index, name='index'),
     url(r'^student/', include('studentportal.urls')),
     url(r'^supervisor/', include('supervisor.urls')),
     url(r'^admin/', include(admin.site.urls)),

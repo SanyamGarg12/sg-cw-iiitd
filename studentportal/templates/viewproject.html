@@ -17,7 +17,7 @@
 	<center><h3>Documents</h3></center>
 	{% if project.documents.all %}
 	{% for doc in project.documents.all %}
-		<a href = "{% url 'download_document' doc.id %}">
+		<a href = "{% url 'download_document' doc.pk %}">
 		{{ doc.document.name }}</a>
 		<br />
 	{% endfor %}
