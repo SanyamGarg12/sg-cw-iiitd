@@ -19,5 +19,9 @@ urlpatterns = patterns('',
 	url(r'^all_ngo/$', views.all_NGOs, name='all_NGO'),
 	url(r'^suggest_ngo/$',views.suggest_NGO, name='suggest_ngo'),
 	url(r'^feedback/(?P<project_id>[0-9]+)/$', views.feedback, name='feedback'),
+	url(r'^allprojects/$',
+	 views.all_projects_open_to_public_year_select, name='all_projects_open_to_public_year_select'),
+	url(r'^allprojects/(?P<year>[0-9]+)/$', views.all_projects_open_to_public,
+		name='all_projects_open_to_public'),
 
 )

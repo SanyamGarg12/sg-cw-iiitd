@@ -25,13 +25,14 @@ def index(request):
 	return HttpResponseRedirect(reverse('studenthome'))
 
 def home(request):
+	news = News.objects.all().order_by('-date_created')[:5]
 	if request.user.is_authenticated():
 		example_projects = Example.objects.all()[:10]
-		news = News.objects.all().order_by('-date_created')[:5]
 		return render(request, 'studenthome.html', 
 		{'example_projects': example_projects, 'news': news})
 	else:
-		return render(request, 'core.html')
+		return render(request, 'studenthome.html',
+			{'news': news,})
 
 @login_required
 def addproject(request):
@@ -139,7 +140,7 @@ def _logout(request):
 	logout(request)
 	return HttpResponseRedirect(reverse('studenthome'))
 
-@login_required
+# @login_required
 def view_news(request, news_id='0'):
 	if news_id == '0':
 		news = News.objects.all()
@@ -185,3 +186,14 @@ def feedback(request, project_id):
 	else:
 		form = FeedbackForm()
 	return render(request, 'feedback.html', {'form': form, 'id': project_id})
+
+def all_projects_open_to_public_year_select(request):
+	from datetime import date
+	years = range(2014, date.today().year + 1)
+	return render(request, 'all_projects_open_to_public_year_select.html',
+		{'years': years})
+
+def all_projects_open_to_public(request, year):
+	projects = Project.objects.filter(date_created__year=year)
+	return render(request, 'all_projects_open_to_public.html',
+		{'projects': projects})

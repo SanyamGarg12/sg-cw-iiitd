@@ -1,0 +1,15 @@
+{% extends 'core.html' %}
+{% block content %}
+
+<div class="container">
+<center>
+<strong>Select a year: </strong>
+<ul>
+<br />
+{% for year in years %}
+<li><a href="{% url 'all_projects_open_to_public' year %}">{{ year }}</a></li>
+{% endfor %}
+</ul>
+</center>
+</div>
+{% endblock %}

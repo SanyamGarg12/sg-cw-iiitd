@@ -55,6 +55,12 @@ class Project(models.Model):
                 return True
         return False
 
+    def get_NGO(self):
+        if self.NGO:
+            return self.NGO.name
+        else: 
+            return self.NGO_name     
+
 class Document(models.Model):
     document = models.FileField(upload_to=path_and_rename('uploads/%Y/'))
     date_added  = models.DateTimeField(default=timezone.now)

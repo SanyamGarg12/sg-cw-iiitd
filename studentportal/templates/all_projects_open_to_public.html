@@ -1,0 +1,48 @@
+{% extends 'core.html' %}
+{% block content %}
+
+<style>
+table,th,td
+{
+border:1px solid black;
+}
+thead td
+{
+font-weight: bold;
+}
+th,td
+{
+padding:10px;
+}
+</style>
+
+<div class="container">
+<a href="{% url 'all_projects_open_to_public_year_select' %}">Year selection</a>
+<center>
+{% if projects %}
+<table>
+	<thead>
+		<tr>
+			<th>#.</th>
+			<th>Student</th>
+			<th>CW Project Title</th>
+			<th>NGO Worked With</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for project in projects %}
+			<tr>
+				<td>{{ forloop.counter }}</td>
+				<td>{{ project.student.first_name }} {{ project.student.last_name }}</td>
+				<td>{{ project.title }}</td>
+				<td>{{ project.get_NGO }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% else %}
+<strong>No projects found for the requested year</strong>
+{% endif %}
+</center>
+</div>
+{% endblock %}
