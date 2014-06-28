@@ -50,8 +50,8 @@
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
             <li class="active">Community Work</li>
-            <li><a href="#">Unverified Projects</a></li>
-            <li><a href="#">Ongoing Projects</a></li>
+            <li><a href="{% url 'unverified_projects'%}">Unverified Projects</a></li>
+            <li><a href="{% url 'ongoing_projects' 0 %}">Ongoing Projects</a></li>
             <li><a href="#">Example Projects</a></li>
             <li><a href="#">Submitted Projects</a></li>
           </ul>

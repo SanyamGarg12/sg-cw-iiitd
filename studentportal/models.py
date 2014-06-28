@@ -29,6 +29,11 @@ class Project(models.Model):
     def __unicode__(self):
         return self.title
 
+    def get_rollno(self):
+        first = self.student.email.split('@')[0][-5:]
+        return ''.join(['20',first])
+
+
 class Document(models.Model):
     document = models.FileField(upload_to='uploads/%Y/')
     date_added  = models.DateTimeField(default=timezone.now)

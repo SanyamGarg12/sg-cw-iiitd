@@ -1,0 +1,43 @@
+{% extends 'core.html' %}
+{% block content %}
+
+<div class="container">
+	<center>
+		{{ project.title }}
+	</center>
+		<h2>Student: </h2> {{ project.student.first_name }} {{ project.student.last_name }}
+		<h2>Roll No. : </h2> {{ project.get_rollno }} 
+		<h2>Email: </h2> {{ project.student.email }}
+		<h2>Credits: </h2> {{ project.credits }}
+		<h2>Proposed on: </h2>{{ project.date_created }}
+		<h2>Expected completion date: </h2>{{ project.expected_finish_date }}
+		<h2>NGO: </h2>{{ project.NGO_name }}
+		<h2>Details of NGO: </h2>{{ project.NGO_details }}
+		<h2>Working under: </h2>{{ project.NGO_super }}
+		<h2>Goals: </h2> {{ project.goals}}
+		<h2>Schedule: </h2> {{ project.schedule_text }}
+
+<hr />
+	<center><h3>Documents</h3></center>
+	{% if project.documents.all %}
+	{% for doc in project.documents.all %}
+		<strong>{{ doc.category }}: </strong>
+		<a href = "{{ doc.document.url }}">
+		{{ doc.document.name }}</a>
+
+		<br />
+	{% endfor %}
+	{% else %}
+		No logs uploaded till now
+	{% endif %}
+<hr />
+{% ifequal project.stage "to_be_verified" %}
+<a class="btn btn-warning" role="button"  href = "{% url 'verify_project' project.id %}">Verify Project</a>
+{% endifequal %}
+
+{% ifequal project.stage "ongoing" %}
+<a class="btn btn-danger" role="button"  href = "{% url 'unverify_project' project.id %}">Unverify Project</a>
+{% endifequal %}
+
+</div>
+{% endblock %}
