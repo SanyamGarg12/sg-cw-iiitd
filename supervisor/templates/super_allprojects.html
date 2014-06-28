@@ -8,6 +8,8 @@
       <tr>
         <th>#</th>
         <th>Student</th>
+        <th>Email</th>
+        <th>Roll number</th>
         <th>Title</th>
         <th>Credits</th>
       </tr>
@@ -17,6 +19,8 @@
       <tr>
         <td>{{ forloop.counter }}</td>
         <td><a href="#">{{ p.student.first_name }} {{ p.student.last_name }}</td>
+        <td>{{ p.student.email }}</td>
+        <td>{{ p.get_rollno }}</td>
         <td><a href="{% url 'super_viewproject' p.id %}">{{ p.title|truncatechars:60 }}</a></td>
         <td>{{ p.credits }}</td>
       </tr>

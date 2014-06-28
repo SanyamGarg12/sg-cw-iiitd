@@ -10,16 +10,20 @@
       <tr>
         <th>#</th>
         <th>Student</th>
+        <th>Email</th>
+        <th>Roll number</th>
         <th>Title</th>
         <th>Credits</th>
       </tr>
     </thead>
     <tbody>
-    {% for p in projects.all %}
+    {% for p in projects %}
       <tr>
         <td>{{ forloop.counter }}</td>
         <td><a href="#">{{ p.project.student.first_name }} {{ p.project.student.last_name }}</td>
-        <td><a href="{% url 'super_viewproject' p.project.id %}">{{ p.project.title|truncatechars:60 }}</td></a>
+        <td>{{ p.project.student.email }}</td>
+        <td>{{ p.project.get_rollno }}</td>
+        <td><a href="{% url 'super_viewproject' p.project.id %}">{{ p.project.title|truncatechars:60 }}</a></td>
         <td>{{ p.project.credits }}</td>
       </tr>
     {% endfor %}

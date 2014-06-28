@@ -49,8 +49,6 @@ def ongoing_projects(request, skip='0'):
 @supervisor_logged_in
 def viewproject(request, project_id):
 	project = Project.objects.get(pk = project_id)
-	import pdb
-	pdb.set_trace()
 	return render(request, 'super_viewproject.html', 
 		{'project': project})
 

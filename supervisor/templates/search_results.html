@@ -17,16 +17,14 @@
     </thead>
     <tbody>
     {% for p in projects %}
-      <a href="#">
       <tr>
         <td>{{ forloop.counter }}</td>
         <td><a href="#">{{ p.student.first_name }} {{ p.student.last_name }}</td>
         <td>{{ p.student.email }}</td>
-        <td>{{ p.student.get_rollno }}</td>
-        <td><a href="{% url 'super_viewproject' p.id %}">{{ p.title|truncatechars:60 }}</td></a>
+        <td>{{ p.get_rollno }}</td>
+        <td><a href="{% url 'super_viewproject' p.id %}">{{ p.title|truncatechars:60 }}</a></td>
         <td>{{ p.credits }}</td>
       </tr>
-      </a>
     {% endfor %}
     </tbody>
   </table>
