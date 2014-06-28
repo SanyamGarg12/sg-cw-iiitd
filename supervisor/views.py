@@ -4,7 +4,7 @@ from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 
 from django.db.models import Q
-from supervisor.decorators import supervisor_logged_in, is_int, EmailMessage
+from supervisor.decorators import supervisor_logged_in, is_int, EmailMessage,RenderProjectToMonthDistribution, RenderFeedbackExperiencePieChart
 
 from studentportal.models import Project, NGO, Category
 from models import Example, AdvanceSearchForm, NewsForm, News, Notification
@@ -64,6 +64,8 @@ def viewproject(request, project_id):
 @supervisor_logged_in
 def example_projects(request):
 	projects = Example.objects.all()
+	RenderFeedbackExperiencePieChart().start()
+	RenderProjectToMonthDistribution().start()
 	return render(request, 'super_exampleprojects.html', 
 		{
 			'projects': projects,

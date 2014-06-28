@@ -1,24 +1,6 @@
 {% extends 'supervisorcore.html' %}
+{% load staticfiles %}
 {% block content %}
-<h1 class="page-header">Statistics</h1>
-
-<div class="row placeholders">
-  <div class="col-xs-4 col-sm-4 placeholder">
-    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBEOEZEQiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEwMCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojZmZmO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEzcHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MjAweDIwMDwvdGV4dD48L3N2Zz4=" data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="200x200">
-    <h4>completed projects</h4>
-    <span class="text-muted">of all</span>
-  </div>
-  <div class="col-xs-4 col-sm-4 placeholder">
-    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzM5REJBQyIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEwMCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojMUUyOTJDO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEzcHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MjAweDIwMDwvdGV4dD48L3N2Zz4=" data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="200x200">
-    <h4>People with more that 1 CW project</h4>
-    <span class="text-muted">Something else</span>
-  </div>
-  <div class="col-xs-4 col-sm-4 placeholder">
-    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBEOEZEQiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEwMCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojZmZmO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEzcHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MjAweDIwMDwvdGV4dD48L3N2Zz4=" data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="200x200">
-    <h4>Generate new</h4>
-    <span class="text-muted">Something else</span>
-  </div>
-</div>
 
 {% if recent_projects %}
 <h2 class="sub-header">Latest CW Projects</h2>
@@ -47,6 +29,27 @@
     {% endfor %}
     </tbody>
   </table>
+</div>
+
+<h1 class="page-header">Statistics</h1>
+<div class="row placeholders">
+  <div class="col-xs-6 col-sm-6 placeholder">
+    <object data="{% static 'statistics/feedback_experience_piechart.svg' %}" type="image/svg+xml">
+    </object>
+    <h4>Student experience while doing Community Work</h4>
+    <span class="text-muted">based on the feedback filled by the students after completion.</span>
+  </div>
+  <div class="col-xs-6 col-sm-6 placeholder">
+    <object data="{% static 'statistics/project_to_month_distribution.svg' %}" type="image/svg+xml">
+    </object>
+    <h4>Project started v/s month of year</h4>
+    <span class="text-muted"></span>
+  </div>
+  <div class="col-xs-6 col-sm-6 placeholder">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBEOEZEQiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEwMCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojZmZmO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEzcHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MjAweDIwMDwvdGV4dD48L3N2Zz4=" data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="200x200">
+    <h4>Generate new</h4>
+    <span class="text-muted">Something else</span>
+  </div>
 </div>
 {% endif %}
 {% endblock %}

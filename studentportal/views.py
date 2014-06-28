@@ -194,6 +194,6 @@ def all_projects_open_to_public_year_select(request):
 		{'years': years})
 
 def all_projects_open_to_public(request, year):
-	projects = Project.objects.filter(date_created__year=year)
+	projects = Project.objects.filter(date_created__year=year, stage='completed')
 	return render(request, 'all_projects_open_to_public.html',
 		{'projects': projects})

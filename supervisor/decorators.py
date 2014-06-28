@@ -3,11 +3,53 @@ from django.http import Http404
 from PrivateData import SUPERVISOR_EMAIL, EMAIL_HOST_USER
 
 from supervisor.models import Notification
+from studentportal.models import Project
 
 import threading
 from django.core.mail import EmailMultiAlternatives
 
 from CW_Portal import globals
+
+from studentportal.models import Feedback
+from pygal import Pie, StackedLine
+from pygal.style import CleanStyle as pygal_CleanStyle
+import os
+from CW_Portal.settings import BASE_DIR
+import datetime
+
+class RenderFeedbackExperiencePieChart(threading.Thread):
+	def __init__(self):
+		print "RENDERING"
+		threading.Thread.__init__(self)
+	def run(self):
+		frequency = [0, 0, 0, 0, 0]
+		for feedback in Feedback.objects.all():
+			frequency[int(feedback.experience) - 1] += 1
+		pie_chart = Pie(title_font_size = 48)
+		pie_chart.title = "Student experience"
+		for x in range(5):
+			print str(x+1),x,frequency[x]
+			pie_chart.add(str(x+1), frequency[x])
+		pie_chart.render_to_file(os.path.join(BASE_DIR, 'studentportal/static/statistics/feedback_experience_piechart.svg'))
+		print "RENDERED to",os.path.join(BASE_DIR, 'studentportal/static/feedback_experience_piechart.svg')
+
+class RenderProjectToMonthDistribution(threading.Thread):
+	def __init__(self):
+		threading.Thread.__init__(self)
+
+	def run(self):
+		chart = StackedLine(fill=True, title_font_size=48,
+		 y_title = 'Projects', style=pygal_CleanStyle )#\
+		 # interpolate='quadratic',,)
+		years = {x: 0 for x in range(2014, datetime.date.today().year+1)[-5:]}
+		#db reading is very fast / caching
+		for year in years:
+			month = {x: 0 for x in range(1,13)}
+			for project in Project.objects.all():
+				month[project.date_created.month] += 1
+			chart.add(str(year),[month[x] for x in sorted(month)] )
+		chart.render_to_file(os.path.join(BASE_DIR, 'studentportal/static/statistics/project_to_month_distribution.svg'))
+		print "RENDEREDasf"
 
 def supervisor_logged_in(view):
 	def _wrapped_view(request, *args, **kwargs):
@@ -19,6 +61,7 @@ def supervisor_logged_in(view):
 			request.session['noti_count_submissions'] = Notification.objects.filter(noti_type='finish').distinct().count()
 			request.session['noti_count_NGO'] = Notification.objects.filter(noti_type='suggest').distinct().count()
 			globals.noti_refresh = False
+
 		if request.user.is_authenticated() and request.user.email == SUPERVISOR_EMAIL:
 			return view(request, *args, **kwargs)
 		raise Http404()
@@ -44,4 +87,5 @@ class EmailThread(threading.Thread):
 		msg.send()
 
 def EmailMessage(subject, text_content, to=[]):
-	EmailThread(subject, text_content, to).start()
+	pass
+	# EmailThread(subject, text_content, to).start()

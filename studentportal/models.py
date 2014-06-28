@@ -75,7 +75,8 @@ class Feedback(models.Model):
     project         = models.ForeignKey(Project, primary_key = True, related_name='feedback')
     hours           = models.IntegerField()
     achievements    = models.CharField(max_length = 1024)
-    experience      = models.CharField(max_length = 1024)
+    experience      = models.IntegerField(choices=(
+        (1,"Very Poor"), (2,"Poor"), (3,"Neutral"), (4,"Good"), (5,"Very Good") ), default=1)
 
     def get_name(self):
         return ' '.join([self.project.student.first_name, self.project.student.last_name])
