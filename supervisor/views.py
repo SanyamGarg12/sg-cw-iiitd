@@ -141,7 +141,11 @@ def advance_search(request):
 	if request.method == "POST":
 		form = AdvanceSearchForm(request.POST)
 		if form.is_valid():
-			projects = Project.objects.all()
+			#this will speed up querying a lot
+			if form.cleaned_data['category']:
+				projects = form.cleaned_data['category'].projects.all()
+			else:
+				projects = Project.objects.all()
 			if form.cleaned_data['stage'] != 'all':
 				projects = projects.filter(stage=form.cleaned_data['stage'])
 			if form.cleaned_data['project_title']:
