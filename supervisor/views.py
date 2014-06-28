@@ -3,11 +3,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 
+from django.db.models import Q
 from supervisor.decorators import supervisor_logged_in, is_int
 
 from studentportal.models import Project
-
-from models import Example
+from models import Example, AdvanceSearchForm
 
 @supervisor_logged_in
 def home(request):
@@ -115,3 +115,40 @@ def complete(request,project_id):
 	project.save()
 	#send link for feedback form
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project_id}))
+
+@supervisor_logged_in
+def noti_proposal(request):
+	pass
+
+@supervisor_logged_in
+def advance_search(request):
+	if request.method == "POST":
+		form = AdvanceSearchForm(request.POST)
+		if form.is_valid():
+			projects = Project.objects.all()
+			if form.cleaned_data['stage'] != 'all':
+				projects = projects.filter(stage=form.cleaned_data['stage'])
+			if form.cleaned_data['project_title']:
+				projects = projects.filter(title__icontains=form.cleaned_data['project_title'])
+			if form.cleaned_data['NGO_name']:
+				projects = projects.filter(title__icontains=form.cleaned_data['NGO_name'])
+			if form.cleaned_data['proposal_year']:
+				date = int(form.cleaned_data['proposal_year'])
+				projects = projects.filter(date_created__year=date)
+			if form.cleaned_data['email']:
+				projects = projects.filter(student__email__icontains=form.cleaned_data['email'])
+			if form.cleaned_data['roll_no']:
+				roll_no = str(form.cleaned_data['roll_no'])
+				if len(roll_no) > 5:
+					roll_no = roll_no[-5:]
+				projects = projects.filter(student__email__icontains=roll_no)
+			if form.cleaned_data['name']:
+				name = form.cleaned_data['name']
+				projects = projects.filter(Q(student__first_name__icontains=name) | 
+					Q(student__last_name__icontains=name))
+			return render(request, 'advance_search_results.html',
+				{'projects': projects})
+	else:
+		form = AdvanceSearchForm()
+	return render(request, 'advance_search.html',
+		{'form': form})

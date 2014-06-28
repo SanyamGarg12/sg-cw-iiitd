@@ -6,7 +6,7 @@ from django.forms import ModelForm
 
 from django import forms
 
-from decorators import path_and_rename
+from decorators import path_and_rename, validate_credits
 
 class NGO(models.Model):
     name    = models.CharField(max_length=255)
@@ -14,7 +14,7 @@ class NGO(models.Model):
     details = models.TextField()
 
 class Project(models.Model):
-    credits                 = models.IntegerField(default=2)
+    credits                 = models.IntegerField(default=2, validators=[validate_credits])
     title                   = models.CharField(max_length=1024)
     date_created            = models.DateTimeField(default=timezone.now)
     NGO_name                = models.CharField(max_length=1024)

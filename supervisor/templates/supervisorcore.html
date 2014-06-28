@@ -35,7 +35,7 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Advanced Search</a></li>
+            <li><a href="{% url 'advance_search' %}">Advance Search</a></li>
             <li><a href="{% url 'supervisor_logout' %}">Logout</a></li>
           </ul>
           <form class="navbar-form navbar-right" action="/supervisor/basic_search/" method="POST">
@@ -58,9 +58,9 @@
           </ul>
           <ul class="nav nav-sidebar">
             <li class="active">Notifications</li>
-            <li><a href="">Proposals uploaded</a></li>
-            <li><a href="">Logs Uploaded</a></li>
-            <li><a href="">NGO suggested</a></li>
+            <li><a href="">New Proposals <span class="badge">{{ request.session.noti_count_proposal|add:"0" }}</span> </a></li>
+            <li><a href="">New Logs <span class="badge">{{ request.session.noti_count_log|add:"0" }}</span></a></li>
+            <li><a href="">New NGOs <span class="badge">{{ request.session.noti_count_suggest|add:"0" }}</span></a></li>
           </ul>
           <ul></ul>
           <ul class="nav nav-sidebar">

@@ -17,5 +17,7 @@ urlpatterns = patterns('',
 	url(r'^allprojects/(?P<skip>[0-9]+)/$', views.allprojects, name = 'super_allprojects'),
 	url(r'^basic_search/$', views.basic_search),
 	url(r'^complete/(?P<project_id>[0-9]+)/$', views.complete, name = 'complete'),
+	# url(r'^notification_proposals/$', views.noti_proposal, name='noti_proposal'),
+	url(r'^advance_search/$', views.advance_search, name='advance_search'),
 
 )
