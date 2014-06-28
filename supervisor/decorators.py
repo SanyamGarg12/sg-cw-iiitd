@@ -8,3 +8,10 @@ def supervisor_logged_in(view):
             return view(request, *args, **kwargs)
         raise Http404()
     return _wrapped_view
+
+def is_int(x):
+	try:
+		x = int(x)
+		return True
+	except:
+		return False

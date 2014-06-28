@@ -55,7 +55,6 @@ def addproject(request):
 @login_required
 def viewproject(request, project_id):
 	project = get_object_or_404(Project, pk = project_id)
-
 	if request.user == project.student:
 		return render(request, 'viewproject.html',
 			{'project': project})

@@ -15,4 +15,7 @@ urlpatterns = patterns('',
 	url(r'^submittedprojects/$', views.submitted_projects, name='submitted_projects'),
 	url(r'^allprojects/$', views.allprojects, name = 'super_allprojects'),
 	url(r'^allprojects/(?P<skip>[0-9]+)/$', views.allprojects, name = 'super_allprojects'),
+	url(r'^basic_search/$', views.basic_search),
+	url(r'^complete/(?P<project_id>[0-9]+)/$', views.complete, name = 'complete'),
+
 )

@@ -35,6 +35,12 @@ class Project(models.Model):
         first = self.student.email.split('@')[0][-5:]
         return ''.join(['20',first])
 
+    def submitted_and_awaiting_completion(self):
+        if self.stage != 'ongoing': return False
+        for document in self.documents.all():
+            if document.category == 'submission':
+                return True
+        return False
 
 class Document(models.Model):
     document = models.FileField(upload_to=path_and_rename('uploads/%Y/'))

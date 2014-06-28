@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 
-from supervisor.decorators import supervisor_logged_in
+from supervisor.decorators import supervisor_logged_in, is_int
 
 from studentportal.models import Project
 
@@ -49,6 +49,8 @@ def ongoing_projects(request, skip='0'):
 @supervisor_logged_in
 def viewproject(request, project_id):
 	project = Project.objects.get(pk = project_id)
+	import pdb
+	pdb.set_trace()
 	return render(request, 'super_viewproject.html', 
 		{'project': project})
 
@@ -77,8 +79,8 @@ def remove_from_examples(request, example_project_id):
 
 @supervisor_logged_in
 def submitted_projects(request):
-	projects = Project.objects.filter(stage='ongoing')
-	projects.filter(documents__category__exact='submission').distinct()
+	projects = Project.objects.filter(documents__category__exact='submission',
+		stage='ongoing').distinct()
 	return render(request, 'super_submittedprojects.html',
 		{'projects': projects})
 
@@ -94,3 +96,24 @@ def allprojects(request, skip='0'):
 		{'projects': projects,
 		 #'next': next_temp, 'back': back_temp
 		 })
+
+@supervisor_logged_in
+def basic_search(request):
+	if request.method == "POST":
+		query = request.POST.get('search_query', None)
+		if query:
+			if len(query)==7 and is_int(query):
+				#full roll number
+				query = str(query)[2:]
+			projects = Project.objects.filter(student__email__icontains = query)
+			return render(request, 'search_results.html',
+				{'projects': projects, 'query': query})
+	return HttpResponseRedirect(reverse('index'))
+
+@supervisor_logged_in
+def complete(request,project_id):
+	project = get_object_or_404(Project, pk = project_id)
+	project.stage = 'completed'
+	project.save()
+	#send link for feedback form
+	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project_id}))

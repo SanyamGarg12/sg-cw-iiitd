@@ -1,9 +1,7 @@
-{% extends 'core.html' %}
+{% extends 'supervisorcore.html' %}
 {% block content %}
-
-<div class="container">
 	<center>
-		{{ project.title }}
+		<h3>{{ project.title }}</h3>
 	</center>
 		<h2>Student: </h2> {{ project.student.first_name }} {{ project.student.last_name }}
 		<h2>Roll No. : </h2> {{ project.get_rollno }} 
@@ -45,5 +43,7 @@
 <a class="btn btn-warning" role="button"  href = "{% url 'addtoexamples' project.pk %}">Add to examples</a>
 {% endif %}
 
-</div>
+{% if project.submitted_and_awaiting_completion %}
+<a class="btn btn-warning" role="button"  href = "{% url 'complete' project.pk %}" style="float:right;">Complete Project</a>
+{% endif %}
 {% endblock %}

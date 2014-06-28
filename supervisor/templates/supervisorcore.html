@@ -38,8 +38,9 @@
             <li><a href="#">Advanced Search</a></li>
             <li><a href="{% url 'supervisor_logout' %}">Logout</a></li>
           </ul>
-          <form class="navbar-form navbar-right">
-            <input class="form-control" placeholder="Name / Email / Roll No." type="text">
+          <form class="navbar-form navbar-right" action="/supervisor/basic_search/" method="POST">
+            {% csrf_token %}
+            <input class="form-control" placeholder="First name / Email / Roll No." type="text" name = "search_query">
           </form>
         </div>
       </div>
