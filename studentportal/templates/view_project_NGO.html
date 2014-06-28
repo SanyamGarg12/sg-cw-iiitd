@@ -1,0 +1,22 @@
+{% extends 'core.html' %}
+{% block content %}
+
+{% if project.NGO %}
+You have linked your community work with this recognised NGO: <strong>{{ project.NGO.name }}</strong>
+<br /> In case its incorrect, select one of the recognied NGO's. If your NGO is not listed, simply let it be empty.
+<br /> Please <a href="{% url 'unlink_ngo_project' project.id %}">click here</a> to remove your link with this NGO.
+{% else %}
+You have currently not linked your project with any recognised NGO. Select a NGO from the listed recognised NGOs or simply leave this empty.
+{% endif %}
+<hr />
+
+<center><h2>Recognised NGOs</h2></center>
+<ol>
+{% for n in NGOs %}
+	<li>  {{ n.name|truncatechars:"100" }} <a href="{% url 'link_NGO_project' n.id project.id %}"> Link your project with this </a></li>
+	<br />
+{% empty %}
+<center>There are no Recognised NGOs at the moment</center>
+{% endfor %}
+</ol>
+{% endblock %}

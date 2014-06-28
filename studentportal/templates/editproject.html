@@ -1,10 +1,12 @@
-<html>
+{% extends 'core.html' %}
 
+{% block content %}
+<div class="container">
 <form action="{% url 'editproject' form.instance.id %}" method="POST"> {% csrf_token %}
 <table>
 	{{ form.as_table }}
 </table>
 <input type='submit' value='Edit' />
 </form>
-
-</html>
+</div>
+{% endblock %}

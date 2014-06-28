@@ -1,0 +1,16 @@
+{% extends 'supervisorcore.html' %}
+{% block content %}
+<a class="btn btn-warning" style="float:right;" role="button" href = "{% url 'add_news' %}">Post a{{ news|pluralize:',nother' }} news</a>
+<br />
+<hr />
+<table>
+	{% for n in news %}
+		<tr>
+		<td>{{forloop.counter}}</td>
+		<td><a href="{% url 'view_news' n.id %}">{{ n.content|truncatechars:"100" }}</a></td>
+		<td>{{ n.created_on|date:"D d M Y" }}</td>
+		<td>{{ n.get_priority }}</td>
+		</tr>
+	{% endfor %}
+</table>
+{% endblock %}

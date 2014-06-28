@@ -1,0 +1,38 @@
+{% extends 'supervisorcore.html' %}
+
+{% block content %}
+
+<style>
+table,th,td
+{
+border:1px solid black;
+}
+th,td
+{
+padding:10px;
+}
+</style>
+<center><h2>{{NGO.name}}</h2></center>
+
+<h2>Link: </h2>{{NGO.link}}
+<h2>Details: </h2>
+{{ NGO.details }}
+{# NGO.category #}
+
+<br />
+<hr />
+<center><strong>CW Projects mentored by the NGO</strong></center>
+<table >
+{% for p in NGO.projects.all %}
+<tr>
+	<td> {{forloop.counter}} </td>
+	<td> <a href="{% url 'super_viewproject' p.id %}">{{p.title }}</a></td>
+	<td> {{p.student }} </td>
+	<td> {{p.date_created }} </td>
+</tr>
+
+{% empty %}
+No one has worked with it as of now.
+{% endfor %}
+</table>
+{% endblock %}

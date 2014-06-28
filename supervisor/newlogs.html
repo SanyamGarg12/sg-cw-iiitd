@@ -1,0 +1,28 @@
+{% extends 'supervisorcore.html' %}
+
+{% block content %}
+
+<style>
+table,th,td
+{
+border:1px solid black;
+}
+th,td
+{
+padding:10px;
+}
+</style>
+
+<table >
+{% for noti in notifications %}
+<tr>
+	<td> {{forloop.counter}} </td>
+	<td>{{ noti.project.student.email }}</td>
+	<td> <a href="{% url 'super_viewproject' noti.project.id %}">{{noti.project.name }}</a> </td>
+</tr>
+
+{% empty %}
+We have not verified any NGO as of now it seems..!!
+{% endfor %}
+</table>
+{% endblock %}

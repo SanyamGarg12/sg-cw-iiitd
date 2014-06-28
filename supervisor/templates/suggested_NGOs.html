@@ -1,0 +1,43 @@
+{% extends 'supervisorcore.html' %}
+
+{% block content %}
+
+<style>
+table,th,td
+{
+border:1px solid black;
+}
+thead td
+{
+font-weight: bold;
+}
+th,td
+{
+padding:10px;
+}
+</style>
+
+<table >
+<thead>
+	<td>No.</td>
+	<td>NGO name</td>
+	<td>NGO link</td>
+	<td>NGO details</td>
+	<td>Suggested by</td>
+	<td>Actions</td>
+</thead>
+{% for noti in notifications %}
+<tr>
+	<td> {{forloop.counter}} </td>
+	<td>{{ noti.NGO_name }}</td>
+	<td>{{ noti.NGO_link }}</td>
+	<td>{{ noti.NGO_details }}</td>
+	<td>{{ noti.NGO_sugg_by }}</td>
+	<td><a class="btn btn-warning" role="button"  href = "{% url 'accept_NGO' noti.pk %}">Accept this NGO</a>  <a class="btn btn-danger" role="button"  href = "{% url 'reject_NGO' noti.pk %}">Reject this NGO</a></td>
+</tr>
+
+{% empty %}
+There are no new suggested NGOs
+{% endfor %}
+</table>
+{% endblock %}

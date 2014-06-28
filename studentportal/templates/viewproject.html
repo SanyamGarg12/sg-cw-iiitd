@@ -5,16 +5,30 @@
 	<center>
 		{{ project.title }}
 	</center>
+		<h2>Goals: </h2>
+		{{ project.goals}}
+	<h2>Schedule: </h2>
+		{{ project.schedule_text }}
+	<h2>
+		NGO:
+	</h2>
+	{{ project.NGO_name }}
+	<a href="{% url 'view_project_NGO' project.id %}">Change NGO details</a>
 
-	<a href="{% url 'editproject' project.id %}">Edit your project details</a>
-	<a href="{% url 'upload_document' project.id %}">Upload logs</a>
+<hr />
+<a class="btn btn-warning" role="button"  href = "{% url 'editproject' project.id %}">Edit CW project details</a>
+<a class="btn btn-primary" role="button"  href = "{% url 'upload_document' project.id %}">Upload files</a>
 
-	<center>DOCUMENTS</center>
+	<center><h3>Documents</h3></center>
+	{% if project.documents.all %}
 	{% for doc in project.documents.all %}
-		<a href = "{% url 'download_document' doc.id %}">
+		<strong>{{ doc.category }}: </strong>
+		<a href = "{% url 'download_document' doc.pk %}">
 		{{ doc.document.name }}</a>
 		<br />
-
 	{% endfor %}
+	{% else %}
+		No logs uploaded till now
+	{% endif %}
 
 {% endblock %}

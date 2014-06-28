@@ -1,0 +1,17 @@
+{% extends 'supervisorcore.html' %}
+{% block content %}
+
+<form action="{% url 'advance_search' %}" method = "post" enctype="multipart/form-data"> {% csrf_token %}
+<p>{{ form.non_field_errors }}</p>
+<table>
+<tr><td>{{ form.stage.label_tag }} </td> <td>{{ form.stage }}</td></tr>
+<tr><td>{{ form.name.label_tag }}</td> <td> {{form.name }} </td></tr>
+<tr><td>{{ form.email.label_tag }}</td> <td> {{form.email }} </td></tr>
+<tr><td>{{ form.roll_no.label_tag }}</td> <td> {{form.roll_no }} </td></tr>
+<tr><td>{{ form.project_title.label_tag }}</td> <td> {{form.project_title }} </td></tr>
+<tr><td>{{ form.NGO_name.label_tag }}</td> <td> {{form.NGO_name }} </td></tr>
+<tr><td>{{ form.proposal_year.label_tag }}</td> <td> {{form.proposal_year }} </td></tr>
+<tr><td><input type="submit" value="Upload" /></td><td></td></tr>
+</table>
+</form>
+{% endblock %}

@@ -1,0 +1,30 @@
+from django.conf.urls import patterns, url
+from . import views
+
+urlpatterns = patterns('',
+	url(r'^home/', views.home, name='supervisor_home'),
+	url(r'^logout/$', views._logout, name='supervisor_logout'),
+	url(r'^ongoing/(?P<skip>[0-9]+)/$', views.ongoing_projects, name='ongoing_projects'),
+	url(r'^unverified/$', views.unverified_projects, name='unverified_projects'),
+	url(r'^verify/(?P<project_id>[0-9]+)/$', views.verify_project, name='verify_project'),
+	url(r'^unverify/(?P<project_id>[0-9]+)/$', views.unverify_project, name='unverify_project'),
+	url(r'^project/(?P<project_id>[0-9]+)/$', views.viewproject, name = 'super_viewproject'),
+	url(r'^example/$', views.example_projects, name = 'example_projects'),
+	url(r'^addtoexamples/(?P<project_id>[0-9]+)/$', views.add_to_examples, name='addtoexamples'),
+	url(r'^removefromexamples/(?P<example_project_id>[0-9]+)/$', views.remove_from_examples, name='removefromexamples'),
+	url(r'^submittedprojects/$', views.submitted_projects, name='submitted_projects'),
+	url(r'^allprojects/$', views.allprojects, name = 'super_allprojects'),
+	url(r'^allprojects/(?P<skip>[0-9]+)/$', views.allprojects, name = 'super_allprojects'),
+	url(r'^basic_search/$', views.basic_search),
+	url(r'^complete/(?P<project_id>[0-9]+)/$', views.complete, name = 'complete'),
+	url(r'^advance_search/$', views.advance_search, name='advance_search'),
+	url(r'^news/new/$', views.add_news, name='add_news'),
+	url(r'^news/all/$', views.all_news, name='all_news'),
+	url(r'^news/(?P<news_id>[0-9]+)/$', views.view_news, name='view_news'),
+	url(r'^all_ngos/$', views.all_NGO, name='super_all_NGO'),
+	url(r'^NGO/(?P<NGO_id>[0-9]+)/$', views.view_NGO, name='super_view_ngo'),
+	url(r'^suggested_NGO/$', views.suggested_NGOs, name='super_suggested_ngos'),
+	url(r'^acceptNGO/(?P<noti_id>[0-9]+)/$', views.accept_NGO, name='accept_NGO'),
+	url(r'^rejectNGO/(?P<noti_id>[0-9]+)/$', views.reject_NGO, name='reject_NGO'),
+
+)
