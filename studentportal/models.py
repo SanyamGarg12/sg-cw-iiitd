@@ -39,7 +39,8 @@ class Project(models.Model):
     student                 = models.ForeignKey(User, related_name='projects')
     stage                   = models.CharField(max_length = 15, default = 'to_be_verified')
     #stage includes -> 'to_be_verified','ongoing', 'completed' 
-    category                = models.ForeignKey(Category, default=Category.objects.get(name='other'), related_name='projects')
+    category                = models.ForeignKey(Category, default=Category.objects.get(name='other'),
+     related_name='projects')
 
     def __unicode__(self):
         return self.title
@@ -103,7 +104,12 @@ class ProjectForm(ModelForm):
         model = Project
         fields = ['title', 'credits', 'NGO_name', 'NGO_details',
                 'NGO_super', 'NGO_super_contact', 'goals',
-                'schedule_text']
+                'schedule_text','category']
+        widgets = {
+        'category' : forms.RadioSelect()
+        }
+        category = forms.ModelChoiceField(queryset=Category.objects.all())
+
 
 class UploadDocumentForm(forms.Form):
     document = forms.FileField(

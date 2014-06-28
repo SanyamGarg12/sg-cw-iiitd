@@ -11,7 +11,7 @@ from PrivateData import SUPERVISOR_EMAIL
 from supervisor.models import Notification, Example, News
 
 from models import ProjectForm, Project, Document, UploadDocumentForm, NGO, suggest_NGOForm
-from models import Feedback, FeedbackForm
+from models import Feedback, FeedbackForm, Category
 
 from django.db.models.signals import pre_save
 
@@ -43,6 +43,10 @@ def addproject(request):
 
 	if request.method == 'POST':
 		form = ProjectForm(request.user, request.POST)
+		import pdb
+		# pdb.set_trace()
+		# form.fields["category"] = Category.objects.get(name=form.instance.category_id)
+		
 		if form.is_valid():
 			pre_save.connect(add_user)
 			form.save()
