@@ -10,6 +10,8 @@ from PrivateData import SUPERVISOR_EMAIL
 
 from supervisor.models import Notification, Example, News
 
+from supervisor.decorators import RenderFeedbackExperiencePieChart, RenderProjectToMonthDistribution, RenderProjectCategoryPieChart
+
 from models import ProjectForm, Project, Document, UploadDocumentForm, NGO, suggest_NGOForm
 from models import Feedback, FeedbackForm, Category
 
@@ -42,16 +44,14 @@ def addproject(request):
 			obj.student = request.user
 
 	if request.method == 'POST':
-		form = ProjectForm(request.user, request.POST)
-		import pdb
-		# pdb.set_trace()
-		# form.fields["category"] = Category.objects.get(name=form.instance.category_id)
-		
+		form = ProjectForm(request.user, request.POST)		
 		if form.is_valid():
 			pre_save.connect(add_user)
 			form.save()
 			pre_save.disconnect(add_user)
 			add_notification("new", Project.objects.last())
+			RenderProjectToMonthDistribution().start()
+			RenderProjectCategoryPieChart().start()
 			return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': Project.objects.last().id}))
 	else:
 		form = ProjectForm(request.user)
@@ -84,6 +84,7 @@ def editproject(request, project_id):
 			if form.is_valid():
 				form.save()
 				add_notification("edit", instance)
+				RenderProjectCategoryPieChart().start()
 			return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
 		return render(request, 'editproject.html',
 		 {'form': form, 'instance': instance})
@@ -185,7 +186,9 @@ def feedback(request, project_id):
 	if request.method == 'POST':
 		form = FeedbackForm(request.POST)
 		if form.is_valid():
+			form.instance.project = project
 			form.save()
+			RenderFeedbackExperiencePieChart().start()
 			return HttpResponseRedirect(reverse('index'))
 	else:
 		form = FeedbackForm()

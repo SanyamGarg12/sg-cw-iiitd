@@ -18,6 +18,9 @@
 <hr />
 <a class="btn btn-warning" role="button"  href = "{% url 'editproject' project.id %}">Edit CW project details</a>
 <a class="btn btn-primary" role="button"  href = "{% url 'upload_document' project.id %}">Upload files</a>
+{% ifequal project.stage "completed" %}{% if project.feedback.all %}{% else %}
+<a class="btn btn-info" href="{% url 'feedback' project.id %}" role="button">Give feedback»</a>
+{% endif %}{% endifequal %}
 
 	<center><h3>Documents</h3></center>
 	{% if project.documents.all %}
