@@ -11,9 +11,12 @@ You have currently not linked your project with any recognised NGO. Select a NGO
 <hr />
 
 <center><h2>Recognised NGOs</h2></center>
+<ol>
 {% for n in NGOs %}
-	{{ forloop.counter }}  {{ n.name|truncatechars:"100" }} <a href="{% url 'link_NGO_project' n.id project.id %}"> Link your project with this </a>
+	<li>  {{ n.name|truncatechars:"100" }} <a href="{% url 'link_NGO_project' n.id project.id %}"> Link your project with this </a></li>
+	<br />
 {% empty %}
 <center>There are no Recognised NGOs at the moment</center>
 {% endfor %}
+</ol>
 {% endblock %}

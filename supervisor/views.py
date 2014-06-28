@@ -6,8 +6,8 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from supervisor.decorators import supervisor_logged_in, is_int
 
-from studentportal.models import Project, NGO
-from models import Example, AdvanceSearchForm, NewsForm, News
+from studentportal.models import Project, NGO, Category
+from models import Example, AdvanceSearchForm, NewsForm, News, Notification
 
 @supervisor_logged_in
 def home(request):
@@ -180,3 +180,29 @@ def view_NGO(request, NGO_id):
 def all_news(request):
 	news = News.objects.all()
 	return render(request, 'all_news.html', {'news': news})
+
+@supervisor_logged_in
+def newlogs(request):
+	notifications = Notification.objects.filter(noti_type='log').distinct()
+	return render(request, 'newlogs.html', {'notifications': notifications})
+
+@supervisor_logged_in
+def suggested_NGOs(request):
+	notifications = Notification.objects.filter(noti_type='suggest').distinct()
+	return render(request, 'suggested_NGOs.html', {'notifications': notifications})	
+
+@supervisor_logged_in
+def accept_NGO(request, noti_id):
+	noti = get_object_or_404(Notification, pk = noti_id)
+	NGO.objects.create(name=noti.NGO_name,
+		link=noti.NGO_link,
+		details=noti.NGO_details,
+		category=Category.objects.last())
+	noti.delete()
+	return HttpResponseRedirect(reverse('super_suggested_ngos'))
+
+@supervisor_logged_in
+def reject_NGO(request, noti_id):
+	noti = get_object_or_404(Notification, pk=noti_id)
+	noti.delete()
+	return HttpResponseRedirect(reverse('super_suggested_ngos'))

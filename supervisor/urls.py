@@ -23,4 +23,9 @@ urlpatterns = patterns('',
 	url(r'^news/(?P<news_id>[0-9]+)/$', views.view_news, name='view_news'),
 	url(r'^all_ngos/$', views.all_NGO, name='super_all_NGO'),
 	url(r'^NGO/(?P<NGO_id>[0-9]+)/$', views.view_NGO, name='super_view_ngo'),
+	url(r'^newlogs/$', views.newlogs, name = 'super_newlogs'),
+	url(r'^suggested_NGO/$', views.suggested_NGOs, name='super_suggested_ngos'),
+	url(r'^acceptNGO/(?P<noti_id>[0-9]+)/$', views.accept_NGO, name='accept_NGO'),
+	url(r'^rejectNGO/(?P<noti_id>[0-9]+)/$', views.reject_NGO, name='reject_NGO'),
+
 )

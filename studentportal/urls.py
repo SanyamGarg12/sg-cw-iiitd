@@ -17,5 +17,6 @@ urlpatterns = patterns('',
 	url(r'^unlink_ngo_project/(?P<project_id>[0-9]+)/$', views.unlink_NGO_project,
 		name = 'unlink_ngo_project'),
 	url(r'^all_ngo/$', views.all_NGOs, name='all_NGO'),
-	
+	url(r'^suggest_ngo/$',views.suggest_NGO, name='suggest_ngo'),
+
 )

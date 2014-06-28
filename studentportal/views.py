@@ -10,7 +10,7 @@ from PrivateData import SUPERVISOR_EMAIL
 
 from supervisor.models import Notification, Example, News
 
-from models import ProjectForm, Project, Document, UploadDocumentForm, NGO
+from models import ProjectForm, Project, Document, UploadDocumentForm, NGO, suggest_NGOForm
 
 from django.db.models.signals import pre_save
 
@@ -153,3 +153,19 @@ def all_NGOs(request):
 	NGOs = NGO.objects.all()
 	return render(request, 'all_ngos.html', 
 		{'NGOs': NGOs})
+
+def suggest_NGO(request):
+	if request.method == "POST":
+		form = suggest_NGOForm(request.POST)
+		if form.is_valid():
+			Notification.objects.create(noti_type='suggest',
+				NGO_name=form.cleaned_data['name'],
+				NGO_link=form.cleaned_data['link'],
+				NGO_details=form.cleaned_data['details'],
+				NGO_sugg_by=str(request.user.email),
+				project = Project.objects.last())
+			return HttpResponseRedirect(reverse('all_NGO'))
+	else:
+		form = suggest_NGOForm()
+	return render(request, 'suggest_ngo.html', 
+	{'form': form})

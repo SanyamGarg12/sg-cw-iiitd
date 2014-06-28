@@ -12,8 +12,9 @@ th,td
 padding:10px;
 }
 </style>
-
+<div class="container">
 <table >
+<a class="btn btn-warning" style="float:right;" role="button" href = "{% url 'suggest_ngo' %}">Suggest an NGO</a>
 Click on the NGO for a list of students who have workied under it.
 {% for n in NGOs %}
 <tr>
@@ -27,4 +28,5 @@ Click on the NGO for a list of students who have workied under it.
 We have not verified any NGO as of now it seems..!!
 {% endfor %}
 </table>
+</div>
 {% endblock %}

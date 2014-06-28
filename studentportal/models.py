@@ -72,3 +72,9 @@ class UploadDocumentForm(forms.Form):
     CHOICES = (('proposal','proposal'),('log', 'log'),('submission', 'submission'),)
     category = forms.ChoiceField(choices=CHOICES,
         help_text = 'Type of Document')
+
+class suggest_NGOForm(forms.Form):
+    name = forms.CharField()
+    link = forms.URLField(required = False)
+    details = forms.CharField(max_length = 2000, required = False)
+    # category

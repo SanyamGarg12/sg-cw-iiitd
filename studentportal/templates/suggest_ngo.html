@@ -1,0 +1,10 @@
+{% extends 'core.html' %}
+
+{% block content %}
+<form action="{% url 'suggest_ngo' %}" method="POST"> {% csrf_token %}
+<table>
+	{{ form.as_table }}
+</table>
+<input type='submit' value='Suggest' />
+</form>
+{% endblock %}
