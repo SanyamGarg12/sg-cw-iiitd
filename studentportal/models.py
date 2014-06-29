@@ -19,8 +19,7 @@ class NGO(models.Model):
     name    = models.CharField(max_length=1023)
     link    = models.URLField(blank = True)
     details = models.TextField(blank=True)
-    category = models.ForeignKey(Category, related_name='NGOs',
-     default=Category.objects.get(name='other'), null=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey(Category, related_name='NGOs', null=True, on_delete=models.SET_NULL)
 
     def __unicode__(self):
         return self.name
@@ -40,8 +39,7 @@ class Project(models.Model):
     student                 = models.ForeignKey(User, related_name='projects')
     stage                   = models.CharField(max_length = 15, default = 'to_be_verified')
     #stage includes -> 'to_be_verified','ongoing', 'completed' 
-    category                = models.ForeignKey(Category, default=Category.objects.get(name='other'),
-     related_name='projects', on_delete=models.SET_NULL, null=True)
+    category                = models.ForeignKey(Category, related_name='projects', on_delete=models.SET_NULL, null=True)
 
     def __unicode__(self):
         return self.title
