@@ -11,6 +11,8 @@ from models import Example, AdvanceSearchForm, NewsForm, News, Notification
 
 from CW_Portal import globals
 
+from django.contrib import messages
+
 @supervisor_logged_in
 def home(request):
 	recent_projects = Project.objects.extra(order_by=['-date_created'])[:10]
@@ -35,6 +37,7 @@ def verify_project(request, project_id):
 	globals.noti_refresh = True
 	project.stage = "ongoing"
 	project.save()
+	messages.success(request, "You have verified the project %s."%project.title)
 	EmailMessage("Congrats.. now get to work :)","Congratulations, your project has has been verified. Now start working and making a difference", to=[str(project.student.email)])
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
 
@@ -44,6 +47,7 @@ def unverify_project(request, project_id):
 	Notification.objects.create(project=project, noti_type='new')
 	project.stage = "to_be_verified"
 	project.save()
+	messages.warning(request, "You have unverified the project %s."%project.title)
 	EmailMessage("I got bad news :(","It seems that the supervisor has un-approved your project. Contact him to find out the issue", to=[str(project.student.email)])
 	globals.noti_refresh = True
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
@@ -73,6 +77,7 @@ def example_projects(request):
 def add_to_examples(request, project_id):
 	project = Project.objects.get(pk = project_id)
 	Example.objects.create(project = project)
+	messages.success(request, "You have marked the project '%s' as an example project."%project.title)
 	EmailMessage("Congrats.. You deserve this :)","Congratulations, your project has has been selected by the admin as an example project. You must have done a mighty fine job. Keep it up.",
 	 to=[str(project.student.email)])
 	return HttpResponseRedirect(reverse('super_viewproject', 
@@ -83,6 +88,7 @@ def remove_from_examples(request, example_project_id):
 	example_project = Example.objects.get(pk = example_project_id)
 	p_id = example_project.project.id
 	example_project.delete()
+	messages.warning(request, "You have unmarked the project as an example project.")
 	EmailMessage("Thank you :)","Your project has has been removed by the admin from the example project. Thank you for contributing to the community. Keep it up.",
 	 to=[str(Project.objects.get(pk=p_id).student.email)])
 	return HttpResponseRedirect(reverse('super_viewproject',
@@ -128,6 +134,7 @@ def complete(request,project_id):
 	globals.noti_refresh = True
 	project.stage = 'completed'
 	project.save()
+	messages.success(request, "You have marked the Community Work project as completed and finished.")
 	EmailMessage("Congrats.. you did it :)","Congratulations, your completed project has has been accepted by the admin. Thanks for giving back to the community. Keep it up.",
 	 to=[str(project.student.email)])
 	#send link for feedback form
@@ -180,6 +187,7 @@ def add_news(request):
 		form = NewsForm(request.POST)
 		if form.is_valid():
 			form.save()
+			messages.success(request, 'News posted')
 			return HttpResponseRedirect(reverse('all_news'))
 	else:
 		form = NewsForm
@@ -218,15 +226,17 @@ def accept_NGO(request, noti_id):
 		link=noti.NGO_link,
 		details=noti.NGO_details,
 		category=Category.objects.last())
-	noti.delete()
-	globals.noti_refresh = True
 	EmailMessage("Thank you :)","We have added the NGO you suggested as a trusted NGO..",
 	 to=[str(noti.NGO_sugg_by)])
+	messages.success(request, "%s is now a trusted NGO."%noti.NGO_name)
+	noti.delete()
+	globals.noti_refresh = True
 	return HttpResponseRedirect(reverse('super_suggested_ngos'))
 
 @supervisor_logged_in
 def reject_NGO(request, noti_id):
 	noti = get_object_or_404(Notification, pk=noti_id)
+	messages.info(request, "You have rejected the suggestion of adding %s as a trusted NGO."%noti.NGO_name)
 	noti.delete()
 	globals.noti_refresh = True
 	EmailMessage("Thank you but sorry :|","We have reviewed your suggestion for the NGO but as of now have to reject it. But thank you for your suggestion",
@@ -236,5 +246,6 @@ def reject_NGO(request, noti_id):
 @supervisor_logged_in
 def remove_NGO(request, ngo_id):
 	ngo = get_object_or_404(NGO, pk=ngo_id)
+	messages.info(request, "%s has been deleted."%noti.NGO_name)
 	ngo.delete()
 	return HttpResponseRedirect(reverse('super_all_NGO'))
