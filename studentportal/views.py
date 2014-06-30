@@ -136,7 +136,9 @@ def profile(request):
 def download(request, document_id):
 	doc = get_object_or_404(Document, pk=document_id)
 	if doc.project.student == request.user:
-		return HttpResponseRedirect(doc.document.url)
+		response = HttpResponse(doc.document)
+		response['Content-Disposition'] = 'attachment; filename=%s' %doc.document.name
+		return response
 	return HttpResponseRedirect(reverse('index'))
 
 
