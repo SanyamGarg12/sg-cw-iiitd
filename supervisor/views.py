@@ -7,7 +7,7 @@ from django.db.models import Q
 from supervisor.decorators import supervisor_logged_in, is_int, EmailMessage
 
 from studentportal.models import Project, NGO, Category, Document
-from models import Example, AdvanceSearchForm, NewsForm, News, Notification, NewCategoryForm
+from models import Example, AdvanceSearchForm, NewsForm, News, Notification, NewCategoryForm, NewNGOForm
 
 from CW_Portal import globals
 
@@ -202,7 +202,9 @@ def view_news(request, news_id):
 @supervisor_logged_in
 def all_NGO(request):
 	NGOs = NGO.objects.all()
-	return render(request, 'super_all_ngo.html', {'NGOs': NGOs})
+	form = NewNGOForm()
+	return render(request, 'super_all_ngo.html',
+	 {'NGOs': NGOs, 'form': form})
 
 @supervisor_logged_in
 def view_NGO(request, NGO_id):
@@ -300,3 +302,19 @@ def delete_category(request, category_id):
 	category.delete()
 	messages.success(request, "%s was deleted"%name)
 	return HttpResponseRedirect(reverse('super_allcategories'))
+
+@supervisor_logged_in
+def add_NGO(request):
+	if request.method=="POST":
+		form = NewNGOForm(request.POST)
+		if form.is_valid():
+			NGO.objects.create(name=form.cleaned_data['name'],
+				link=form.cleaned_data['link'],
+				details=form.cleaned_data['details'])
+			messages.success(request, "NGO has been created successfully.")
+		else:
+			NGOs = NGO.objects.all()
+			messages.warning(request, "The data entered was incorrect.")
+			return render(request, 'super_all_ngo.html',
+				{'NGOs': NGOs, 'form': form})
+	return HttpResponseRedirect(reverse('super_all_NGO'))

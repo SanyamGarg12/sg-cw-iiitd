@@ -1,38 +1,32 @@
 {% extends 'supervisorcore.html' %}
 
 {% block content %}
-
-<style>
-table,th,td
-{
-border:1px solid black;
-}
-th,td
-{
-padding:10px;
-}
-</style>
-<center><h2>{{NGO.name}}</h2></center>
-
-<h2>Link: </h2>{{NGO.link}}
-<h2>Details: </h2>
-{{ NGO.details }}
-{# NGO.category #}
-
-<br />
-<hr />
-<center><strong>CW Projects mentored by the NGO</strong></center>
-<table >
-{% for p in NGO.projects.all %}
-<tr>
-	<td> {{forloop.counter}} </td>
-	<td> <a href="{% url 'super_viewproject' p.id %}">{{p.title }}</a></td>
-	<td> <a href="{% url 'super_viewuser' p.student.pk %}">{{p.student }}</a> </td>
-	<td> {{p.date_created }} </td>
-</tr>
-
-{% empty %}
+<h2 class="sub-header">{{NGO.name}}</h2>
+<h3> Link: {{ NGO.link }}</h3>
+<h3> Description: {{ NGO.description }}</h3>
+{% if NGO.projects.all %}
+<center><h3>CW Projects mentored by the NGO</h3></center>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Project Title</th>
+        <th>Student</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for p in category.projects.all %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td><a href="{% url 'super_viewproject' p.pk %}">{{ p.title|truncatechars:"100" }}</a></td>
+        <td><a href="{% url 'super_viewuser' p.student.pk %}">{{ p.student.first_name}} {{p.student.last_name}}</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
 No one has worked with it as of now.
-{% endfor %}
-</table>
+{% endif %}
 {% endblock %}
