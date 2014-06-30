@@ -17,5 +17,5 @@ def path_and_rename(path):
 def validate_credits(value):
 	print value, type(value)
 	from django.core.exceptions import ValidationError
-	if value != 2 and value != 4:
-		raise ValidationError('You can only work for 2 or 4 credits')
+	if value != 1 and value != 2:
+		raise ValidationError('You can only work for 1 or 2 credits')
