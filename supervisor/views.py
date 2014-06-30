@@ -7,7 +7,7 @@ from django.db.models import Q
 from supervisor.decorators import supervisor_logged_in, is_int, EmailMessage
 
 from studentportal.models import Project, NGO, Category, Document
-from models import Example, AdvanceSearchForm, NewsForm, News, Notification
+from models import Example, AdvanceSearchForm, NewsForm, News, Notification, NewCategoryForm
 
 from CW_Portal import globals
 
@@ -262,3 +262,41 @@ def view_student(request, user_id):
 	student = get_object_or_404(User, pk=user_id)
 	return render(request, 'super_viewuser.html', 
 		{'student': student})
+
+@supervisor_logged_in
+def all_categories(request):
+	categories = Category.objects.all()
+	form = NewCategoryForm()
+	return render(request, 'super_allcategories.html',
+		{'categories': categories, 'form': form})
+
+@supervisor_logged_in
+def category(request, category_id):
+	category = get_object_or_404(Category, pk=category_id)
+	return render(request, 'super_category.html',
+		{'category': category})
+
+@supervisor_logged_in
+def add_category(request):
+	if request.method == "POST":
+		form = NewCategoryForm(request.POST)
+		if form.is_valid():
+			Category.objects.create(name=form.cleaned_data['name'],
+				description = form.cleaned_data['description'])
+			messages.success(request, "%s has been added as a new category."%form.cleaned_data['name'])
+			return HttpResponseRedirect(reverse('super_allcategories'))
+		else:
+			messages.warning(request, "There was something wrong in the data you entered.")
+			categories = Category.objects.all()
+			return render(request, 'super_allcategories.html',
+				{'form': form, "categories": categories})
+	else:
+		return HttpResponseRedirect(reverse('super_allcategories'))
+
+@supervisor_logged_in
+def delete_category(request, category_id):
+	category = get_object_or_404(Category,pk =category_id)
+	name = category.name
+	category.delete()
+	messages.success(request, "%s was deleted"%name)
+	return HttpResponseRedirect(reverse('super_allcategories'))

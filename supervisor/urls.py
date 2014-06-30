@@ -29,4 +29,9 @@ urlpatterns = patterns('',
 	url(r'^removeNGO/(?P<ngo_id>[0-9]+)/$', views.remove_NGO, name='remove_NGO'),
 	url(r'^download/(?P<doc_id>[0-9]+)/$', views.download, name='super_download'),
 	url(r'^student/(?P<user_id>[0-9]+)/$', views.view_student, name='super_viewuser'),
+	url(r'^category/all/$', views.all_categories, name='super_allcategories'),
+	url(r'^category/(?P<category_id>[0-9]+)/$', views.category, name='super_viewcategory'),
+	url(r'^addcategory/$', views.add_category),
+	url(r'^deletecategory/(?P<category_id>[0-9]+)', views.delete_category, name='super_delete_category'),
+	
 )

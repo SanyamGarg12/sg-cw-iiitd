@@ -51,3 +51,8 @@ class NewsForm(forms.ModelForm):
     class Meta:
         model = News
         fields = ['content', 'priority']
+
+class NewCategoryForm(forms.Form):
+    name = forms.CharField(label="Name of the category")
+    description = forms.CharField(label="Describe the category")
+    
