@@ -17,6 +17,8 @@ from models import Feedback, FeedbackForm, Category
 
 from django.db.models.signals import pre_save
 
+from django.contrib import messages
+
 def add_notification(noti_type, project):
 	Notification.objects.create(noti_type=noti_type, project=project)
 
@@ -52,7 +54,10 @@ def addproject(request):
 			add_notification("new", Project.objects.last())
 			RenderProjectToMonthDistribution().start()
 			RenderProjectCategoryPieChart().start()
+			messages.success(request, 'Your project was added successfully.')
 			return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': Project.objects.last().id}))
+		else:
+			messages.warning(request, 'There was something wrong in the provided details.')
 	else:
 		form = ProjectForm(request.user)
 	return render(request, 'newproject.html',
@@ -85,7 +90,10 @@ def editproject(request, project_id):
 				form.save()
 				add_notification("edit", instance)
 				RenderProjectCategoryPieChart().start()
-			return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
+				messages.success(request, "Your project details have been succesfully updated.")
+				return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
+			else:
+				messages.warning(request, "There was something wrong in the provided details.")
 		return render(request, 'editproject.html',
 		 {'form': form, 'instance': instance})
 	return HttpResponseRedirect(reverse('index'))
@@ -102,7 +110,10 @@ def _upload(request, project_id):
 				 project=project, category=form.cleaned_data['category'])
 				if form.cleaned_data['category'] == 'submission':
 					add_notification("finish", project)
+				messages.success(request, "Your document was uploaded successfully")
 				return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
+			else:
+				messages.warning(request, "There was an error in uploading your file.")
 		return render(request, 'upload_document.html', {'form': form, 'id': project_id})
 	return HttpResponseRedirect(reverse('index'))
 
@@ -113,6 +124,7 @@ def link_NGO_project(request, NGO_id, project_id):
 	if project.student == request.user:
 		project.NGO = ngo
 		project.save()
+		messages.success(request, "You have linked your project with %s"%ngo.name)
 		return HttpResponseRedirect(reverse('view_project_NGO', 
 			kwargs = {'project_id': project_id}))
 	return HttpResponseRedirect(reverse('index'))
@@ -123,6 +135,7 @@ def unlink_NGO_project(request, project_id):
 	if project.student == request.user:
 		project.NGO = None
 		project.save()
+		messages.success(request, "You have unlinked your project")
 		return HttpResponseRedirect(reverse('view_project_NGO', 
 			kwargs = {'project_id': project_id}))
 	return HttpResponseRedirect(reverse('index'))
@@ -174,7 +187,10 @@ def suggest_NGO(request):
 				NGO_link=form.cleaned_data['link'],
 				NGO_details=form.cleaned_data['details'],
 				NGO_sugg_by=str(request.user.email))
+			messages.success(request, "Thank you for your suggestion. We'll get back to you as soon as possible.")
 			return HttpResponseRedirect(reverse('all_NGO'))
+		else:
+			messages.warning(request, "There was something wrong in the provided details.")
 	else:
 		form = suggest_NGOForm()
 	return render(request, 'suggest_ngo.html', 
@@ -191,7 +207,10 @@ def feedback(request, project_id):
 			form.instance.project = project
 			form.save()
 			RenderFeedbackExperiencePieChart().start()
+			messages.success(request, "Thank you for your feedback.")
 			return HttpResponseRedirect(reverse('index'))
+		else:
+			messages.warning(request, "There was something wrong in the provided details.")
 	else:
 		form = FeedbackForm()
 	return render(request, 'feedback.html', {'form': form, 'id': project_id})
