@@ -27,5 +27,6 @@ urlpatterns = patterns('',
 	url(r'^acceptNGO/(?P<noti_id>[0-9]+)/$', views.accept_NGO, name='accept_NGO'),
 	url(r'^rejectNGO/(?P<noti_id>[0-9]+)/$', views.reject_NGO, name='reject_NGO'),
 	url(r'^removeNGO/(?P<ngo_id>[0-9]+)/$', views.remove_NGO, name='remove_NGO'),
-	url(r'^download/(?P<doc_id>[0-9]+)/$', views.download, name='super_download')
+	url(r'^download/(?P<doc_id>[0-9]+)/$', views.download, name='super_download'),
+	url(r'^student/(?P<user_id>[0-9]+)/$', views.view_student, name='super_viewuser'),
 )

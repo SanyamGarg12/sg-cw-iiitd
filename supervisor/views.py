@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
-
+from django.contrib.auth.models import User
 from django.db.models import Q
 from supervisor.decorators import supervisor_logged_in, is_int, EmailMessage
 
@@ -256,3 +256,9 @@ def download(request, doc_id):
 	response = HttpResponse(doc.document)
 	response['Content-Disposition'] = 'attachment; filename=%s' %doc.name
 	return response
+
+@supervisor_logged_in
+def view_student(request, user_id):
+	student = get_object_or_404(User, pk=user_id)
+	return render(request, 'super_viewuser.html', 
+		{'student': student})
