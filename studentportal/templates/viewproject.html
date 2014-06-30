@@ -27,7 +27,7 @@
 	{% for doc in project.documents.all %}
 		<strong>{{ doc.category }}: </strong>
 		<a href = "{% url 'download_document' doc.pk %}">
-		{{ doc.document.name }}</a>
+		{{ doc.name }}</a>
 		<br />
 	{% endfor %}
 	{% else %}

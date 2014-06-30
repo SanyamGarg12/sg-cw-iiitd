@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from supervisor.decorators import supervisor_logged_in, is_int, EmailMessage
 
-from studentportal.models import Project, NGO, Category
+from studentportal.models import Project, NGO, Category, Document
 from models import Example, AdvanceSearchForm, NewsForm, News, Notification
 
 from CW_Portal import globals
@@ -246,6 +246,13 @@ def reject_NGO(request, noti_id):
 @supervisor_logged_in
 def remove_NGO(request, ngo_id):
 	ngo = get_object_or_404(NGO, pk=ngo_id)
-	messages.info(request, "%s has been deleted."%noti.NGO_name)
+	messages.info(request, "%s has been deleted."%ngo.name)
 	ngo.delete()
 	return HttpResponseRedirect(reverse('super_all_NGO'))
+
+@supervisor_logged_in
+def download(request, doc_id):
+	doc = get_object_or_404(Document, pk=doc_id)
+	response = HttpResponse(doc.document)
+	response['Content-Disposition'] = 'attachment; filename=%s' %doc.name
+	return response
