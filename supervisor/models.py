@@ -55,4 +55,8 @@ class NewsForm(forms.ModelForm):
 class NewCategoryForm(forms.Form):
     name = forms.CharField(label="Name of the category")
     description = forms.CharField(label="Describe the category")
-    
+
+class NewNGOForm(forms.Form):
+    name = forms.CharField(label="Name of the NGO")
+    link = forms.CharField(label="Link for the NGO", required = False)
+    details = forms.CharField(label="Something about the NGO", required=False)
