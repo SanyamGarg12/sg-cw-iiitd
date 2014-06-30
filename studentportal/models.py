@@ -63,6 +63,7 @@ class Project(models.Model):
 
 class Document(models.Model):
     document = models.FileField(upload_to=path_and_rename('uploads/%Y/'))
+    name = models.CharField(max_length=50)
     date_added  = models.DateTimeField(default=timezone.now)
     #category has the following options -> proposal, log, submission
     category    = models.CharField(max_length=16)

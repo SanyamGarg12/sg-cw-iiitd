@@ -104,10 +104,11 @@ def _upload(request, project_id):
 	if project.student == request.user:
 		form = UploadDocumentForm()
 		if request.method == "POST":
+			name = request.FILES['document'].name
 			form = UploadDocumentForm(request.POST, request.FILES)
 			if form.is_valid():
 				Document.objects.create(document=request.FILES['document'],
-				 project=project, category=form.cleaned_data['category'])
+				 project=project, category=form.cleaned_data['category'], name=name)
 				if form.cleaned_data['category'] == 'submission':
 					add_notification("finish", project)
 				messages.success(request, "Your document was uploaded successfully")
@@ -150,7 +151,7 @@ def download(request, document_id):
 	doc = get_object_or_404(Document, pk=document_id)
 	if doc.project.student == request.user:
 		response = HttpResponse(doc.document)
-		response['Content-Disposition'] = 'attachment; filename=%s' %doc.document.name
+		response['Content-Disposition'] = 'attachment; filename=%s' %doc.name
 		return response
 	return HttpResponseRedirect(reverse('index'))
 

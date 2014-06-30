@@ -24,8 +24,8 @@
 	{% if project.documents.all %}
 	{% for doc in project.documents.all %}
 		<strong>{{ doc.category }}: </strong>
-		<a href = "{{ doc.document.url }}">
-		{{ doc.document.name }}</a>
+		<a href = "{% url 'super_download' doc.id %}">
+		{{ doc.name }}</a>
 
 		<br />
 	{% endfor %}
