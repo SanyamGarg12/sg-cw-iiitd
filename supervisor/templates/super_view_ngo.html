@@ -27,7 +27,7 @@ padding:10px;
 <tr>
 	<td> {{forloop.counter}} </td>
 	<td> <a href="{% url 'super_viewproject' p.id %}">{{p.title }}</a></td>
-	<td> {{p.student }} </td>
+	<td> <a href="{% url 'super_viewuser' p.student.pk %}">{{p.student }}</a> </td>
 	<td> {{p.date_created }} </td>
 </tr>
 

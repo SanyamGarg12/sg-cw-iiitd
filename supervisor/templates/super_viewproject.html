@@ -3,7 +3,7 @@
 	<center>
 		<h3>{{ project.title }}</h3>
 	</center>
-		<h2>Student: </h2> {{ project.student.first_name }} {{ project.student.last_name }}
+		<h2>Student: </h2><a href="{% url 'super_viewuser' project.student.pk %}"> {{ project.student.first_name }} {{ project.student.last_name }}</a>
 		<h2>Roll No. : </h2> {{ project.get_rollno }} 
 		<h2>Email: </h2> {{ project.student.email }}
 		<h2>Credits: </h2> {{ project.credits }}

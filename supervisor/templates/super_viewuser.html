@@ -1,0 +1,22 @@
+{% extends 'supervisorcore.html' %}
+{% block content %}
+	<center>
+		<h3>{{ student.first_name }} {{ student.last_name}}</h3>
+	</center>
+		<h2>Email: </h2> {{ student.email }}
+<hr />
+	<center><h3>Projects</h3></center>
+	{% if student.projects.all %}
+	<ul>
+	{% for p in student.projects.all %}
+		<li><a href = "{% url 'super_viewproject' p.pk %}">
+		<strong>{{ p.title }}</strong>
+		</a></li>
+		<br />
+	{% endfor %}
+	{% else %}
+		No projects started until now.
+	{% endif %}
+<hr />
+
+{% endblock %}
