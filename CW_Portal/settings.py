@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 from PrivateData import EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
+from django.contrib.messages import constants as message_constants
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -138,3 +139,5 @@ STATICFILES_DIR = (
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
+
+MESSAGE_TAGS = {message_constants.ERROR: 'danger'}
