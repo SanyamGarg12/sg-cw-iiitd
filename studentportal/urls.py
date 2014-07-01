@@ -26,4 +26,5 @@ urlpatterns = patterns('',
 	url(r'^examples/all/$', views.all_examples, name='student_all_examples'),
 	url(r'^examples/(?P<example_id>[0-9]+)/$', views.view_example, name='view_example'),
 	url(r'^guidlines/$', views.guidlines, name='guidlines'),
+	url(r'^bugs/$', views.bugs, name = 'bugs'),
 )

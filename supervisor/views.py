@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
@@ -196,7 +196,7 @@ def add_news(request):
 #should i add or not..??
 def view_news(request, news_id):
 	news = get_object_or_404(News, pk=news_id)
-	return render(request, 'view_news.html', {'news': news})
+	return render(request, 'super_view_news.html', {'news': news})
 
 @supervisor_logged_in
 def all_NGO(request):
