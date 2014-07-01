@@ -31,7 +31,7 @@ def index(request):
 def home(request):
 	news = News.objects.all().order_by('-date_created')[:5]
 	if request.user.is_authenticated():
-		example_projects = Example.objects.all()[:10]
+		example_projects = Example.objects.all()[:6]
 		return render(request, 'studenthome.html', 
 		{'example_projects': example_projects, 'news': news})
 	else:
@@ -107,6 +107,9 @@ def _upload(request, project_id):
 			name = request.FILES['document'].name
 			form = UploadDocumentForm(request.POST, request.FILES)
 			if form.is_valid():
+				if form.cleaned_data['category'] == 'submission' and project.stage == 'to_be_verified':
+					messages.warning(request, "You can't submit the final submission until the supervisor has verified your project.")
+					return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id})) 
 				Document.objects.create(document=request.FILES['document'],
 				 project=project, category=form.cleaned_data['category'], name=name)
 				if form.cleaned_data['category'] == 'submission':
@@ -163,12 +166,14 @@ def _logout(request):
 
 # @login_required
 def view_news(request, news_id='0'):
+	single = True
 	if news_id == '0':
 		news = News.objects.all()
+		single = False
 	else:
 		news = get_list_or_404(News, pk=news_id)
 	return render(request, 'view_news.html', {
-		'news': news
+		'news': news, 'single': single
 		})
 
 #I am not checking for login on purpose.
@@ -226,3 +231,17 @@ def all_projects_open_to_public(request, year):
 	projects = Project.objects.filter(date_created__year=year, stage='completed')
 	return render(request, 'all_projects_open_to_public.html',
 		{'projects': projects})
+
+@login_required
+def all_examples(request):
+	projects = Example.objects.all()
+	return render(request, 'all_examples.html',
+		{'projects': projects})
+
+@login_required
+def view_example(request, example_id):
+	project = get_object_or_404(Example, pk=example_id)
+	return render(request, 'view_example.html',
+		{'project': project})
+def guidlines(request):
+	return render(request, 'guidlines.html')

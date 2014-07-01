@@ -11,9 +11,14 @@
             <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Sticky links</button>
           </p>
           <div class="jumbotron">
-            <h1>Community Work @ IIIT-D</h1>
+            <h1>Community Work</h1>
             <p>Community Work provides students broader connect with society and self. At IIIT Delhi, students have to do minimum 80 hours of Community Work. This activity teaches students about their rights and responsibilities as citizens, and their ability to bring about meaningful change through advocacy and service. It enables students to help to apply skills and content knowledge to real needs in their local community.</p>
           </div>
+          {% if example_projects.all %}
+            <div class="panel panel-default">
+            <div class="panel-heading"><h3><a href="{% url 'student_all_examples' %}" class="panel-title">All example projects</a></h3>
+            </div>
+          <div class="panel-body">
           <div class="row">
             {% for p in example_projects.all %}
             <div class="col-6 col-sm-6 col-lg-4">
@@ -33,25 +38,28 @@
      		 						{{ p.project.title|truncatechars:15 }}</h3>
       		  			</div>
         				<p>{{ p.project.goals|truncatechars:30 }}</p>
-        				<p><a class="btn btn-default" href="{% url 'viewproject' p.project.id %}" role="button">View details »</a></p>
+        				<p><a class="btn btn-default" href="{% url 'view_example' p.project.id %}" role="button">View details »</a></p>
       				</div>
     				</div>
             {% endfor %}
           </div><!--/row-->
+          </div>
+          </div>
+          {% endif %}
         </div><!--/span-->
 
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
           <div class="list-group">
-          <center><span class="badge">Sticky Links</span></center>
-            <a href="" class="list-group-item">Principles</a>
-            <a href="#" class="list-group-item">Guidlines</a>
+          <center><span class="list-group-item disabled">Sticky Links</span></center>
+            <a href="{% url 'guidlines' %}" class="list-group-item">Guidlines</a>
             <a href="{% url 'all_NGO' %}" class="list-group-item">Some NGOs</a>
             <a href="{% url 'all_projects_open_to_public_year_select' %}" class="list-group-item"> All Completed Projects </a>
+            <a href="mailto: communitywork@iiitd.ac.in" class="list-group-item"> Contact us </a>
           </div>
         </div><!--/span-->
 
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="news_sidebar" role="navigation">
-          <center><span class="badge"><a href="{% url 'student_view_news' 0 %}">Announcements</a></span></center>
+          <center><span><a href="{% url 'student_view_news' 0 %}" class="list-group-item disabled">All Announcements</a></span></center>
           <div class="list-group">
             {% for n in news %}
             <a href="{% url 'student_view_news' n.id %}" class="list-group-item">{{ n.content|truncatechars:75 }}</a>

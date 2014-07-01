@@ -23,5 +23,7 @@ urlpatterns = patterns('',
 	 views.all_projects_open_to_public_year_select, name='all_projects_open_to_public_year_select'),
 	url(r'^allprojects/(?P<year>[0-9]+)/$', views.all_projects_open_to_public,
 		name='all_projects_open_to_public'),
-
+	url(r'^examples/all/$', views.all_examples, name='student_all_examples'),
+	url(r'^examples/(?P<example_id>[0-9]+)/$', views.view_example, name='view_example'),
+	url(r'^guidlines/$', views.guidlines, name='guidlines'),
 )

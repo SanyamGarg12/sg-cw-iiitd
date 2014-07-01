@@ -1,0 +1,26 @@
+{% extends 'core.html' %}
+
+{% block content %}
+<div class="container">
+	<center>
+		<h3>{{ project.project.title }}</h3>
+	</center>
+		<h2>Credits: </h2>
+		{{ project.project.credits}}
+		<h2>Date created: </h2>
+		{{ project.project.date_created|date:"D, d M Y"}}
+		<h2>Goals: </h2>
+		{{ project.project.goals}}
+	<h2>Schedule: </h2>
+		{{ project.project.schedule_text }}
+	<h2>NGO:</h2>
+	{{ project.project.get_NGO }}
+	<h2>Supervisor: </h2>
+	{{ project.project.NGO_super}}
+	<h2>Supervisor contact: </h2>
+	{{ project.project.NGO_super_contact}}
+	<h2>Schedule: </h2>
+	{{ project.project.schedule_text}}
+	<hr />
+</div>
+{% endblock %}
