@@ -1,0 +1,36 @@
+{% extends 'core.html' %}
+
+{% block content %}
+{% if projects %}
+    <div class = "row">
+    {% for p in projects.all %}
+      	<div class="{% cycle 'col-sm-6 col-md-3 col-md-offset-1' 'col-sm-6 col-md-3' 'col-sm-6 col-md-3' %}">
+              <p> <span class="badge" style="float:right;">  {{p.project.student.first_name}} {{p.project.student.last_name}} </span></p>
+              <div class="thumbnail">
+                <div class="caption">
+                  <h3>
+                   {% ifequal p.project.stage "to_be_verified" %}
+                     <span class="glyphicon glyphicon-flag" title="Unverified"></span>
+                     {% endifequal %}
+                    {% ifequal p.project.stage "ongoing" %}
+                      <span class="glyphicon glyphicon-cog" title="Ongoing"></span>
+                    {% endifequal %}
+                    {% ifequal p.project.stage "completed" %}
+                      <span class="glyphicon glyphicon-ok" title="Completed"></span>
+                    {% endifequal %}
+                    {{ p.project.title|truncatechars:15 }}</h3>
+                  </div>
+                <p>{{ p.project.goals|truncatechars:30 }}</p>
+                <p><a class="btn btn-default" href="{% url 'view_example' p.project.id %}" role="button">View details »</a>
+                </p>
+            </div>
+          </div><!--/row-->
+        {% endfor %}
+    </div>
+{% else %}
+	<center> No example projects have been added yet. </center>
+{% endif %}
+
+
+{% endblock %}
+

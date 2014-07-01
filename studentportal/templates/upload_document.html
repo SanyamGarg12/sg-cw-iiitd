@@ -1,7 +1,7 @@
 {% extends 'core.html' %}
 
 {% block content %}
-
+<div class="container">
 <form action="{% url 'upload_document' id %}" method = "post" enctype="multipart/form-data"> {% csrf_token %}
 <p>{{ form.non_field_errors }}</p>
 <p>{{ form.document.label_tag }} {{ form.document.help_text }}</p>
@@ -12,4 +12,5 @@
 </p>
 <p><input type="submit" value="Upload" /></p>
 </form>
+</div>
 {% endblock %}

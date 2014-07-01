@@ -1,28 +1,38 @@
 {% extends 'core.html' %}
 
 {% block content %}
-
+<div class="container">
 	<center>
-		{{ project.title }}
+		<h3>{% ifequal project.stage "to_be_verified" %}
+         <span class="glyphicon glyphicon-flag" title="Unverified"></span>
+         {% endifequal %}
+        {% ifequal project.stage "ongoing" %}
+          <span class="glyphicon glyphicon-cog" title="Ongoing"></span>
+        {% endifequal %}
+        {% ifequal project.stage "completed" %}
+          <span class="glyphicon glyphicon-ok" title="Completed"></span>
+        {% endifequal %} {{ project.title }}</h3>
 	</center>
+		<h2>Credits: </h2>
+		{{ project.credits}}
+		<h2>Date created: </h2>
+		{{ project.date_created|date:"D, d M Y"}}
 		<h2>Goals: </h2>
 		{{ project.goals}}
 	<h2>Schedule: </h2>
 		{{ project.schedule_text }}
-	<h2>
-		NGO:
-	</h2>
-	{{ project.NGO_name }}
-	<a href="{% url 'view_project_NGO' project.id %}">Change NGO details</a>
-
-<hr />
-<a class="btn btn-warning" role="button"  href = "{% url 'editproject' project.id %}">Edit CW project details</a>
-<a class="btn btn-primary" role="button"  href = "{% url 'upload_document' project.id %}">Upload files</a>
-{% ifequal project.stage "completed" %}{% if project.feedback.all %}{% else %}
-<a class="btn btn-info" href="{% url 'feedback' project.id %}" role="button">Give feedback»</a>
-{% endif %}{% endifequal %}
-
-	<center><h3>Documents</h3></center>
+	<h2>NGO:</h2>
+	{{ project.get_NGO }}<a href="{% url 'view_project_NGO' project.id %}">  Change NGO</a>
+	<h2>NGO details: </h2>
+	{{ project.NGO_details}}
+	<h2>Supervisor: </h2>
+	{{ project.NGO_super}}
+	<h2>Supervisor contact: </h2>
+	{{ project.NGO_super_contact}}
+	<h2>Schedule: </h2>
+	{{ project.schedule_text}}
+	
+	<h3>Documents:</h3>
 	{% if project.documents.all %}
 	{% for doc in project.documents.all %}
 		<strong>{{ doc.category }}: </strong>
@@ -33,5 +43,11 @@
 	{% else %}
 		No logs uploaded till now
 	{% endif %}
-
+	<hr />
+<a class="btn btn-warning" role="button"  href = "{% url 'editproject' project.id %}">Edit CW project details</a>
+<a class="btn btn-primary" role="button"  href = "{% url 'upload_document' project.id %}">Upload files</a>
+{% ifequal project.stage "completed" %}{% if project.feedback.all %}{% else %}
+<a class="btn btn-info" href="{% url 'feedback' project.id %}" role="button">Give feedback»</a>
+{% endif %}{% endifequal %}
+</div>
 {% endblock %}

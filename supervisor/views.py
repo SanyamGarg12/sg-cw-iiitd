@@ -16,7 +16,6 @@ from django.contrib import messages
 @supervisor_logged_in
 def home(request):
 	recent_projects = Project.objects.extra(order_by=['-date_created'])[:10]
-	print 1
 	return render(request, 'supervisorhome.html', {'recent_projects': recent_projects})
 
 @supervisor_logged_in

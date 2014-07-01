@@ -1,21 +1,31 @@
 {% extends 'core.html' %}
 {% block content %}
-<a class="btn btn-warning" style="float:right;" role="button" href = "{% url 'student_view_news' 0 %}">All news</a>
-<br />
-<hr />
-<table>
-	<thead>
-	<tr><td>News</td><td>Created on</td><td>Priority</td></tr>
-	</thead>
-	<tbody>
-	{% for n in news %}
-	<tr>
-		<td>{{ n.content}}</td>
-		<td>{{ n.date_created|date:"D d M Y" }}</td>
-		<td>{{ n.get_priority }}</td>
-	</tr>
-	{% endfor %}
-	</tbody>
-</table>
-</table>
+<div class="container">
+{% if single %}
+<a class="btn btn-link" style="float:right;" role="button" href = "{% url 'student_view_news' 0 %}">All Announcements</a>
+{% endif %}
+<h2 class="sub-header">Announcements</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Announcement</th>
+        <th>Date</th>
+        <th>Priority</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for n in news %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ n.content }}</td>
+        <td>{{ n.date_created|date:"D d M Y" }}</td>
+        <td>{{ n.get_priority }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
 {% endblock %}
