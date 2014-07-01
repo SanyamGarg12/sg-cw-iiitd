@@ -3,7 +3,7 @@
 {% block content %}
 
 <h2 class="sub-header">All NGOs</h2>
-
+<hr />
 <form action="/supervisor/addNGO/" method = "post"> {% csrf_token %}
 <p>{{ form.non_field_errors }} {{ form.error_messages }}</p>
 <table>

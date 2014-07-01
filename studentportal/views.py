@@ -245,3 +245,7 @@ def view_example(request, example_id):
 		{'project': project})
 def guidlines(request):
 	return render(request, 'guidlines.html')
+
+@login_required
+def bugs(request):
+	pass

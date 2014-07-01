@@ -20,14 +20,14 @@ class Example(models.Model):
 	date_created = models.DateTimeField(default = timezone.now)
 
 class News(models.Model):
-    content = models.TextField()
+    content = models.CharField(max_length=1000)
     date_created = models.DateTimeField(default = timezone.now)
     priority = models.IntegerField()
     #from 1,2,3
     def get_priority(self):
-        if self.priority == 1: return "LOW"
-        elif self.priority == 2: return "MEDIUM"
-        else: return "HIGH"
+        if self.priority == 1: return "Low"
+        elif self.priority == 2: return "Medium"
+        else: return "High"
 
 class AdvanceSearchForm(forms.Form):
     stage = forms.ChoiceField(choices=(
@@ -48,6 +48,8 @@ class AdvanceSearchForm(forms.Form):
     # time_completed_after
 
 class NewsForm(forms.ModelForm):
+    priority = forms.ChoiceField( choices=(
+        (1, "Low"), (2, "Medium"), (3, "High")))
     class Meta:
         model = News
         fields = ['content', 'priority']
