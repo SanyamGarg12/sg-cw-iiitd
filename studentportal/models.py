@@ -127,3 +127,16 @@ class FeedbackForm(ModelForm):
     class Meta:
         model = Feedback
         fields = ['hours', 'achievements', 'experience']
+
+class Bugs(models.Model):
+    user = models.ForeignKey(User, related_name='bugs', null = True)
+    suggestions = models.TextField(max_length=2000,)
+    rating = models.IntegerField()
+
+class BugsForm(ModelForm):
+    rating = forms.ChoiceField(choices=(
+        ((x,x) for x in range(1,11))
+        ), initial =5)
+    class Meta:
+        model = Bugs
+        fields = ['suggestions', 'rating']

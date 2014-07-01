@@ -13,7 +13,7 @@ from supervisor.models import Notification, Example, News
 from supervisor.decorators import RenderFeedbackExperiencePieChart, RenderProjectToMonthDistribution, RenderProjectCategoryPieChart
 
 from models import ProjectForm, Project, Document, UploadDocumentForm, NGO, suggest_NGOForm
-from models import Feedback, FeedbackForm, Category
+from models import Feedback, FeedbackForm, Category, BugsForm, Bugs
 
 from django.db.models.signals import pre_save
 
@@ -248,4 +248,15 @@ def guidlines(request):
 
 @login_required
 def bugs(request):
-	pass
+	if request.method == "POST":
+		form = BugsForm(request.POST)
+		if form.is_valid():
+			form.save()
+			a = Bugs.objects.last()
+			a.user = request.user
+			a.save()
+			messages.success(request, "Thank you for your suggestions")
+		return HttpResponseRedirect(reverse('index'))
+	else:
+		form = BugsForm()
+	return render(request, "bugs.html", {'form': form})
