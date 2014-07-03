@@ -41,7 +41,11 @@
           </ul>
           <form class="navbar-form navbar-right" action="/supervisor/basic_search/" method="POST">
             {% csrf_token %}
+            
             <input class="form-control" placeholder="First name / Email / Roll No." type="text" name = "search_query">
+            <span class-"input-group-button">
+            <input type='submit' value='Search' class="btn btn-default" />
+            </span>
           </form>
         </div>
       </div>
