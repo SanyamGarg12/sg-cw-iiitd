@@ -3,7 +3,5 @@ alias s='python manage.py runserver'
 alias a='python manage.py shell'
 mkdir -p studentportal/static/statistics
 python manage.py syncdb
-#python -i manage.py 'from studentportal.models import Category; Category.objects.create(name="Others", description="Everything else")'
-echo
-echo "Remember to add the 'other' category"
+python -c "import os; os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'CW_Portal.settings'); from supervisor.models import Category; Category.objects.create(name='Other', description='projects that do not fit into other categories')"
 echo
