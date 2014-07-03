@@ -113,7 +113,7 @@ class UploadDocumentForm(forms.Form):
         label='Select a file',
         help_text='max. 42 megabytes'
     )
-    CHOICES = (('proposal','proposal'),('log', 'log'),('submission', 'submission'),)
+    CHOICES = (('Proposal','proposal'),('Log', 'log'),('Final Report', 'submission'),)
     category = forms.ChoiceField(choices=CHOICES,
         help_text = 'Type of Document')
 
