@@ -23,10 +23,9 @@ class News(models.Model):
     content = models.CharField(max_length=1000)
     date_created = models.DateTimeField(default = timezone.now)
     priority = models.IntegerField()
-    #from 1,2,3
+    #from 1,2
     def get_priority(self):
         if self.priority == 1: return "Low"
-        elif self.priority == 2: return "Medium"
         else: return "High"
 
 class AdvanceSearchForm(forms.Form):
@@ -49,7 +48,7 @@ class AdvanceSearchForm(forms.Form):
 
 class NewsForm(forms.ModelForm):
     priority = forms.ChoiceField( choices=(
-        (1, "Low"), (2, "Medium"), (3, "High")))
+        (1, "Low"), (2, "High"),))
     class Meta:
         model = News
         fields = ['content', 'priority']

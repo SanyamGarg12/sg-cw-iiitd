@@ -98,3 +98,13 @@ class EmailThread(threading.Thread):
 def EmailMessage(subject, text_content, to=[]):
 	pass
 	# EmailThread(subject, text_content, to).start()
+
+def chunks(full, size):
+	for i in xrange(0, len(full), size):
+		yield full[i:i+size]
+
+def EmailMessageAll(text_content,subject="New Announcement"):
+	projects = Project.objects.filter(stage='ongoing')
+	projects = list(chunks(projects, 10))
+	for p in projects:
+		EmailMessage(subject, text_content, to=[str(x.student.email) for x in p])
