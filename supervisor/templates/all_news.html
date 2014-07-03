@@ -17,7 +17,7 @@
       <tr>
         <td>{{ forloop.counter }}</td>
         <td><a href="{% url 'view_news' n.id %}">{{ n.content|truncatechars:"100" }}</a></td>
-        <td>{{ n.created_on|date:"D d M Y" }}</td>
+        <td>{{ n.date_created|date:"D d M Y" }}</td>
         <td>{{ n.get_priority }}</td>
         </tr>
     {% endfor %}

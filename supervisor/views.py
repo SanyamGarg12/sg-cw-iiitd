@@ -4,7 +4,7 @@ from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.db.models import Q
-from supervisor.decorators import supervisor_logged_in, is_int, EmailMessage
+from supervisor.decorators import supervisor_logged_in, is_int, EmailMessage, EmailMessageAll
 
 from studentportal.models import Project, NGO, Category, Document
 from models import Example, AdvanceSearchForm, NewsForm, News, Notification, NewCategoryForm, NewNGOForm
@@ -186,6 +186,8 @@ def add_news(request):
 		form = NewsForm(request.POST)
 		if form.is_valid():
 			form.save()
+			if int(form.cleaned_data['priority']) == 2:
+				EmailMessageAll(str(form.cleaned_data['content']))
 			messages.success(request, 'News posted')
 			return HttpResponseRedirect(reverse('all_news'))
 	else:
