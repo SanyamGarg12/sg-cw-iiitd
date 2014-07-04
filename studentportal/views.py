@@ -24,7 +24,7 @@ def add_notification(noti_type, project):
 
 def index(request):
 	if request.user.is_authenticated():
-		if request.user.email == SUPERVISOR_EMAIL:
+		if request.user.email in SUPERVISOR_EMAIL:
 			return HttpResponseRedirect(reverse('supervisor_home'))
 	return HttpResponseRedirect(reverse('studenthome'))
 
