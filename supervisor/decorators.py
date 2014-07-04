@@ -71,7 +71,7 @@ def supervisor_logged_in(view):
 			request.session['noti_count_NGO'] = Notification.objects.filter(noti_type='suggest').distinct().count()
 			globals.noti_refresh = False
 
-		if request.user.is_authenticated() and request.user.email == SUPERVISOR_EMAIL:
+		if request.user.is_authenticated() and request.user.email in SUPERVISOR_EMAIL:
 			return view(request, *args, **kwargs)
 		raise Http404()
 	return _wrapped_view
