@@ -42,7 +42,7 @@
           <form class="navbar-form navbar-right" action="/supervisor/basic_search/" method="POST">
             {% csrf_token %}
             
-            <input class="form-control" placeholder="First name / Email / Roll No." type="text" name = "search_query">
+            <input class="form-inline" placeholder="First name / Email / Roll No." type="text" name = "search_query" >
             <span class-"input-group-button">
             <input type='submit' value='Search' class="btn btn-default" />
             </span>
@@ -55,12 +55,12 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active">Community Work</li>
+            <li class="active"><strong>Community Work</strong></li>
             <li><a href="{% url 'ongoing_projects' 0 %}">Ongoing Projects</a></li>
             <li><a href="{% url 'example_projects' %}">Example Projects</a></li>
           </ul>
           <ul class="nav nav-sidebar">
-            <li class="active">Notifications</li>
+            <li class="active"><strong>Notifications</strong></li>
             <li><a href="{% url 'unverified_projects' %}">New Proposals <span class="badge">{{ request.session.noti_count_proposal|add:"0" }}</span> </a></li>
             <li><a href="{% url 'submitted_projects' %}">Pending Projects <span class="badge">{{ request.session.noti_count_submissions|add:"0" }}</span></a></li>
             <li><a href="{% url 'super_suggested_ngos' %}">New NGOs <span class="badge">{{ request.session.noti_count_NGO|add:"0" }}</span></a></li>
@@ -75,12 +75,12 @@
         </div>
         {% if messages %}
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</li>
-    {% endfor %}
-    </div>
-</ul>
+          <span class="messages">
+          {% for message in messages %}
+            <span {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</span>
+          {% endfor %}
+          </div>
+          </span>
 {% endif %}
 {% endblock %}
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
