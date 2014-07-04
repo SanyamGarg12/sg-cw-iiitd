@@ -118,12 +118,12 @@ footer {
         </div><!-- /.nav-collapse -->
       </div><!-- /.container -->
     </div><!-- /.navbar -->
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
+    {% if messages %}
+          <span class="messages">
+          {% for message in messages %}
+            <span {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</span>
+          {% endfor %}
+          </span>
 {% endif %}
 {% endblock %}
 
