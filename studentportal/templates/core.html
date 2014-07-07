@@ -119,12 +119,15 @@ footer {
       </div><!-- /.container -->
     </div><!-- /.navbar -->
     {% if messages %}
+    <div class="container">
           <span class="messages">
           {% for message in messages %}
             <span {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</span>
           {% endfor %}
           </span>
+    </div>  
 {% endif %}
+
 {% endblock %}
 
 {% block content %}
