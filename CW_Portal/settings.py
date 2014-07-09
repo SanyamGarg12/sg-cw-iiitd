@@ -138,7 +138,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 
-ALLOWED_DOMAINS = ['iiitd.ac.in',]
+ALLOWED_DOMAINS = ['iiitd.ac.in','gmail.com',]
 
 SOCIALACCOUNT_ADAPTER = 'studentportal.views.LoginAdapter'
 
