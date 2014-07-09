@@ -31,8 +31,6 @@ TEMPLATE_DIRS = (
     BASE_DIR + '/studentportal/templates/'
     )
 
-ALLOWED_HOSTS = []
-
 MEDIA_ROOT = BASE_DIR + '/media/'
 MEDIA_URL = '/media/'
 
@@ -139,5 +137,9 @@ STATICFILES_DIR = (
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
+
+ALLOWED_DOMAINS = ['iiitd.ac.in',]
+
+SOCIALACCOUNT_ADAPTER = 'studentportal.views.LoginAdapter'
 
 MESSAGE_TAGS = {message_constants.ERROR: 'danger'}
