@@ -1,6 +1,7 @@
 {% extends 'supervisorcore.html' %}
 {% block content %}
 <a class="btn btn-warning" style="float:right;" role="button" href = "{% url 'add_news' %}">Post another news</a>
+<a class="btn btn-danger" role="button" href = "{% url 'super_delete_news' news.pk %}">Delete this news post.</a>
 <br />
 <hr />
 <h3> News: </h3>

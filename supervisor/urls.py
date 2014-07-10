@@ -34,4 +34,6 @@ urlpatterns = patterns('',
 	url(r'^addcategory/$', views.add_category),
 	url(r'^deletecategory/(?P<category_id>[0-9]+)', views.delete_category, name='super_delete_category'),
 	url(r'^addNGO/$', views.add_NGO),
+	url(r'^delete_news/(?P<news_id>[0-9]+)/$', views.delete_news, name = 'super_delete_news'),
+
 )
