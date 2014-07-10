@@ -319,3 +319,10 @@ def add_NGO(request):
 			return render(request, 'super_all_ngo.html',
 				{'NGOs': NGOs, 'form': form})
 	return HttpResponseRedirect(reverse('super_all_NGO'))
+
+@supervisor_logged_in
+def delete_news(request, news_id):
+	news = get_object_or_404(News, pk = news_id)
+	news.delete()
+	messages.success(request, "The news post has been deleted successfully.")
+	return HttpResponseRedirect(reverse('all_news'))
