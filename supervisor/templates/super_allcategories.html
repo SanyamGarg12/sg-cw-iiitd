@@ -21,6 +21,7 @@
         <th>#</th>
         <th>Name</th>
         <th>Description</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -29,6 +30,7 @@
         <td>{{ forloop.counter }}</td>
         <td><a href="{% url 'super_viewcategory' c.pk %}">{{ c.name|truncatechars:"100" }}</a></td>
         <td>{{ c.description|truncatechars:"100" }}</td>
+        <td><a href="{% url 'super_delete_category' c.pk %}"><span class='glyphicon glyphicon-remove'></span></a></td>
         </tr>
     {% endfor %}
     </tbody>
