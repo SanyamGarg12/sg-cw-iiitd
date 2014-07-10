@@ -61,3 +61,7 @@ class NewNGOForm(forms.Form):
     name = forms.CharField(label="Name of the NGO")
     link = forms.CharField(label="Link for the NGO", required = False)
     details = forms.CharField(label="Something about the NGO", required=False)
+
+class EmailProjectForm(forms.Form):
+    to = forms.CharField(label="Student Email", required = True)
+    body = forms.CharField(label="Body", widget=forms.Textarea, required=True)

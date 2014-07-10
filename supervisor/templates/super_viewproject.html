@@ -30,7 +30,7 @@
 		<br />
 	{% endfor %}
 	{% else %}
-		No logs uploaded till now
+		No logs uploaded till now.
 	{% endif %}
 <hr />
 {% ifequal project.stage "to_be_verified" %}
@@ -46,6 +46,8 @@
 {% else %}
 <a class="btn btn-warning" role="button"  href = "{% url 'addtoexamples' project.pk %}">Add to examples</a>
 {% endif %}
+
+<a class="btn btn-info" role="button"  href = "{% url 'super_email_project' project.pk %}">Email student about project</a>
 
 {% if project.submitted_and_awaiting_completion %}
 <a class="btn btn-warning" role="button"  href = "{% url 'complete' project.pk %}" style="float:right;">Complete Project</a>
