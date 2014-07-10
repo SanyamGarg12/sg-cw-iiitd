@@ -300,6 +300,9 @@ def add_category(request):
 def delete_category(request, category_id):
 	category = get_object_or_404(Category,pk =category_id)
 	name = category.name
+	if str(name).lower() == 'other':
+		messages.error(request, "'Other' category cannot be deleted.")
+		return HttpResponseRedirect(reverse('super_allcategories'))
 	category.delete()
 	messages.success(request, "%s was deleted"%name)
 	return HttpResponseRedirect(reverse('super_allcategories'))
