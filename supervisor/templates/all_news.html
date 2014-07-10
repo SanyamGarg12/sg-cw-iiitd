@@ -20,6 +20,13 @@
         <td>{{ n.date_created|date:"D d M Y" }}</td>
         <td>{{ n.get_priority }}</td>
         </tr>
+    {% empty %}
+      <tr>
+      <td> - </td>
+      <td> No news posted. </td>
+      <td> - </td>
+      <td> - </td>
+      </tr>
     {% endfor %}
     </tbody>
   </table>
