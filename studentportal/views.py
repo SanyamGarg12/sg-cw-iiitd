@@ -101,7 +101,6 @@ def editproject(request, project_id):
 			form = ProjectForm(request.user, request.POST, instance = instance)
 			if form.is_valid():
 				form.save()
-				add_notification("edit", instance)
 				RenderProjectCategoryPieChart().start()
 				messages.success(request, "Your project details have been succesfully updated.")
 				return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
