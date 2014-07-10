@@ -7,7 +7,7 @@ from django.db.models import Q
 from supervisor.decorators import supervisor_logged_in, is_int, EmailMessage, EmailMessageAll
 
 from studentportal.models import Project, NGO, Category, Document
-from models import Example, AdvanceSearchForm, NewsForm, News, Notification, NewCategoryForm, NewNGOForm
+from models import Example, AdvanceSearchForm, NewsForm, News, Notification, NewCategoryForm, NewNGOForm, EmailProjectForm
 
 from CW_Portal import globals
 
@@ -326,3 +326,17 @@ def delete_news(request, news_id):
 	news.delete()
 	messages.success(request, "The news post has been deleted successfully.")
 	return HttpResponseRedirect(reverse('all_news'))
+
+@supervisor_logged_in
+def email_project(request, project_id):
+	project = get_object_or_404(Project, pk = project_id)
+	if request.method == "POST":
+		form = EmailProjectForm(request.POST)
+		if form.is_valid():
+			EmailMessage("CW Project '%s' "%project.title, form.cleaned_data['body'], to=[form.cleaned_data['to']])
+			messages.success(request, "E-mail sent.")
+			return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
+	else:
+		form = EmailProjectForm({'to':str(project.student.email), 'body': "This is regarding your project '%s'." %project.title
+			})
+	return render(request, 'email.html', {'form': form, 'project_id': project_id})
