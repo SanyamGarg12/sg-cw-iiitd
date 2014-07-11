@@ -23,6 +23,7 @@ from django.conf import settings
 
 from allauth.exceptions import ImmediateHttpResponse
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
+from allauth.account.adapter import DefaultAccountAdapter
 
 def add_notification(noti_type, project):
 	Notification.objects.create(noti_type=noti_type, project=project)
@@ -43,13 +44,18 @@ def home(request):
 		return render(request, 'studenthome.html',
 			{'news': news,})
 
-class LoginAdapter(DefaultSocialAccountAdapter):
+class DomainLoginAdapter(DefaultSocialAccountAdapter):
 	def pre_social_login(self, request, sociallogin):
 		u = sociallogin.account.user
 		if u.email.split('@')[1] not in settings.ALLOWED_DOMAINS:
 			logout(request)
 			messages.error(request, "Sorry. You must login through a IIIT-D account only.")
 			raise ImmediateHttpResponse(home(request))
+
+class NoMessagesLoginAdapter(DefaultAccountAdapter):
+	def add_message(self, request, level, message_template,
+                    message_context={}, extra_tags=''):
+		pass
 
 @login_required
 def addproject(request):
