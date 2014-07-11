@@ -58,7 +58,7 @@ class RenderProjectCategoryPieChart(threading.Thread):
 			category_dict[project.category] += 1
 		for k,v in category_dict.iteritems():
 			pie_chart.add(k.name, v)
-		pie_chart.render_to_file(os.path.join(BASE_DIR, 'studentportal/static/statistics/project_category_piechart.svg'))		
+		pie_chart.render_to_file(os.path.join(BASE_DIR, 'studentportal/static/statistics/project_category_piechart.svg'))
 
 def supervisor_logged_in(view):
 	def _wrapped_view(request, *args, **kwargs):
