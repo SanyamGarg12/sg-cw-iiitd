@@ -140,6 +140,8 @@ EMAIL_PORT = 587
 
 ALLOWED_DOMAINS = ['iiitd.ac.in','gmail.com',]
 
-SOCIALACCOUNT_ADAPTER = 'studentportal.views.LoginAdapter'
+SOCIALACCOUNT_ADAPTER = 'studentportal.views.DomainLoginAdapter'
+ACCOUNT_ADAPTER = 'studentportal.views.NoMessagesLoginAdapter'
+
 
 MESSAGE_TAGS = {message_constants.ERROR: 'danger'}
