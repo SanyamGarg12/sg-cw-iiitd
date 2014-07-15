@@ -1,18 +1,22 @@
 {% extends 'supervisorcore.html' %}
-
+{% load bootstrap %}
 {% block content %}
 
 <h2 class="sub-header">All NGOs</h2>
 <hr />
-<form action="/supervisor/addNGO/" method = "post"> {% csrf_token %}
-<p>{{ form.non_field_errors }} {{ form.error_messages }}</p>
-<table>
-<tr><td>{{ form.name.label_tag }} </td> <td>{{ form.name }}</td></tr>
-<tr><td>{{ form.link.label_tag }} </td> <td>{{ form.link }}</td></tr>
-<tr><td>{{ form.details.label_tag }}</td> <td> {{form.details }} </td></tr>
-<tr><td><input type="submit" value="Add NGO" /></td></tr>
-</table>
+<div class="panel panel-default">
+<div class="panel-heading">
+<h3 class="panel-title">
+Add an NGO
+</h3>
+</div>
+<div class="panel-body">
+<form action="/supervisor/addNGO/" method="POST"> {% csrf_token %}
+{{ form|bootstrap_horizontal }}
+<input type="submit" value="Add NGO" />
 </form>
+</div>
+</div>
 <hr />
 {% if NGOs %}
 Click on the NGO for a list of students who have workied under it.

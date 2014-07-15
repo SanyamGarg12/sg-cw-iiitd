@@ -1,9 +1,8 @@
 {% extends 'supervisorcore.html' %}
+{% load bootstrap %}
 {% block content %}
 <form action="{% url 'super_email_project' project_id %}" method="POST"> {% csrf_token %}
-<table>
-	{{ form.as_table }}
-</table>
+	{{ form|bootstrap }}
 <input type='submit' value='Send' />
 </form>
 {% endblock %}
