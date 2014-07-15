@@ -3,24 +3,50 @@
 {% block content %}
 <div class="container">
 	<center>
-		<h3>{{ project.project.title }}</h3>
+		<h2>
+		{% ifequal project.project.stage "to_be_verified" %}
+         <span class="glyphicon glyphicon-flag" title="Unverified" style="color:red"></span>
+         {% endifequal %}
+        {% ifequal project.project.stage "ongoing" %}
+          <span class="glyphicon glyphicon-cog" title="Ongoing" style="color:blue"></span>
+        {% endifequal %}
+        {% ifequal project.project.stage "completed" %}
+          <span class="glyphicon glyphicon-ok" title="Completed" style="color:green"></span>
+        {% endifequal %}
+        {{ project.project.title }}
+        </h2>
 	</center>
 		<h2>Credits: </h2>
-		{{ project.project.credits}}
+		<blockquote>
+			{{ project.project.credits }}
+		</blockquote>
 		<h2>Date created: </h2>
-		{{ project.project.date_created|date:"D, d M Y"}}
+		<blockquote>
+			{{ project.project.date_created|date:"D, d M Y"}}
+		</blockquote>
 		<h2>Goals: </h2>
-		{{ project.project.goals}}
-	<h2>Schedule: </h2>
-		{{ project.project.schedule_text }}
-	<h2>NGO:</h2>
-	{{ project.project.get_NGO }}
-	<h2>Supervisor: </h2>
-	{{ project.project.NGO_super}}
-	<h2>Supervisor contact: </h2>
-	{{ project.project.NGO_super_contact}}
-	<h2>Schedule: </h2>
-	{{ project.project.schedule_text}}
-	<hr />
-</div>
+		<blockquote>
+			{{ project.project.goals}}
+		</blockquote>
+		<h2>Schedule: </h2>
+		<blockquote>
+			{{ project.project.schedule_text }}
+		</blockquote>
+		<h2>NGO:</h2>
+		<blockquote>
+			{{ project.project.get_NGO }}
+		</blockquote>
+		<h2>Supervisor: </h2>
+		<blockquote>
+			{{ project.project.NGO_super}}
+		</blockquote>	
+		<h2>Supervisor contact information: </h2>
+		<blockquote>
+			{{ project.project.NGO_super_contact}}
+		</blockquote>	
+		<h2>Category</h2>
+		<blockquote>
+		{{ project.project.category.name }}
+		</blockquote>
+	</div>
 {% endblock %}

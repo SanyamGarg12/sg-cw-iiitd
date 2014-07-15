@@ -7,28 +7,17 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>Community Work Portal - IIIT-D</title>
-
     <!-- Bootstrap core CSS -->
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
-
-    <!-- Custom styles for this template -->
-    <!-- <link href="Off%20Canvas%20Template%20for%20Bootstrap_files/offcanvas.css" rel="stylesheet"> -->
-
 <style type="text/css">
-  /*
- * Style tweaks
- * --------------------------------------------------
- */
 html,
 body {
   overflow-x: hidden; /* Prevent scroll on narrow devices */
 }
-footer {
-  padding: 30px 0;
-}
-
+/*footer {
+  padding: 0px 0;
+}*/
 /*
  * Off Canvas
  * --------------------------------------------------
@@ -73,13 +62,10 @@ footer {
     width: 50%; /* 6 columns */
   }
 }
-
 </style>
+</head>
 
-
-  </head>
-
-  <body style="padding-top: 70px; padding-bottom: 70px;">
+  <body style="padding-top: 70px">
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -97,7 +83,7 @@ footer {
             {% if user.is_authenticated %}
             <li><a href="{% url 'bugs' %}"> Report bug </a></li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ user.first_name }} <b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ user.first_name }} <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="{% url 'studentprofile' %}">My CW-Projects</a></li>
                 <li class="divider"></li>
@@ -124,20 +110,18 @@ footer {
     </div>  
     <br />
 {% endif %}
-
 {% endblock %}
 
 {% block content %}
 {% endblock %}
 
 {% block core-footer %}
-<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
-  <div class="collapse navbar-collapse" id="head-navbar-collapse-1">
-    <div class="container">
-    <p class="text-muted credit">Made by <a href="//www.github.com/darkryder/">Sambhav Satija</a> @ <a href="//www.iiitd.ac.in">IIIT-D</a>.</p>
-    </div>
-  </div><!-- /.container-fluid -->
-</nav>
+<hr />
+<div class="container">
+<footer>
+    <p class="credit">Made by <a href="//www.github.com/darkryder/">Sambhav Satija</a> @ <a href="//www.iiitd.ac.in">IIIT-D</a>.</p>
+</footer>
+</div>
 {% endblock %}
    
     <!-- Bootstrap core JavaScript
@@ -152,6 +136,4 @@ footer {
         });
       });
     </script>
-  
-
 </body></html>

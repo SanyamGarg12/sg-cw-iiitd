@@ -1,42 +1,38 @@
 {% extends 'core.html' %}
 
 {% block content %}
-
-<center> <h3> {{ user.first_name }} {{ user.last_name }} </h3></center> 
-
-<hr />
-<span style="margin-left:8.5%;" ><a class="btn btn-warning" role="button"  href = "{% url 'addproject' %}">Add new project</a></span>
+<h3 class="page-header"><center> {{ user.first_name }} {{ user.last_name }}  </center></h3>
+<div align="center">
+<a class="btn btn-info btn-lg " role="button"  href = "{% url 'addproject' %}" style="margin-bottom:10px;">Add new project</a>
+</div>
 {% if projects %}
-	
-
+  <div class="container">
     <div class = "row">
     {% for p in projects.all %}
-      	<div class="{% cycle 'col-sm-6 col-md-3 col-md-offset-1' 'col-sm-6 col-md-3' 'col-sm-6 col-md-3' %}">
-              <p> <span class="badge" style="float:right;">  {{p.student.first_name}} {{p.student.last_name}} </span></p>
-              <div class="thumbnail">
-                <div class="caption">
-                  <h3>
-                   {% ifequal p.stage "to_be_verified" %}
-                     <span class="glyphicon glyphicon-flag" title="Unverified"></span>
-                     {% endifequal %}
-                    {% ifequal p.stage "ongoing" %}
-                      <span class="glyphicon glyphicon-cog" title="Ongoing"></span>
-                    {% endifequal %}
-                    {% ifequal p.stage "completed" %}
-                      <span class="glyphicon glyphicon-ok" title="Completed"></span>
-                    {% endifequal %}
-                    {{ p.title|truncatechars:15 }}</h3>
-                  </div>
-                <p>{{ p.goals|truncatechars:30 }}</p>
-                <p><a class="btn btn-default" href="{% url 'viewproject' p.id %}" role="button">View details »</a>
-                {% ifequal p.stage "completed" %}{% if p.feedback.all %}{% else %}
-                <a class="btn btn-default" href="{% url 'feedback' p.id %}" role="button">Give feedback»</a>
-                {% endif %}{% endifequal %}
-                </p>
-            </div>
-          </div><!--/row-->
-        {% endfor %}
+      <div class="col-6 col-sm-6 col-lg-4">
+      <blockquote>
+        {% ifequal p.stage "to_be_verified" %}
+           <span class="glyphicon glyphicon-flag" title="Unverified" style="color:red;"></span>
+           {% endifequal %}
+          {% ifequal p.stage "ongoing" %}
+            <span class="glyphicon glyphicon-cog" title="Ongoing" style="color:blue;"></span>
+          {% endifequal %}
+          {% ifequal p.stage "completed" %}
+            <span class="glyphicon glyphicon-ok" title="Completed" style="color:green;"></span>
+          {% endifequal %}
+        <p>
+          {{ p.title|truncatechars:50 }} <a class="btn btn-link" href="{% url 'viewproject' p.id %}" role="button">View »</a>
+          {% ifequal p.stage "completed" %}{% if p.feedback.all %}{% else %}
+            <a class="btn btn-link" href="{% url 'feedback' p.id %}">Give feedback »</a>
+            {% endif %}{% endifequal %}
+ 
+        </p>
+        <small>{{p.student.first_name}} {{p.student.last_name}}</small>
+      </blockquote>
+      </div>
+      {% endfor %}
     </div>
+  </div>
 
 {% else %}
 	<center> You have not done any CW Project yet. </center>
@@ -44,4 +40,3 @@
 
 
 {% endblock %}
-

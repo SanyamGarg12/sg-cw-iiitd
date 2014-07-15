@@ -3,13 +3,11 @@
 
 <div class="container">
 <center>
-<strong>Select a year: </strong>
-<ul>
+<h1 class="page-header">Select a year:</h1>
 <br />
 {% for year in years %}
-<li><a href="{% url 'all_projects_open_to_public' year %}">{{ year }}</a></li>
+<a href="{% url 'all_projects_open_to_public' year %}"><h3>{{ year }}</h3></a>
 {% endfor %}
-</ul>
 </center>
 </div>
 {% endblock %}

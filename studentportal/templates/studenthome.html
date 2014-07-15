@@ -11,35 +11,81 @@
             <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Sticky links</button>
           </p>
           <div class="jumbotron">
-            <h1>Community Work</h1>
-            <p>Community Work provides students broader connect with society and self. At IIIT Delhi, students have to do minimum 80 hours of Community Work. This activity teaches students about their rights and responsibilities as citizens, and their ability to bring about meaningful change through advocacy and service. It enables students to help to apply skills and content knowledge to real needs in their local community.</p>
+            <h1>Community Work @ IIITD</h1>
+            <p class="lead">Community Work provides students broader connect with society and self. At IIIT Delhi, students have to do minimum 80 hours of Community Work. This activity teaches students about their rights and responsibilities as citizens, and their ability to bring about meaningful change through advocacy and service. It enables students to help to apply skills and content knowledge to real needs in their local community.</p>
           </div>
+
+            <div class="panel panel-info">
+              <div class="panel-body">
+                <div class="row">
+                  <div class='col-lg-2'>
+                    <div align="center">
+                      <h1><span class="glyphicon glyphicon-exclamation-sign" style="color:purple;"></span></h1>
+                      <h2>Propose</h2>
+                    </div>
+                  </div>
+                  <div class='col-lg-1'>
+                    <div align="center">
+                      <h1><span class="glyphicon glyphicon-arrow-right" style="color:blue;"></span></h1>
+                    </div>
+                  </div>
+                  <div class='col-lg-3'>
+                    <div align="center">
+                      <h1><span class="glyphicon glyphicon-tree-conifer" style="color:green;"><span class="glyphicon glyphicon-tree-deciduous" style="color:green;"><span class="glyphicon glyphicon-tree-conifer" style="color:green;"></span></h1>
+                      <h2>Work</h2>
+                    </div>
+                  </div>
+                  <div class='col-lg-1'>
+                    <div align="center">
+                      <h1><span class="glyphicon glyphicon-arrow-right" style="color:blue;"></span></h1>
+                    </div>
+                  </div>
+                  <div class='col-lg-2'>
+                    <div align="center">
+                      <h1><span class="glyphicon glyphicon-ok" style="color:red;"></span></h1>
+                      <h2>Complete</h2>
+                    </div>
+                  </div>
+                  <div class='col-lg-1'>
+                    <div align="center">
+                      <h1><span class="glyphicon glyphicon-arrow-right" style="color:blue;"></span></h1>
+                    </div>
+                  </div>
+                  <div class='col-lg-2'>
+                    <div align="center">
+                      <h1><span class="glyphicon glyphicon-repeat" style="color:orange;"></span></h1>
+                      <h2>Repeat</h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
           {% if example_projects.all %}
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
             <div class="panel-heading"><h3><a href="{% url 'student_all_examples' %}" class="panel-title">All example projects</a></h3>
             </div>
           <div class="panel-body">
           <div class="row">
             {% for p in example_projects.all %}
             <div class="col-6 col-sm-6 col-lg-4">
-      				<p> <span class="badge" style="float:right;">  {{p.project.student.first_name}} {{p.project.student.last_name}} </span></p>
-      				<div class="thumbnail">
-        				<div class="caption">
-      						<h3>
-      		 				 {% ifequal p.project.stage "to_be_verified" %}
-		     						 <span class="glyphicon glyphicon-flag" title="Unverified"></span>
-		     						 {% endifequal %}
-		      					{% ifequal p.project.stage "ongoing" %}
-		      					  <span class="glyphicon glyphicon-cog" title="Ongoing"></span>
-		     						{% endifequal %}
-		      					{% ifequal p.project.stage "completed" %}
-		      						<span class="glyphicon glyphicon-ok" title="Completed"></span>
-		      					{% endifequal %}
-     		 						{{ p.project.title|truncatechars:15 }}</h3>
-      		  			</div>
-        				<p>{{ p.project.goals|truncatechars:30 }}</p>
-        				<p><a class="btn btn-default" href="{% url 'view_example' p.project.id %}" role="button">View details »</a></p>
-      				</div>
+            <blockquote>
+              {% ifequal p.project.stage "to_be_verified" %}
+                 <span class="glyphicon glyphicon-flag" title="Unverified" style="color:red;"></span>
+                 {% endifequal %}
+                {% ifequal p.project.stage "ongoing" %}
+                  <span class="glyphicon glyphicon-cog" title="Ongoing" style="color:blue;"></span>
+                {% endifequal %}
+                {% ifequal p.project.stage "completed" %}
+                  <span class="glyphicon glyphicon-ok" title="Completed" style="color:green;"></span>
+                {% endifequal %}
+              <p>
+                {{ p.project.title|truncatechars:50 }} <a class="btn btn-link" href="{% url 'view_example' p.project.id %}" role="button">Check it out »</a>
+              </p>
+              <small>{{p.project.student.first_name}} {{p.project.student.last_name}}</small>
+            
+            </blockquote>
     				</div>
             {% endfor %}
           </div><!--/row-->
@@ -50,7 +96,7 @@
 
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
           <div class="list-group">
-          <center><span class="list-group-item disabled">Sticky Links</span></center>
+          <center><span class="list-group-item active">Sticky Links</span></center>
             <a href="{% url 'guidlines' %}" class="list-group-item">Guidlines</a>
             <a href="{% url 'all_NGO' %}" class="list-group-item">Some NGOs</a>
             <a href="{% url 'all_projects_open_to_public_year_select' %}" class="list-group-item"> All Completed Projects </a>
@@ -59,7 +105,7 @@
         </div><!--/span-->
 
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="news_sidebar" role="navigation">
-          <center><span><a href="{% url 'student_view_news' 0 %}" class="list-group-item disabled">All Announcements</a></span></center>
+          <center><span><a href="{% url 'student_view_news' 0 %}" class="list-group-item active">All Announcements</a></span></center>
           <div class="list-group">
             {% for n in news %}
             <a href="{% url 'student_view_news' n.id %}" class="list-group-item">{{ n.content|truncatechars:75 }}</a>

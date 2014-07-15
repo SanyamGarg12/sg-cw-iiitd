@@ -4,7 +4,7 @@
 <div class="container">
 <form action="{% url 'feedback' id %}" method="POST"> {% csrf_token %}
 	{{ form|bootstrap_horizontal:'col-lg-2' }}
-<input type='submit' value='Submit feedback' />
+<input type='submit' value='Submit feedback' class="btn btn-default btn-lg" style="margin-top:10px; float:right;"/>
 </form>
 </div>
 {% endblock %}
