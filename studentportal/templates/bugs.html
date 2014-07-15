@@ -4,7 +4,8 @@
 <div class="container">
 <form action="{% url 'bugs'%}" method = "post"> {% csrf_token %}
 {{ form|bootstrap_horizontal }}
-<p><input type="submit" value="Submit" /></p>
+<br />
+<input type="submit" value="Submit" class="btn btn-warning btn-lg" style="float:right; margin-top:10px;"  />
 </form>
 </div>
 {% endblock %}

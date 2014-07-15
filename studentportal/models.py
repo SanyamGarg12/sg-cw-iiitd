@@ -6,7 +6,7 @@ from django.forms import ModelForm
 
 from django import forms
 
-from decorators import path_and_rename, validate_credits
+from decorators import path_and_rename, validate_credits, validate_feedback_hours
 
 from django.conf import settings
 
@@ -83,7 +83,7 @@ class Document(models.Model):
 
 class Feedback(models.Model):
     project         = models.ForeignKey(Project, primary_key = True, related_name='feedback')
-    hours           = models.IntegerField()
+    hours           = models.IntegerField(validators=[validate_feedback_hours])
     achievements    = models.TextField(max_length = 2000)
     experience      = models.IntegerField(choices=(
         (1,"Very Poor"), (2,"Poor"), (3,"Neutral"), (4,"Good"), (5,"Very Good") ), default=1)
@@ -120,7 +120,7 @@ class ProjectForm(ModelForm):
 class UploadDocumentForm(forms.Form):
     document = forms.FileField(
         label='Select a file',
-        help_text='max. 42 megabytes'
+        help_text='max. 5 Mb.'
     )
     CHOICES = (('Proposal','proposal'),('Log', 'log'),('submission', 'Final Report'),)
     category = forms.ChoiceField(choices=CHOICES,

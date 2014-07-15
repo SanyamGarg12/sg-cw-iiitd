@@ -3,46 +3,69 @@
 {% block content %}
 <div class="container">
 	<center>
-		<h3>{% ifequal project.stage "to_be_verified" %}
-         <span class="glyphicon glyphicon-flag" title="Unverified"></span>
+		<h2>
+		{% ifequal project.stage "to_be_verified" %}
+         <span class="glyphicon glyphicon-flag" title="Unverified" style="color:red"></span>
          {% endifequal %}
         {% ifequal project.stage "ongoing" %}
-          <span class="glyphicon glyphicon-cog" title="Ongoing"></span>
+          <span class="glyphicon glyphicon-cog" title="Ongoing" style="color:blue"></span>
         {% endifequal %}
         {% ifequal project.stage "completed" %}
-          <span class="glyphicon glyphicon-ok" title="Completed"></span>
-        {% endifequal %} {{ project.title }}</h3>
+          <span class="glyphicon glyphicon-ok" title="Completed" style="color:green"></span>
+        {% endifequal %}
+        {{ project.title }}
+        </h2>
 	</center>
 		<h2>Credits: </h2>
-		{{ project.credits}}
+		<blockquote>
+			{{ project.credits}}
+		</blockquote>
 		<h2>Date created: </h2>
-		{{ project.date_created|date:"D, d M Y"}}
+		<blockquote>
+			{{ project.date_created|date:"D, d M Y"}}
+		</blockquote>
 		<h2>Goals: </h2>
-		{{ project.goals}}
-	<h2>Schedule: </h2>
-		{{ project.schedule_text }}
-	<h2>NGO:</h2>
-	{{ project.get_NGO }}<a href="{% url 'view_project_NGO' project.id %}">  Change NGO</a>
-	<h2>NGO details: </h2>
-	{{ project.NGO_details}}
-	<h2>Supervisor: </h2>
-	{{ project.NGO_super}}
-	<h2>Supervisor contact: </h2>
-	{{ project.NGO_super_contact}}
-	<h2>Schedule: </h2>
-	{{ project.schedule_text}}
-	
-	<h3>Documents:</h3>
-	{% if project.documents.all %}
-	{% for doc in project.documents.all %}
-		<strong>{{ doc.category }}: </strong>
-		<a href = "{% url 'download_document' doc.pk %}">
-		{{ doc.name }}</a>
-		<br />
-	{% endfor %}
-	{% else %}
-		No logs uploaded till now
-	{% endif %}
+		<blockquote>
+			{{ project.goals}}
+		</blockquote>
+		<h2>Schedule: </h2>
+		<blockquote>
+			{{ project.schedule_text }}
+		</blockquote>
+		<h2>NGO:</h2>
+		<blockquote>
+			{{ project.get_NGO }}
+			<p><a href="{% url 'view_project_NGO' project.id %}">Change NGO details</a></p>
+		</blockquote>
+		<h2>NGO details: </h2>
+		<blockquote>
+			{{ project.NGO_details}}
+		</blockquote>
+		<h2>Supervisor: </h2>
+		<blockquote>
+			{{ project.NGO_super}}
+		</blockquote>	
+		<h2>Supervisor contact information: </h2>
+		<blockquote>
+			{{ project.NGO_super_contact}}
+		</blockquote>	
+		<h2>Category</h2>
+		<blockquote>
+		{{ project.category.name }}
+		</blockquote>
+	<h2>Documents:</h2>
+	<blockquote>
+		{% if project.documents.all %}
+		{% for doc in project.documents.all %}
+			<strong>{{ doc.category }}: </strong>
+			<a href = "{% url 'download_document' doc.pk %}">
+			{{ doc.name }}</a>
+			<br />
+		{% endfor %}
+		{% else %}
+			No documents uploaded till now.
+		{% endif %}
+	</blockquote>
 	<hr />
 <a class="btn btn-warning" role="button"  href = "{% url 'editproject' project.id %}">Edit CW project details</a>
 <a class="btn btn-primary" role="button"  href = "{% url 'upload_document' project.id %}">Upload files</a>

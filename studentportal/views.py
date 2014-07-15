@@ -267,6 +267,7 @@ def view_example(request, example_id):
 	project = get_object_or_404(Example, pk=example_id)
 	return render(request, 'view_example.html',
 		{'project': project})
+	
 def guidlines(request):
 	return render(request, 'guidlines.html')
 
