@@ -1,17 +1,23 @@
 {% extends 'supervisorcore.html' %}
+{% load bootstrap %}
 {% block content %}
-
-
 <h2 class="sub-header">Categories</h2>
 
-<form action="/supervisor/addcategory/" method = "post"> {% csrf_token %}
-<p>{{ form.non_field_errors }} {{ form.error_messages }}</p>
-<table>
-<tr><td>{{ form.name.label_tag }} </td> <td>{{ form.name }}</td></tr>
-<tr><td>{{ form.description.label_tag }}</td> <td> {{form.description }} </td></tr>
-<tr><td><input type="submit" value="Add Category" /></td></tr>
-</table>
+<div class="panel panel-default">
+<div class="panel-heading">
+<h3 class="panel-title">
+Add a category
+</h3>
+</div>
+<div class="panel-body">
+<form action="/supervisor/addcategory/" method="POST"> {% csrf_token %}
+{{ form|bootstrap_horizontal }}
+<input type="submit" value="Add Category" />
 </form>
+</div>
+</div>
+
+
 <hr />
 {% if categories %}
 <div class="table-responsive">

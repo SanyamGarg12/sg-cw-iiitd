@@ -20,7 +20,7 @@ class Example(models.Model):
 	date_created = models.DateTimeField(default = timezone.now)
 
 class News(models.Model):
-    content = models.CharField(max_length=1000)
+    content = models.TextField(max_length=1000)
     date_created = models.DateTimeField(default = timezone.now)
     priority = models.IntegerField()
     #from 1,2
@@ -48,7 +48,9 @@ class AdvanceSearchForm(forms.Form):
 
 class NewsForm(forms.ModelForm):
     priority = forms.ChoiceField( choices=(
-        (1, "Low"), (2, "High"),))
+        (1, "Low"), (2, "High"),),
+        help_text = "High priority will also send a mail to all the students who are still doing their projects."
+        )
     class Meta:
         model = News
         fields = ['content', 'priority']
