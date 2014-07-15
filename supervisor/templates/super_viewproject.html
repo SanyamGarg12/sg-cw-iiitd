@@ -52,4 +52,5 @@
 {% if project.submitted_and_awaiting_completion %}
 <a class="btn btn-warning" role="button"  href = "{% url 'complete' project.pk %}" style="float:right;">Complete Project</a>
 {% endif %}
+<a class="btn btn-danger" role="button"  href = "{% url 'super_delete_project' project.pk %}" style="float:right;">Delete Project</a>
 {% endblock %}

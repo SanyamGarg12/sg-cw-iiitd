@@ -49,5 +49,6 @@
 {% ifequal project.stage "completed" %}{% if project.feedback.all %}{% else %}
 <a class="btn btn-info" href="{% url 'feedback' project.id %}" role="button">Give feedback»</a>
 {% endif %}{% endifequal %}
+<a class="btn btn-warning" href="{% url 'delete_project' project.id %}" role="button">Delete this project</a>
 </div>
 {% endblock %}

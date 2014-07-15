@@ -27,4 +27,6 @@ urlpatterns = patterns('',
 	url(r'^examples/(?P<example_id>[0-9]+)/$', views.view_example, name='view_example'),
 	url(r'^guidlines/$', views.guidlines, name='guidlines'),
 	url(r'^bugs/$', views.bugs, name = 'bugs'),
+	url(r'^delete/(?P<project_id>[0-9]+)/$', views.delete_project, name = 'delete_project'),
+	
 )

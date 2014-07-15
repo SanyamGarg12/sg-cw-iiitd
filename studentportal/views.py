@@ -65,6 +65,8 @@ def addproject(request):
 			obj.student = request.user
 
 	if request.method == 'POST':
+		import pdb
+		pdb.set_trace()
 		form = ProjectForm(request.user, request.POST)		
 		if form.is_valid():
 			pre_save.connect(add_user)
@@ -278,3 +280,14 @@ def bugs(request):
 	else:
 		form = BugsForm()
 	return render(request, "bugs.html", {'form': form})
+
+@login_required
+def delete_project(request, project_id):
+	project = get_object_or_404(Project, pk = project_id)
+	if not project.student == request.user:
+		return HttpResponseRedirect(reverse('studenthome'))
+	for document in project.documents.all():
+		document.delete()
+	project.delete()
+	messages.info(request, "Project has been deleted")
+	return HttpResponseRedirect(reverse('studentprofile'))

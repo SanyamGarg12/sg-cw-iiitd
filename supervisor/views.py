@@ -343,3 +343,12 @@ def email_project(request, project_id):
 		form = EmailProjectForm({'to':str(project.student.email), 'body': "This is regarding your project '%s'." %project.title
 			})
 	return render(request, 'email.html', {'form': form, 'project_id': project_id})
+
+@supervisor_logged_in
+def deleteproject(request, project_id):
+	project = get_object_or_404(Project, pk = project_id)
+	for document in project.documents.all():
+		document.delete()
+	project.delete()
+	messages.info(request, "Project has been deleted")
+	return HttpResponseRedirect(reverse('super_allprojects'))

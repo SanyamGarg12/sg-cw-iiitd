@@ -1,12 +1,39 @@
 {% extends 'core.html' %}
-
+{% load bootstrap %}
 {% block content %}
-<div class="container">
-<form action="{% url 'editproject' form.instance.id %}" method="POST"> {% csrf_token %}
-<table>
-	{{ form.as_table }}
-</table>
-<input type='submit' value='Edit' />
-</form>
+<div class="container" style="width:60%">
+  <div class="row">
+  	<div class="span12">
+  	<ul class="nav nav-tabs" role="tablist">
+  	<li class="active"><a href="#1" role="tab" data-toggle="tab">
+  		Basic Information
+  	</a>
+  	<li><a href="#2" role="tab" data-toggle="tab">
+  		More Information
+  	</a>	
+  	</ul>
+		<form action="{% url 'editproject' form.instance.id %}" method="POST" class="form" role="form"> {% csrf_token %}
+		  	<div class="tab-content">
+
+			<div class="tab-pane fade in active" id="1">
+			<br />
+			{{ form.title|bootstrap }}
+			{{ form.credits|bootstrap }}
+			{{ form.NGO_name|bootstrap }}
+			{{ form.NGO_details|bootstrap }}
+			{{ form.NGO_super|bootstrap }}
+			{{ form.NGO_super_contact|bootstrap }}
+			</div>
+			<div class="tab-pane fade in" id="2">
+			<br />
+			{{ form.goals|bootstrap }}
+			{{ form.schedule_text|bootstrap }}
+			{{ form.category|bootstrap }}
+			<input type='submit' value='Edit' />
+			</div>
+			</div>
+		</form>
+</div>
+</div>
 </div>
 {% endblock %}
