@@ -1,14 +1,9 @@
 {% extends 'core.html' %}
-
+{% load bootstrap %}
 {% block content %}
 <div class="container">
 <form action="{% url 'bugs'%}" method = "post"> {% csrf_token %}
-<p>{{ form.non_field_errors }}</p>
-<p>
-Suggestions: 
-<br />{{ form.suggestions }}<br />
-Rating: {{ form.rating }}
-</p>
+{{ form|bootstrap_horizontal }}
 <p><input type="submit" value="Submit" /></p>
 </form>
 </div>

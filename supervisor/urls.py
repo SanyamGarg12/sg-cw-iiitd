@@ -36,5 +36,6 @@ urlpatterns = patterns('',
 	url(r'^addNGO/$', views.add_NGO),
 	url(r'^delete_news/(?P<news_id>[0-9]+)/$', views.delete_news, name = 'super_delete_news'),
 	url(r'^email/project/(?P<project_id>[0-9]+)/$', views.email_project, name='super_email_project'),
+	url(r'^delete/project/(?P<project_id>[0-9]+)/$', views.deleteproject, name = 'super_delete_project'),
 
 )

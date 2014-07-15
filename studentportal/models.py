@@ -8,6 +8,7 @@ from django import forms
 
 from decorators import path_and_rename, validate_credits
 
+from django.conf import settings
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -75,10 +76,15 @@ class Document(models.Model):
     def __unicode__(self):
         return ': '.join([self.project.title, self.document.name])
 
+    def delete(self, *args, **kwargs):
+        import os
+        os.remove(os.path.join(settings.MEDIA_ROOT, self.document.name))
+        super(Document, self).delete(*args, **kwargs)
+
 class Feedback(models.Model):
     project         = models.ForeignKey(Project, primary_key = True, related_name='feedback')
     hours           = models.IntegerField()
-    achievements    = models.CharField(max_length = 1024)
+    achievements    = models.TextField(max_length = 2000)
     experience      = models.IntegerField(choices=(
         (1,"Very Poor"), (2,"Poor"), (3,"Neutral"), (4,"Good"), (5,"Very Good") ), default=1)
 
