@@ -12,14 +12,14 @@ Add an NGO
 </div>
 <div class="panel-body">
 <form action="/supervisor/addNGO/" method="POST"> {% csrf_token %}
-{{ form|bootstrap_horizontal }}
-<input type="submit" value="Add NGO" />
+{{ form|bootstrap}}
+<input type="submit" value="Add NGO" class="btn btn-info btn-lg pull-right" style="margin-right:10px; margin-top:10px;" />
 </form>
 </div>
 </div>
 <hr />
 {% if NGOs %}
-Click on the NGO for a list of students who have workied under it.
+Click on an NGO for a list of students who have worked under it.
 <div class="table-responsive">
   <table class="table table-striped table-hover">
     <thead>
@@ -37,7 +37,7 @@ Click on the NGO for a list of students who have workied under it.
         <td> <a href="{% url 'super_view_ngo' n.id %}">{{n.name }}</a> </td>
         <td>{{ n.link }}</td>
         <td>{{ n.details|truncatechars:"100" }}</td>
-        <td> <a href = "{% url 'remove_NGO' n.pk %}"><span class='glyphicon glyphicon-remove'></span></a>
+        <td> <a href = "{% url 'remove_NGO' n.pk %}"><span class='glyphicon glyphicon-remove' style="color:red"></span></a>
         </tr>
     {% endfor %}
     </tbody>

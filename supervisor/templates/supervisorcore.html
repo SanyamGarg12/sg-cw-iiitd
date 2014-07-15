@@ -5,15 +5,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>Supervisor - CW Portal</title>
-
     <!-- Bootstrap core CSS -->
     <link href="{%static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <!-- <link href="Dashboard%20Template%20for%20Bootstrap_files/dashboard.css" rel="stylesheet"> -->
-
   <style type="text/css" id="holderjs-style"></style>
   <style type="text/css">
   .col-sm-offset-3 {
@@ -21,7 +15,7 @@
   };
   </style>
   </head>
-  <body style="padding-top: 70px; padding-bottom: 70px;">
+  <body style="padding-top: 70px;">
 {% block core-header %}
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
@@ -36,14 +30,12 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="{% url 'studenthome' %}">View as Student</a></li>
-            <li><a href="{% url 'bugs' %}"> Report bug </a></li>
             <li><a href="{% url 'advance_search' %}">Advance Search</a></li>
+            <li><a href="{% url 'bugs' %}"> Report bug </a></li>
             <li><a href="{% url 'supervisor_logout' %}">Logout</a></li>
           </ul>
           <form class="navbar-form navbar-right" action="/supervisor/basic_search/" method="POST">
             {% csrf_token %}
-            
             <input class="form-inline" placeholder="First name / Email / Roll No." type="text" name = "search_query" >
             <span class-"input-group-button">
             <input type='submit' value='Search' class="btn btn-default" />
@@ -58,7 +50,7 @@
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
             <li class="active"><strong>Community Work</strong></li>
-            <li><a href="{% url 'ongoing_projects' 0 %}">Ongoing Projects</a></li>
+            <li><a href="{% url 'ongoing_projects' %}">Ongoing Projects</a></li>
             <li><a href="{% url 'example_projects' %}">Example Projects</a></li>
           </ul>
           <ul class="nav nav-sidebar">
@@ -93,13 +85,12 @@
     </div>
 
 {% block core-footer %}
-<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
-  <div class="collapse navbar-collapse" id="head-navbar-collapse-1">
-    <div class="container">
-    <p class="text-muted credit">Made by <a href="//www.github.com/darkryder/">Sambhav Satija</a> @ <a href="//www.iiitd.ac.in">IIIT-D</a>.</p>
-    </div>
-  </div><!-- /.container-fluid -->
-</nav>
+<hr />
+<div class="container">
+<footer>
+    <p class="credit">Made by <a href="//www.github.com/darkryder/">Sambhav Satija</a> @ <a href="//www.iiitd.ac.in">IIIT-D</a>.</p>
+</footer>
+</div>
 {% endblock %}
 
 

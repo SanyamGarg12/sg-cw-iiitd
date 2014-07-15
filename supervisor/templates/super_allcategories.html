@@ -11,8 +11,12 @@ Add a category
 </div>
 <div class="panel-body">
 <form action="/supervisor/addcategory/" method="POST"> {% csrf_token %}
-{{ form|bootstrap_horizontal }}
-<input type="submit" value="Add Category" />
+{{ form|bootstrap }}
+<div class="form-group">
+<div class="col-sm-12">
+<input type="submit" value="Add Category" class="btn btn-info btn-lg pull-right" style="margin-right:10px; margin-top:10px;" />
+</div>
+</div>
 </form>
 </div>
 </div>
@@ -36,7 +40,7 @@ Add a category
         <td>{{ forloop.counter }}</td>
         <td><a href="{% url 'super_viewcategory' c.pk %}">{{ c.name|truncatechars:"100" }}</a></td>
         <td>{{ c.description|truncatechars:"100" }}</td>
-        <td><a href="{% url 'super_delete_category' c.pk %}"><span class='glyphicon glyphicon-remove'></span></a></td>
+        <td><a href="{% url 'super_delete_category' c.pk %}"><span class='glyphicon glyphicon-remove' style="color:red"></span></a></td>
         </tr>
     {% endfor %}
     </tbody>
