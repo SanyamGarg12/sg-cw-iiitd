@@ -25,6 +25,8 @@ from allauth.exceptions import ImmediateHttpResponse
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.account.adapter import DefaultAccountAdapter
 
+from CW_Portal import globals
+
 def add_notification(noti_type, project):
 	Notification.objects.create(noti_type=noti_type, project=project)
 
@@ -65,8 +67,6 @@ def addproject(request):
 			obj.student = request.user
 
 	if request.method == 'POST':
-		import pdb
-		pdb.set_trace()
 		form = ProjectForm(request.user, request.POST)		
 		if form.is_valid():
 			pre_save.connect(add_user)
@@ -76,6 +76,7 @@ def addproject(request):
 			RenderProjectToMonthDistribution().start()
 			RenderProjectCategoryPieChart().start()
 			messages.success(request, 'Your project was added successfully.')
+			globals.noti_refresh = True
 			return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': Project.objects.last().id}))
 		else:
 			messages.warning(request, 'There was something wrong in the provided details.')
@@ -109,6 +110,7 @@ def editproject(request, project_id):
 			form = ProjectForm(request.user, request.POST, instance = instance)
 			if form.is_valid():
 				form.save()
+				globals.noti_refresh = True
 				RenderProjectCategoryPieChart().start()
 				messages.success(request, "Your project details have been succesfully updated.")
 				return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
@@ -135,6 +137,7 @@ def _upload(request, project_id):
 				if form.cleaned_data['category'] == 'submission':
 					add_notification("finish", project)
 				messages.success(request, "Your document was uploaded successfully")
+				globals.noti_refresh = True
 				return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
 			else:
 				messages.warning(request, "There was an error in uploading your file.")
@@ -214,6 +217,7 @@ def suggest_NGO(request):
 				NGO_details=form.cleaned_data['details'],
 				NGO_sugg_by=str(request.user.email))
 			messages.success(request, "Thank you for your suggestion. We'll get back to you as soon as possible.")
+			globals.noti_refresh = True
 			return HttpResponseRedirect(reverse('all_NGO'))
 		else:
 			messages.warning(request, "There was something wrong in the provided details.")
@@ -289,5 +293,6 @@ def delete_project(request, project_id):
 	for document in project.documents.all():
 		document.delete()
 	project.delete()
+	globals.noti_refresh = True
 	messages.info(request, "Project has been deleted")
 	return HttpResponseRedirect(reverse('studentprofile'))
