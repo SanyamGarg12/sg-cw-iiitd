@@ -2,8 +2,8 @@
 {% block content %}
 
 <a class="btn btn-danger" role="button"  href = "{% url 'super_delete_category' category.pk %}" style='float:right;'>Delete Category</a>
-<h2 class="sub-header">{{category.name}}</h2>
-<h3> Description: {{ category.description }}</h3>
+<h2 class="sub-header"><strong>{{category.name}}</strong></h2>
+<h3> {{ category.description }}</h3>
 {% if category.projects.all %}
 <center><h3>Projects</h3></center>
 <div class="table-responsive">

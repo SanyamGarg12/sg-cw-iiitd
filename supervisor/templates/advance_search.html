@@ -3,10 +3,10 @@
 {% block content %}
 
 <h2 class="page-header">
-Advanced search filters
+Advance search filters
 </h2>
 <form action="{% url 'advance_search' %}" method = "post" enctype="multipart/form-data"> {% csrf_token %}
 {{ form|bootstrap_horizontal:'col-lg-3' }}
-<input type="submit" value="Search">
+<input type="submit" value="Search" class="btn btn-info btn-lg pull-right" style="margin-right:10px; margin-top:10px;" >
 </form>
 {% endblock %}

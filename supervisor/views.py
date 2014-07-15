@@ -52,9 +52,8 @@ def unverify_project(request, project_id):
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
 
 @supervisor_logged_in
-def ongoing_projects(request, skip='0'):
-	skip = int(skip)
-	projects = Project.objects.filter(stage='ongoing')[skip:skip+20]
+def ongoing_projects(request):
+	projects = Project.objects.filter(stage='ongoing')
 	return render(request, 'ongoing_projects.html', 
 		{'projects': projects})
 

@@ -1,38 +1,70 @@
 {% extends 'supervisorcore.html' %}
 {% block content %}
 	<center>
-		<h3>{{ project.title }}</h3>
+		<h2>{{ project.title }}</h2>
 	</center>
-		<h2>Student: </h2><a href="{% url 'super_viewuser' project.student.pk %}"> {{ project.student.first_name }} {{ project.student.last_name }}</a>
-		<h2>Roll No. : </h2> {{ project.get_rollno }} 
-		<h2>Email: </h2> {{ project.student.email }}
-		<h2>Credits: </h2> {{ project.credits }}
-		<h2>Proposed on: </h2>{{ project.date_created }}
-		<h2>Expected completion date: </h2>{{ project.expected_finish_date }}
-		{% if project.NGO %}
-			<h2>NGO: </h2><a href="{% url 'super_view_ngo' project.NGO.id %}">{{ project.NGO.name }}</a>.<br /> <strong>This is a verified NGO.</strong>
-		{% else %}
-			<h2>NGO: </h2>{{ project.NGO_name }}
-		{% endif %}
-		<h2>Details of NGO: </h2>{{ project.NGO_details }}
-		<h2>Working under: </h2>{{ project.NGO_super }}
-		<h2>Goals: </h2> {{ project.goals}}
-		<h2>Schedule: </h2> {{ project.schedule_text }}
-
-<hr />
-	<center><h3>Documents</h3></center>
-	{% if project.documents.all %}
-	{% for doc in project.documents.all %}
-		<strong>{{ doc.category }}: </strong>
-		<a href = "{% url 'super_download' doc.id %}">
-		{{ doc.name }}</a>
-
-		<br />
-	{% endfor %}
-	{% else %}
-		No logs uploaded till now.
-	{% endif %}
-<hr />
+		<h2>Student </h2>
+		<blockquote>
+			<a href="{% url 'super_viewuser' project.student.pk %}"> {{ project.student.first_name }} {{ project.student.last_name }}</a>
+		</blockquote>
+		<h2>Roll No. </h2>
+		<blockquote>
+			{{ project.get_rollno }}
+		</blockquote> 
+		<h2>Email</h2>
+		<blockquote>
+			{{ project.student.email }}
+		</blockquote>
+		<h2>Credits</h2>
+		<blockquote>
+			{{ project.credits }}
+		</blockquote>
+		<h2>Proposed on</h2>
+		<blockquote>
+			{{ project.date_created }}
+		</blockquote>
+		<h2>NGO</h2>
+		<blockquote>
+			{% if project.NGO %}
+				<a href="{% url 'super_view_ngo' project.NGO.id %}">{{ project.NGO.name }}</a>.<br /> <strong>This is a verified NGO.</strong>
+			{% else %}
+				{{ project.NGO_name }}
+			{% endif %}
+		</blockquote>
+		<h2>Details of NGO</h2>
+		<blockquote>
+			{{ project.NGO_details }}
+		</blockquote>
+		<h2>Working under</h2>
+		<blockquote>
+			{{ project.NGO_super }}
+		</blockquote>
+		<h2>Supervisor Contact Information</h2>
+		<blockquote>
+			{{ project.NGO_super_contact }}
+		</blockquote>
+		<h2>Goals</h2>
+		<blockquote>
+			{{ project.goals}}
+		</blockquote>
+		<h2>Schedule</h2>
+		<blockquote>
+			{{ project.schedule_text }}
+		</blockquote>
+		<h2>Documents</h2>
+		<blockquote>
+			{% if project.documents.all %}
+			{% for doc in project.documents.all %}
+				<strong>{{ doc.category }}: </strong>
+				<a href = "{% url 'super_download' doc.id %}">
+				{{ doc.name }}</a>
+				<br />
+			{% endfor %}
+			{% else %}
+				No logs uploaded till now.
+			{% endif %}
+		</blockquote>
+		<hr />
 {% ifequal project.stage "to_be_verified" %}
 <a class="btn btn-warning" role="button"  href = "{% url 'verify_project' project.id %}">Verify Project</a>
 {% endifequal %}
@@ -52,5 +84,5 @@
 {% if project.submitted_and_awaiting_completion %}
 <a class="btn btn-warning" role="button"  href = "{% url 'complete' project.pk %}" style="float:right;">Complete Project</a>
 {% endif %}
-<a class="btn btn-danger" role="button"  href = "{% url 'super_delete_project' project.pk %}" style="float:right;">Delete Project</a>
+<a class="btn btn-danger" role="button"  href = "{% url 'super_delete_project' project.pk %}" style="float:right; margin-right:5px;">Delete Project</a>
 {% endblock %}

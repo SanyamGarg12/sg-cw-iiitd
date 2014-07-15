@@ -1,9 +1,23 @@
 {% extends 'supervisorcore.html' %}
 {% block content %}
 <a href = "{% url 'remove_NGO' NGO.pk %}" class="btn btn-danger" role="button">Delete NGO</a>
-<h2 class="sub-header">{{NGO.name}}</h2>
-<h3> Link: {{ NGO.link }}</h3>
-<h3> Description: {{ NGO.description }}</h3>
+<h1 class="sub-header">{{NGO.name}}</h1>
+<h3> Link</h3>
+<blockquote>
+  {% if NGO.link%}
+  {{ NGO.link }}
+  {% else %}
+  No link.
+  {% endif %}
+</blockquote>
+<h3> Description</h3>
+<blockquote>
+  {% if NGO.description %}
+  {{ NGO.description }}
+  {% else %}
+  No description.
+  {% endif %}
+</blockquote>
 {% if NGO.projects.all %}
 <center><h3>CW Projects mentored by the NGO</h3></center>
 <div class="table-responsive">
