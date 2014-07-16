@@ -268,8 +268,8 @@ def view_example(request, example_id):
 	return render(request, 'view_example.html',
 		{'project': project})
 	
-def guidlines(request):
-	return render(request, 'guidlines.html')
+def guidelines(request):
+	return render(request, 'guidelines.html')
 
 @login_required
 def bugs(request):
