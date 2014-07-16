@@ -25,7 +25,7 @@ urlpatterns = patterns('',
 		name='all_projects_open_to_public'),
 	url(r'^examples/all/$', views.all_examples, name='student_all_examples'),
 	url(r'^examples/(?P<example_id>[0-9]+)/$', views.view_example, name='view_example'),
-	url(r'^guidlines/$', views.guidlines, name='guidlines'),
+	url(r'^guidelines/$', views.guidelines, name='guidelines'),
 	url(r'^bugs/$', views.bugs, name = 'bugs'),
 	url(r'^delete/(?P<project_id>[0-9]+)/$', views.delete_project, name = 'delete_project'),
 	
