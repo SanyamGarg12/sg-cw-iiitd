@@ -84,7 +84,9 @@
                 {{ p.project.title|truncatechars:50 }}<a class="btn btn-link" href="{% url 'view_example' p.project.id %}">Check it out »</a>
               </p>
               <small>{{p.project.student.first_name}} {{p.project.student.last_name}}</small>
-            
+              <p> <a href="{% url 'view_example' p.pk %}"><span class="glyphicon glyphicon-heart" style="color:red;"></span> {{ p.likes_count }}
+                <span class="pull-right"><span class="glyphicon glyphicon-comment" style="color:purple;"></span> {{ p.comments_count }}</span></a>
+              </p>
             </blockquote>
     				</div>
             {% endfor %}

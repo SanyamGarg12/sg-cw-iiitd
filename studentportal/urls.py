@@ -29,5 +29,9 @@ urlpatterns = patterns('',
 	url(r'^bugs/$', views.bugs, name = 'bugs'),
 	url(r'^delete/(?P<project_id>[0-9]+)/$', views.delete_project, name = 'delete_project'),
 	url(r'^delete/document/(?P<document_id>[0-9]+)/$', views.delete_document, name='delete_document'),
-
+	url(r'^like/(?P<example_id>[0-9]+)/$', views.like_project, name='like_project'),
+	url(r'^unlike/(?P<example_id>[0-9]+)/$', views.unlike_project, name='unlike_project'),
+	url(r'^comment/(?P<example_id>[0-9]+)/$', views.add_comment, name='add_comment'),
+	url(r'^comment/delete/(?P<comment_id>[0-9]+)/$', views.delete_comment, name='delete_comment'),
+	
 )

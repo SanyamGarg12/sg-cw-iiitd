@@ -43,7 +43,7 @@ class Project(models.Model):
     student                 = models.ForeignKey(User, related_name='projects')
     stage                   = models.CharField(max_length = 15, default = 'to_be_verified')
     #stage includes -> 'to_be_verified','ongoing', 'completed' 
-    category                = models.ForeignKey(Category, related_name='projects', on_delete=models.SET(get_other_category), null=True)
+    category                = models.ForeignKey(Category, related_name='projects', on_delete=models.SET(get_other_category), null=False)
 
     def __unicode__(self):
         return self.title
