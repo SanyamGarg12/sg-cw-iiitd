@@ -8,7 +8,7 @@ from studentportal.models import Project
 import threading
 from django.core.mail import EmailMultiAlternatives
 
-from CW_Portal import globals
+from CW_Portal import global_constants
 
 from studentportal.models import Feedback, Category
 from pygal import Pie, StackedLine
@@ -62,14 +62,14 @@ class RenderProjectCategoryPieChart(threading.Thread):
 
 def supervisor_logged_in(view):
 	def _wrapped_view(request, *args, **kwargs):
-		if (globals.noti_refresh == True \
+		if (global_constants.noti_refresh == True \
 		or request.session.get('noti_count_submissions', None) == None \
 		or request.session.get('noti_count_NGO', None) == None \
 		or request.session.get('noti_count_proposal', None) == None ):
 			request.session['noti_count_proposal'] = Notification.objects.filter(noti_type='new').distinct().count()
 			request.session['noti_count_submissions'] = Notification.objects.filter(noti_type='finish').distinct().count()
 			request.session['noti_count_NGO'] = Notification.objects.filter(noti_type='suggest').distinct().count()
-			globals.noti_refresh = False
+			global_constants.noti_refresh = False
 
 		if request.user.is_authenticated() and request.user.email in SUPERVISOR_EMAIL:
 			return view(request, *args, **kwargs)

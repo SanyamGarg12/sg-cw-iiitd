@@ -6,3 +6,9 @@ def init():
 	#experience feedback pie is the svg shown in statistics
 	global render_feedback_experience_piechart
 	render_feedback_experience_piechart = True
+
+	#compute leaderboard
+	global leaderboard
+	leaderboard = None
+	global leaderboard_refresh
+	leaderboard_refresh = True

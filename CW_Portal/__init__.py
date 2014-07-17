@@ -1,5 +1,5 @@
 def startup_globals():
-	import globals
-	globals.init()
+	import global_constants
+	global_constants.init()
 startup_globals()
 

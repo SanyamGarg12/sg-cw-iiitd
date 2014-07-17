@@ -1,3 +1,5 @@
+from CW_Portal import global_constants
+
 def path_and_rename(path):
 	def wrapper(instance, filename):
 		import os
@@ -29,3 +31,8 @@ def validate_feedback_hours(value):
 		raise ValidationError("Did you seriously work so litte ? Thanks for being honest.")
 	elif value > 200:
 		raise ValidationError("I don't believe you must have put in more than 200 hours, tops.")
+
+def RefreshLeaderboard():
+	from supervisor.models import Example
+	global_constants.leaderboard = Example.objects.all().order_by('-likes_count')[:5]
+	global_constants.leaderboard_refresh = False
