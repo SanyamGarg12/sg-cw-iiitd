@@ -102,9 +102,17 @@ SOCIALACCOUNT_PROVIDERS = {
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'development': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'CW_Portal_DB', #will change
+        'USER': '', #will change
+        'PASSWORD': '', # will change
+        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on WILL CHANGE
+        'PORT': '3306',
     }
 }
 
