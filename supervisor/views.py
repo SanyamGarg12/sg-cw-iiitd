@@ -209,7 +209,8 @@ def all_NGO(request):
 @supervisor_logged_in
 def view_NGO(request, NGO_id):
 	ngo = get_object_or_404(NGO, pk = NGO_id)
-	return render(request, 'super_view_ngo.html', {'NGO': ngo})
+	form = NewNGOForm(initial={'name':ngo.name, 'link':ngo.link, 'details':ngo.details})
+	return render(request, 'super_view_ngo.html', {'NGO': ngo, 'form': form})
 
 @supervisor_logged_in
 def all_news(request):
@@ -275,8 +276,9 @@ def all_categories(request):
 @supervisor_logged_in
 def category(request, category_id):
 	category = get_object_or_404(Category, pk=category_id)
+	form = NewCategoryForm(initial={'name': category.name, 'description': category.description})
 	return render(request, 'super_category.html',
-		{'category': category})
+		{'category': category, 'form': form})
 
 @supervisor_logged_in
 def add_category(request):
@@ -353,3 +355,38 @@ def deleteproject(request, project_id):
 	project.delete()
 	messages.info(request, "Project has been deleted")
 	return HttpResponseRedirect(reverse('super_allprojects'))
+
+@supervisor_logged_in
+def update_category(request, category_id):
+	category = get_object_or_404(Category, pk=category_id)
+	if request.method != "POST":
+		messages.info(request, "Wrong html request method.")
+		return HttpResponseRedirect(reverse('super_allcategories'))
+	form = NewCategoryForm(request.POST)
+	if form.is_valid():
+		category.name = form.cleaned_data['name']
+		category.description = form.cleaned_data['description']
+		category.save()
+		messages.success(request, "Category: %s updated successfuly"%category.name)
+		return HttpResponseRedirect(reverse('super_viewcategory', kwargs={'category_id': category_id}))
+	else:
+		messages.error(request, "There was an error in the updated data.")
+		return HttpResponseRedirect(reverse('super_viewcategory',kwargs={'category_id': category_id}))
+
+@supervisor_logged_in
+def update_ngo(request, NGO_id):
+	ngo = get_object_or_404(NGO, pk=NGO_id)
+	if request.method != "POST":
+		messages.info(request, "Wrong html request method.")
+		return HttpResponseRedirect(reverse('super_all_ngo'))
+	form = NewNGOForm(request.POST)
+	if form.is_valid():
+		ngo.name = form.cleaned_data['name']
+		ngo.link = form.cleaned_data['link']
+		ngo.details = form.cleaned_data['details']
+		ngo.save()
+		messages.success(request, "NGO: %s updated successfuly"%ngo.name)
+		return HttpResponseRedirect(reverse('super_view_ngo', kwargs={'NGO_id': NGO_id}))
+	else:
+		messages.error(request, "There was an error in the updated data.")
+		return HttpResponseRedirect(reverse('super_view_ngo',kwargs={'NGO_id': NGO_id}))

@@ -12,7 +12,7 @@ from django.conf import settings
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=1024)
+    description = models.CharField(max_length=1024, blank=True)
     def __unicode__(self):
         return self.name
 

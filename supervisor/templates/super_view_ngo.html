@@ -1,4 +1,5 @@
 {% extends 'supervisorcore.html' %}
+{% load bootstrap %}
 {% block content %}
 <div class="modal fade" id="confirm_delete_ngo_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -16,6 +17,23 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="update_ngo_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="ModalLabel">Update NGO details</h4>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'super_update_ngo' NGO.pk %}" method="post">{% csrf_token %}
+          {{ form|bootstrap }}
+          <input type="submit" value="Update details" class="btn btn-info btn-lg" style="margin-right:10px; margin-top:10px;" />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<button class="btn btn-info " data-toggle="modal" data-target="#update_ngo_modal" >Edit NGO details</button>
 <button class="btn btn-danger pull-right" data-toggle="modal" data-target="#confirm_delete_ngo_modal" >Delete this NGO</button>
 
 
