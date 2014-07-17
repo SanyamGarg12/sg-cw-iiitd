@@ -297,3 +297,14 @@ def delete_project(request, project_id):
 	globals.noti_refresh = True
 	messages.info(request, "Project has been deleted")
 	return HttpResponseRedirect(reverse('studentprofile'))
+
+@login_required
+def delete_document(request, document_id):
+	document = get_object_or_404(Document, pk=document_id)
+	project = document.project
+	if not project.student == request.user:
+		return HttpResponseRedirect(reverse('studenthome'))
+	document.delete()
+	globals.noti_refresh = True
+	messages.success(request, "Document has been removed.")
+	return HttpResponseRedirect(reverse('viewproject', kwargs={'project_id': project.pk}))

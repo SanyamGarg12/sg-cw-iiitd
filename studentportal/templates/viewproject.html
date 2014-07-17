@@ -57,9 +57,28 @@
 	<blockquote>
 		{% if project.documents.all %}
 		{% for doc in project.documents.all %}
+			<div class="modal fade" id="confirm_delete_document_{{ doc.pk }}_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			        <h4 class="modal-title" id="ModalLabel">Delete Document</h4>
+			      </div>
+			      <div class="modal-body">
+			        Are you sure you want to delete {{ doc.name }}? This action is irrevocable.
+			      </div>
+			      <div class="modal-footer">
+				      <a class="btn btn-danger" href="{% url 'delete_document' doc.pk %}" role="button">Delete</a>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+
 			<strong>{{ doc.category }}: </strong>
 			<a href = "{% url 'download_document' doc.pk %}">
 			{{ doc.name }}</a>
+			&nbsp;
+			<button class="btn-link glyphicon glyphicon-remove" style="color:red" data-toggle="modal" data-target="#confirm_delete_document_{{ doc.pk }}_modal"></button>
 			<br />
 		{% endfor %}
 		{% else %}
@@ -67,11 +86,30 @@
 		{% endif %}
 	</blockquote>
 	<hr />
+
 <a class="btn btn-warning" role="button"  href = "{% url 'editproject' project.id %}">Edit CW project details</a>
 <a class="btn btn-primary" role="button"  href = "{% url 'upload_document' project.id %}">Upload files</a>
 {% ifequal project.stage "completed" %}{% if project.feedback.all %}{% else %}
 <a class="btn btn-info" href="{% url 'feedback' project.id %}" role="button">Give feedback»</a>
 {% endif %}{% endifequal %}
-<a class="btn btn-warning" href="{% url 'delete_project' project.id %}" role="button">Delete this project</a>
+<div class="modal fade" id="confirm_delete_project_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="ModalLabel">Delete Project</h4>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete your CW Project "{{ project.title }}"? This action is irrevocable.
+      </div>
+      <div class="modal-footer">
+	      <a class="btn btn-danger" href="{% url 'delete_project' project.id %}" role="button">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="btn btn-danger" data-toggle="modal" data-target="#confirm_delete_project_modal" >Delete this project</button>
+
 </div>
 {% endblock %}
