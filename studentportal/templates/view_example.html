@@ -1,5 +1,5 @@
 {% extends 'core.html' %}
-
+{% load bootstrap %}
 {% block content %}
 <div class="container">
 	<center>
@@ -48,5 +48,35 @@
 		<blockquote>
 		{{ project.project.category.name }}
 		</blockquote>
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<h1 class="panel-title">
+					{{project.likes_count}} <span class="glyphicon glyphicon-heart" style="color:white;"></span>
+					{% if liked %}
+					<a href="{% url 'unlike_project' project.pk %}" class="pull-right">Unlike this project</a>
+					{% else %}
+					<a href="{% url 'like_project' project.pk %}" class="pull-right">Like this project</a>
+					</a>
+					{% endif %}
+				</h1>
+			</div>
+			<div class="panel-body" style="line-height:200%">
+				<div class="well well-lg clearfix">
+					<form action="{% url 'add_comment' project.pk %}" method="post"> {% csrf_token %}
+						{{ form|bootstrap_horizontal }}
+						<br />
+						<input type="submit" value="Add comment" class="btn btn-info pull-right" style="margin-right:20px; margin-top:10px;" />
+					</form>
+				</div>
+				{% for comment in project.comments.all %}
+					<div class="clearfix" style="line-height:100%"><strong>{{ comment.commentor.first_name }} {{comment.commentor.last_name }} : </strong> {{ comment.text }}
+					{% ifequal user comment.commentor %}
+					<a href="{% url 'delete_comment' comment.pk %}"><span class="glyphicon glyphicon-trash pull-right" style="color:red; left-margin:10px;"></span></a>
+					{% endifequal %}
+					</div><br />
+				{% endfor %}
+			</div>
+		</div>
+
 	</div>
 {% endblock %}

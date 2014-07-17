@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 from PrivateData import SUPERVISOR_EMAIL
 
-from supervisor.models import Notification, Example, News
+from supervisor.models import Notification, Example, News, Like, Comment, NewCommentForm
 
 from supervisor.decorators import RenderFeedbackExperiencePieChart, RenderProjectToMonthDistribution, RenderProjectCategoryPieChart
 
@@ -24,7 +24,7 @@ from django.conf import settings
 from allauth.exceptions import ImmediateHttpResponse
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.account.adapter import DefaultAccountAdapter
-
+from django.db.models import Q
 from CW_Portal import globals
 
 def add_notification(noti_type, project):
@@ -271,8 +271,10 @@ def all_examples(request):
 @login_required
 def view_example(request, example_id):
 	project = get_object_or_404(Example, pk=example_id)
+	liked = True if request.user.liked_projects.filter(Q(project=project)) else False
+	form = NewCommentForm
 	return render(request, 'view_example.html',
-		{'project': project})
+		{'project': project, 'liked': liked, 'form': form})
 	
 def guidelines(request):
 	return render(request, 'guidelines.html')
@@ -314,3 +316,49 @@ def delete_document(request, document_id):
 	globals.noti_refresh = True
 	messages.success(request, "Document has been removed.")
 	return HttpResponseRedirect(reverse('viewproject', kwargs={'project_id': project.pk}))
+
+@login_required
+def like_project(request, example_id):
+	example = get_object_or_404(Example, pk=example_id)
+	if request.user.liked_projects.filter(project=example):
+		messages.error(request, "You have already liked the project.")
+	else:
+		Like.objects.create(project=example, liked_by=request.user)
+	return HttpResponseRedirect(reverse('view_example', kwargs={'example_id': example_id}))
+
+
+@login_required
+def unlike_project(request, example_id):
+	example = get_object_or_404(Example, pk=example_id)
+	if not request.user.liked_projects.filter(project=example):
+		messages.error(request, "You had not liked the project previously.")
+	else:
+		like = request.user.liked_projects.get(Q(project=example))
+		like.delete()
+	return HttpResponseRedirect(reverse('view_example', kwargs={'example_id': example_id}))
+
+@login_required
+def add_comment(request, example_id):
+	if request.method=="POST":
+		project = get_object_or_404(Example, pk=example_id)
+		form = NewCommentForm(request.POST)
+		if form.is_valid():
+			Comment.objects.create(commentor=request.user,
+				text=form.cleaned_data['text'],
+				project=project)
+		else:
+			liked = True if request.user.liked_projects.filter(Q(project=project)) else False
+			return render(request, 'view_example.html',
+		{'project': project, 'liked': liked, 'form': form})
+	return HttpResponseRedirect(reverse('view_example', kwargs={'example_id': example_id}))
+
+@login_required
+def delete_comment(request, comment_id):
+	comment = get_object_or_404(Comment, pk=comment_id)
+	example_id = comment.project.pk 
+	if comment.commentor != request.user:
+		messages.info(request, "It seems to me that it ain't your comment.")
+	else:
+		comment.delete()
+		messages.info(request, "Comment deleted.")
+	return HttpResponseRedirect(reverse('view_example', kwargs={'example_id': example_id}))
