@@ -81,7 +81,7 @@
                   <span class="glyphicon glyphicon-ok" title="Completed" style="color:green;"></span>
                 {% endifequal %}
               <p>
-                {{ p.project.title|truncatechars:50 }} <a class="btn btn-link" href="{% url 'view_example' p.project.id %}" role="button">Check it out »</a>
+                {{ p.project.title|truncatechars:50 }}<a class="btn btn-link" href="{% url 'view_example' p.project.id %}">Check it out »</a>
               </p>
               <small>{{p.project.student.first_name}} {{p.project.student.last_name}}</small>
             

@@ -28,5 +28,6 @@ urlpatterns = patterns('',
 	url(r'^guidelines/$', views.guidelines, name='guidelines'),
 	url(r'^bugs/$', views.bugs, name = 'bugs'),
 	url(r'^delete/(?P<project_id>[0-9]+)/$', views.delete_project, name = 'delete_project'),
-	
+	url(r'^delete/document/(?P<document_id>[0-9]+)/$', views.delete_document, name='delete_document'),
+
 )
