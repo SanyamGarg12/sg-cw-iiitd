@@ -125,6 +125,9 @@ def _upload(request, project_id):
 	project = get_object_or_404(Project, pk = project_id)
 	if project.student == request.user:
 		form = UploadDocumentForm()
+		if not request.FILES.get('document', None):
+			messages.warning(request, "No file selected for upload")
+			return render(request, 'upload_document.html', {'form': form, 'id': project_id})
 		if request.method == "POST":
 			name = request.FILES['document'].name
 			form = UploadDocumentForm(request.POST, request.FILES)
@@ -132,6 +135,9 @@ def _upload(request, project_id):
 				if form.cleaned_data['category'] == 'submission' and project.stage == 'to_be_verified':
 					messages.warning(request, "You can't submit the final submission until the supervisor has verified your project.")
 					return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id})) 
+				if request.FILES['document']._size > 5242880:
+					messages.warning(request, "File size limit exceeded.")
+					return render(request, 'upload_document.html', {'form': form, 'id': project_id})
 				Document.objects.create(document=request.FILES['document'],
 				 project=project, category=form.cleaned_data['category'], name=name)
 				if form.cleaned_data['category'] == 'submission':
