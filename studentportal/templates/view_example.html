@@ -51,7 +51,8 @@
 		<div class="panel panel-info">
 			<div class="panel-heading">
 				<h1 class="panel-title">
-					{{project.likes_count}} <span class="glyphicon glyphicon-heart" style="color:white;"></span>
+					{{project.likes_count}} <span class="glyphicon glyphicon-heart" style="color:white;margin-right:20px;"></span>
+					{{project.comments_count}} <span class="glyphicon glyphicon-comment" style="color:white;"></span>
 					{% if liked %}
 					<a href="{% url 'unlike_project' project.pk %}" class="pull-right">Unlike this project</a>
 					{% else %}
