@@ -56,8 +56,8 @@ class NewsForm(forms.ModelForm):
         fields = ['content', 'priority']
 
 class NewCategoryForm(forms.Form):
-    name = forms.CharField(label="Name of the category")
-    description = forms.CharField(label="Describe the category")
+    name = forms.CharField(label="Name of the category", required=True)
+    description = forms.CharField(label="Describe the category", required=False)
 
 class NewNGOForm(forms.Form):
     name = forms.CharField(label="Name of the NGO")
