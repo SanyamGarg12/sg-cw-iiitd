@@ -117,6 +117,24 @@
           </div>
         </div><!--/span-->
 
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="leaderboard_sidebar" role="navigation">
+          <center><span class="list-group-item active">Leaderboard</span></center>
+          <div class="list-group">
+            {% for example in leaderboard %}
+            <div class="clearfix">
+              <a href="{% url 'view_example' example.pk %}" class="list-group-item">
+              {{ example.project.title|truncatechars:50 }}
+                <div class="pull-right">
+                  {{example.likes_count}} <span class="glyphicon glyphicon-heart" style="color:red;"></span>
+                </div>
+              </a>
+            </div>
+            {% empty %}
+            <span class="list-group-item"><center>No Example Projects</center></span>
+            {% endfor %}
+          </div>
+        </div><!--/span-->
+
       </div><!--/row-->
 
       </div><!--/.container-->

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from studentportal.models import Project, NGO, Category
 from django import forms
 from django.utils import timezone
+from CW_Portal import global_constants
 
 class Notification(models.Model):
     noti_id = models.IntegerField(primary_key= True)
@@ -33,10 +34,12 @@ class Like(models.Model):
     def save(self, *args, **kwargs):
         self.project.likes_count += 1
         self.project.save()
+        global_constants.leaderboard_refresh = True
         super(Like, self).save(*args, **kwargs)
     def delete(self, *args, **kwargs):
         self.project.likes_count -= 1
         self.project.save()
+        global_constants.leaderboard_refresh = True
         super(Like, self).delete(*args, **kwargs)
 
 class Comment(models.Model):

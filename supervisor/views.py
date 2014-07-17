@@ -9,7 +9,7 @@ from supervisor.decorators import supervisor_logged_in, is_int, EmailMessage, Em
 from studentportal.models import Project, NGO, Category, Document
 from models import Example, AdvanceSearchForm, NewsForm, News, Notification, NewCategoryForm, NewNGOForm, EmailProjectForm
 
-from CW_Portal import globals
+from CW_Portal import global_constants
 
 from django.contrib import messages
 
@@ -33,7 +33,7 @@ def unverified_projects(request):
 def verify_project(request, project_id):
 	project = Project.objects.get(pk = project_id)
 	Notification.objects.get(project=project, noti_type='new', project__stage='to_be_verified').delete()
-	globals.noti_refresh = True
+	global_constants.noti_refresh = True
 	project.stage = "ongoing"
 	project.save()
 	messages.success(request, "You have verified the project %s."%project.title)
@@ -48,7 +48,7 @@ def unverify_project(request, project_id):
 	project.save()
 	messages.warning(request, "You have unverified the project %s."%project.title)
 	EmailMessage("I got bad news :(","It seems that the supervisor has un-approved your project. Contact him to find out the issue", to=[str(project.student.email)])
-	globals.noti_refresh = True
+	global_constants.noti_refresh = True
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
 
 @supervisor_logged_in
@@ -129,7 +129,7 @@ def basic_search(request):
 def complete(request,project_id):
 	project = get_object_or_404(Project, pk = project_id)
 	noti = Notification.objects.filter(project=project).delete()
-	globals.noti_refresh = True
+	global_constants.noti_refresh = True
 	project.stage = 'completed'
 	project.save()
 	messages.success(request, "You have marked the Community Work project as completed and finished.")
@@ -233,7 +233,7 @@ def accept_NGO(request, noti_id):
 	 to=[str(noti.NGO_sugg_by)])
 	messages.success(request, "%s is now a trusted NGO."%noti.NGO_name)
 	noti.delete()
-	globals.noti_refresh = True
+	global_constants.noti_refresh = True
 	return HttpResponseRedirect(reverse('super_suggested_ngos'))
 
 @supervisor_logged_in
@@ -241,7 +241,7 @@ def reject_NGO(request, noti_id):
 	noti = get_object_or_404(Notification, pk=noti_id)
 	messages.info(request, "You have rejected the suggestion of adding %s as a trusted NGO."%noti.NGO_name)
 	noti.delete()
-	globals.noti_refresh = True
+	global_constants.noti_refresh = True
 	EmailMessage("Thank you but sorry :|","We have reviewed your suggestion for the NGO but as of now have to reject it. But thank you for your suggestion",
 	 to=[str(noti.NGO_sugg_by)])
 	return HttpResponseRedirect(reverse('super_suggested_ngos'))

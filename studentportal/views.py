@@ -11,7 +11,7 @@ from PrivateData import SUPERVISOR_EMAIL
 from supervisor.models import Notification, Example, News, Like, Comment, NewCommentForm
 
 from supervisor.decorators import RenderFeedbackExperiencePieChart, RenderProjectToMonthDistribution, RenderProjectCategoryPieChart
-
+from decorators import RefreshLeaderboard
 from models import ProjectForm, Project, Document, UploadDocumentForm, NGO, suggest_NGOForm
 from models import Feedback, FeedbackForm, Category, BugsForm, Bugs
 
@@ -25,7 +25,7 @@ from allauth.exceptions import ImmediateHttpResponse
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.account.adapter import DefaultAccountAdapter
 from django.db.models import Q
-from CW_Portal import globals
+from CW_Portal import global_constants
 
 def add_notification(noti_type, project):
 	Notification.objects.create(noti_type=noti_type, project=project)
@@ -38,10 +38,12 @@ def index(request):
 
 def home(request):
 	news = News.objects.all().order_by('-date_created')[:5]
+	if (global_constants.leaderboard_refresh or global_constants.leaderboard==None):
+		RefreshLeaderboard()
 	if request.user.is_authenticated():
 		example_projects = Example.objects.all()[:6]
 		return render(request, 'studenthome.html', 
-		{'example_projects': example_projects, 'news': news})
+		{'example_projects': example_projects, 'news': news, 'leaderboard': global_constants.leaderboard})
 	else:
 		return render(request, 'studenthome.html',
 			{'news': news,})
@@ -76,7 +78,7 @@ def addproject(request):
 			RenderProjectToMonthDistribution().start()
 			RenderProjectCategoryPieChart().start()
 			messages.success(request, 'Your project was added successfully.')
-			globals.noti_refresh = True
+			global_constants.noti_refresh = True
 			return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': Project.objects.last().id}))
 		else:
 			messages.warning(request, 'There was something wrong in the provided details.')
@@ -110,7 +112,7 @@ def editproject(request, project_id):
 			form = ProjectForm(request.user, request.POST, instance = instance)
 			if form.is_valid():
 				form.save()
-				globals.noti_refresh = True
+				global_constants.noti_refresh = True
 				RenderProjectCategoryPieChart().start()
 				messages.success(request, "Your project details have been succesfully updated.")
 				return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
@@ -143,7 +145,7 @@ def _upload(request, project_id):
 				if form.cleaned_data['category'] == 'submission':
 					add_notification("finish", project)
 				messages.success(request, "Your document was uploaded successfully")
-				globals.noti_refresh = True
+				global_constants.noti_refresh = True
 				return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
 			else:
 				messages.warning(request, "There was an error in uploading your file.")
@@ -223,7 +225,7 @@ def suggest_NGO(request):
 				NGO_details=form.cleaned_data['details'],
 				NGO_sugg_by=str(request.user.email))
 			messages.success(request, "Thank you for your suggestion. We'll get back to you as soon as possible.")
-			globals.noti_refresh = True
+			global_constants.noti_refresh = True
 			return HttpResponseRedirect(reverse('all_NGO'))
 		else:
 			messages.warning(request, "There was something wrong in the provided details.")
@@ -302,7 +304,7 @@ def delete_project(request, project_id):
 	for document in project.documents.all():
 		document.delete()
 	project.delete()
-	globals.noti_refresh = True
+	global_constants.noti_refresh = True
 	messages.info(request, "Project has been deleted")
 	return HttpResponseRedirect(reverse('studentprofile'))
 
@@ -313,7 +315,7 @@ def delete_document(request, document_id):
 	if not project.student == request.user:
 		return HttpResponseRedirect(reverse('studenthome'))
 	document.delete()
-	globals.noti_refresh = True
+	global_constants.noti_refresh = True
 	messages.success(request, "Document has been removed.")
 	return HttpResponseRedirect(reverse('viewproject', kwargs={'project_id': project.pk}))
 
