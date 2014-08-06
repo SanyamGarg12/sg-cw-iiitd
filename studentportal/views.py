@@ -15,11 +15,13 @@ from decorators import RefreshLeaderboard
 from models import ProjectForm, Project, Document, UploadDocumentForm, NGO, suggest_NGOForm
 from models import Feedback, FeedbackForm, Category, BugsForm, Bugs
 
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
+from supervisor.models import TA
 
 from django.contrib import messages
 
 from django.conf import settings
+from django.dispatch import receiver
 
 from allauth.exceptions import ImmediateHttpResponse
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
@@ -29,6 +31,13 @@ from CW_Portal import global_constants
 
 def add_notification(noti_type, project):
 	Notification.objects.create(noti_type=noti_type, project=project)
+
+@receiver(post_save, sender = TA)
+def update_TAs(sender, **kwargs):
+	new_TAs = [x.email for x in TA.objects.all()]
+	global SUPERVISOR_EMAIL
+	SUPERVISOR_EMAIL = list(set(new_TAs))
+update_TAs(sender=TA)
 
 def index(request):
 	if request.user.is_authenticated():

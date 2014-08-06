@@ -65,6 +65,14 @@ class News(models.Model):
         if self.priority == 1: return "Low"
         else: return "High"
 
+class TA(models.Model):
+    email = models.CharField(max_length = 100)
+
+class TAForm(forms.ModelForm):
+    class Meta:
+        model = TA
+    email = forms.CharField(label = "IIIT-D Email of the TA", required=True)
+
 class AdvanceSearchForm(forms.Form):
     stage = forms.ChoiceField(choices=(
         ('all', 'all'),('ongoing', 'ongoing'),('to_be_verified', 'unverified'), ('completed', 'completed')

@@ -39,4 +39,6 @@ urlpatterns = patterns('',
 	url(r'^email/project/(?P<project_id>[0-9]+)/$', views.email_project, name='super_email_project'),
 	url(r'^delete/project/(?P<project_id>[0-9]+)/$', views.deleteproject, name = 'super_delete_project'),
 	url(r'^category/(?P<category_id>[0-9]+)/update/$', views.update_category, name='super_update_category'),
+	url(r'^TA/(?P<TA_id>[0-9]+)/$', views.change_TA, name="TA_delete"),
+	url(r'^TA/$', views.change_TA, name="TA"),
 )
