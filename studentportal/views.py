@@ -6,7 +6,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from PrivateData import SUPERVISOR_EMAIL
+import PrivateData
 
 from supervisor.models import Notification, Example, News, Like, Comment, NewCommentForm
 
@@ -35,13 +35,12 @@ def add_notification(noti_type, project):
 @receiver(post_save, sender = TA)
 def update_TAs(sender, **kwargs):
 	new_TAs = [x.email for x in TA.objects.all()]
-	global SUPERVISOR_EMAIL
-	SUPERVISOR_EMAIL = list(set(new_TAs))
+	PrivateData.SUPERVISOR_EMAIL = list(set(new_TAs))
 update_TAs(sender=TA)
 
 def index(request):
 	if request.user.is_authenticated():
-		if request.user.email in SUPERVISOR_EMAIL:
+		if request.user.email in PrivateData.SUPERVISOR_EMAIL:
 			return HttpResponseRedirect(reverse('supervisor_home'))
 	return HttpResponseRedirect(reverse('studenthome'))
 

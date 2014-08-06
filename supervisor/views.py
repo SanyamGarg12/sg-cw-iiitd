@@ -10,7 +10,7 @@ from studentportal.models import Project, NGO, Category, Document
 from models import Example, AdvanceSearchForm, NewsForm, News, Notification, NewCategoryForm, NewNGOForm, EmailProjectForm, TA, TAForm
 
 from CW_Portal import global_constants
-from PrivateData import SUPER_SUPERVISOR
+import PrivateData
 
 from django.contrib import messages
 
@@ -396,7 +396,7 @@ def update_ngo(request, NGO_id):
 def change_TA(request, TA_id = '-1'):
 	if eval(TA_id) != -1:
 		ta = get_object_or_404(TA, pk = TA_id)
-		if ta.email in SUPER_SUPERVISOR:
+		if ta.email in PrivateData.SUPER_SUPERVISOR:
 			messages.error(request, ''.join([ta.email, " can't be removed. Contact the admin to remove this."]))
 		else:
 			ta.delete()
