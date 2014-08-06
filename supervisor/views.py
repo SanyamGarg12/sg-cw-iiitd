@@ -7,9 +7,10 @@ from django.db.models import Q
 from supervisor.decorators import supervisor_logged_in, is_int, EmailMessage, EmailMessageAll
 
 from studentportal.models import Project, NGO, Category, Document
-from models import Example, AdvanceSearchForm, NewsForm, News, Notification, NewCategoryForm, NewNGOForm, EmailProjectForm
+from models import Example, AdvanceSearchForm, NewsForm, News, Notification, NewCategoryForm, NewNGOForm, EmailProjectForm, TA, TAForm
 
 from CW_Portal import global_constants
+from PrivateData import SUPER_SUPERVISOR
 
 from django.contrib import messages
 
@@ -390,3 +391,24 @@ def update_ngo(request, NGO_id):
 	else:
 		messages.error(request, "There was an error in the updated data.")
 		return HttpResponseRedirect(reverse('super_view_ngo',kwargs={'NGO_id': NGO_id}))
+
+@supervisor_logged_in
+def change_TA(request, TA_id = '-1'):
+	if eval(TA_id) != -1:
+		ta = get_object_or_404(TA, pk = TA_id)
+		if ta.email in SUPER_SUPERVISOR:
+			messages.error(request, ''.join([ta.email, " can't be removed. Contact the admin to remove this."]))
+		else:
+			ta.delete()
+			messages.success(request, "TA deleted successfully.")
+		return HttpResponseRedirect(reverse('TA'))
+	tas = TA.objects.all()
+	form = TAForm()
+	if request.method == "POST":
+		form = TAForm(request.POST)
+		if form.is_valid():
+			form.save()
+			messages.success(request, "TA added successfully.")
+			return HttpResponseRedirect(reverse('TA'))
+		messages.error(request, "There was something wrong in the email provided.")
+	return render(request, 'TA.html', {'form': form, 'tas': tas})

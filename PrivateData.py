@@ -1,3 +1,8 @@
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
-SUPERVISOR_EMAIL = ''
+
+#Add TA's and instructors
+SUPERVISOR_EMAIL = ['']
+
+#Add instructors
+SUPER_SUPERVISOR = ['']
