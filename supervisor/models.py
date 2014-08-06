@@ -4,6 +4,7 @@ from studentportal.models import Project, NGO, Category
 from django import forms
 from django.utils import timezone
 from CW_Portal import global_constants
+from django.contrib.admin import widgets
 
 class Notification(models.Model):
     noti_id = models.IntegerField(primary_key= True)
@@ -118,3 +119,7 @@ class NewCommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['text']
+
+class ReportForm(forms.Form):
+    date = forms.ChoiceField(label="Projects which were marked as complete within these past months : ",
+     choices=tuple([(x, x) for x in range(1, 13)]))

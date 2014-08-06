@@ -1,18 +1,23 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.utils import timezone
 from supervisor.decorators import supervisor_logged_in, is_int, EmailMessage, EmailMessageAll
 
 from studentportal.models import Project, NGO, Category, Document
-from models import Example, AdvanceSearchForm, NewsForm, News, Notification, NewCategoryForm, NewNGOForm, EmailProjectForm, TA, TAForm
+from models import Example, AdvanceSearchForm, NewsForm, News, Notification, NewCategoryForm, NewNGOForm, EmailProjectForm, TA, TAForm, ReportForm
 
 from CW_Portal import global_constants
 import PrivateData
 
 from django.contrib import messages
+import datetime
+import xlwt
+from CW_Portal.settings import BASE_DIR
+import os
 
 @supervisor_logged_in
 def home(request):
@@ -108,9 +113,11 @@ def allprojects(request, skip='0'):
 	# back_temp = skip - step if skip-step >= 0 else None
 	# print skip, step, back_temp
 	projects = Project.objects.all()[skip: skip + step]
+	form = ReportForm()
 	return render(request, 'super_allprojects.html',
 		{'projects': projects,
-		 #'next': next_temp, 'back': back_temp
+		 #'next': next_temp, 'back': back_temp,
+		 'form': form,
 		 })
 
 @supervisor_logged_in
@@ -132,6 +139,7 @@ def complete(request,project_id):
 	noti = Notification.objects.filter(project=project).delete()
 	global_constants.noti_refresh = True
 	project.stage = 'completed'
+	project.expected_finish_date = timezone.now()
 	project.save()
 	messages.success(request, "You have marked the Community Work project as completed and finished.")
 	EmailMessage("Congrats.. you did it :)","Congratulations, your completed project has has been accepted by the admin. Thanks for giving back to the community. Keep it up.",
@@ -412,3 +420,39 @@ def change_TA(request, TA_id = '-1'):
 			return HttpResponseRedirect(reverse('TA'))
 		messages.error(request, "There was something wrong in the email provided.")
 	return render(request, 'TA.html', {'form': form, 'tas': tas})
+
+@supervisor_logged_in
+def generateReport(request):
+	months = int(request.POST['date'])
+	projects = Project.objects.filter(stage='completed')
+	projects = projects.filter(
+		expected_finish_date__gte = datetime.datetime.now() - datetime.timedelta(months*31))
+
+	report = xlwt.Workbook(encoding="utf-8")
+
+	sheet = report.add_sheet("Community Work Projects")
+
+	headings = [
+	"Name",
+	"Roll number",
+	"Email",
+	"NGO",
+	"Title",
+	]
+	for (index, h) in enumerate(headings):
+		sheet.write(0, index, h)
+
+	for index, project in enumerate(projects):
+		sheet.write(index + 1, 0,  ' '.join([
+			project.student.first_name,
+			project.student.last_name]))
+		sheet.write(index + 1, 1, project.get_rollno())
+		sheet.write(index + 1, 2, project.student.email)
+		sheet.write(index + 1, 3, project.get_NGO())
+		sheet.write(index + 1, 4, project.title)
+
+	report.save(os.path.join(BASE_DIR, 'report.xls'))
+	report = open(os.path.join(BASE_DIR, 'report.xls'), 'r')
+	response = StreamingHttpResponse(report)
+	response['Content-Disposition'] = 'attachment; filename=Report.xls'
+	return response
