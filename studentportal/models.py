@@ -38,6 +38,7 @@ class Project(models.Model):
     NGO_super               = models.CharField(max_length=127)
     NGO_super_contact       = models.CharField(max_length=127)
     goals                   = models.TextField()
+    #use this field as the date when the project has been marked as completed.
     expected_finish_date    = models.DateTimeField(blank = True, null = True)
     schedule_text           = models.TextField()
     student                 = models.ForeignKey(User, related_name='projects')

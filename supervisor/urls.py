@@ -41,4 +41,5 @@ urlpatterns = patterns('',
 	url(r'^category/(?P<category_id>[0-9]+)/update/$', views.update_category, name='super_update_category'),
 	url(r'^TA/(?P<TA_id>[0-9]+)/$', views.change_TA, name="TA_delete"),
 	url(r'^TA/$', views.change_TA, name="TA"),
+	url(r'^report/$', views.generateReport, name='generateReport'),
 )
