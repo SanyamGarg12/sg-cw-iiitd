@@ -50,9 +50,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'studentportal',
     'supervisor',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'bootstrapform',
 )
