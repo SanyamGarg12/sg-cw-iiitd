@@ -1,6 +1,6 @@
 from functools import wraps
 from django.http import Http404
-from PrivateData import SUPERVISOR_EMAIL, EMAIL_HOST_USER
+import PrivateData
 
 from supervisor.models import Notification
 from studentportal.models import Project
@@ -70,8 +70,7 @@ def supervisor_logged_in(view):
 			request.session['noti_count_submissions'] = Notification.objects.filter(noti_type='finish').distinct().count()
 			request.session['noti_count_NGO'] = Notification.objects.filter(noti_type='suggest').distinct().count()
 			global_constants.noti_refresh = False
-
-		if request.user.is_authenticated() and request.user.email in SUPERVISOR_EMAIL:
+		if request.user.is_authenticated() and request.user.email in PrivateData.SUPERVISOR_EMAIL:
 			return view(request, *args, **kwargs)
 		raise Http404()
 	return _wrapped_view
@@ -91,7 +90,7 @@ class EmailThread(threading.Thread):
 		threading.Thread.__init__(self)
 
 	def run(self):
-		msg = EmailMultiAlternatives(self.subject, self.text_content, EMAIL_HOST_USER, self.recipient_list)
+		msg = EmailMultiAlternatives(self.subject, self.text_content, PrivateData.EMAIL_HOST_USER, self.recipient_list)
 		# msg.attach_alternative(True, "text/html")
 		msg.send()
 
