@@ -117,6 +117,7 @@
           </div>
         </div><!--/span-->
 
+        {% if user.is_authenticated %}
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="leaderboard_sidebar" role="navigation">
           <center><span class="list-group-item active">Leaderboard</span></center>
           <div class="list-group">
@@ -134,6 +135,7 @@
             {% endfor %}
           </div>
         </div><!--/span-->
+        {% endif %}
 
       </div><!--/row-->
 

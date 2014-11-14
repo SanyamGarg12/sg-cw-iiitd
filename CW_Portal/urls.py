@@ -8,6 +8,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 from studentportal.views import index
+from studentportal import startup
 
 urlpatterns = patterns('',
     url(r'^$', index, name='index'),
