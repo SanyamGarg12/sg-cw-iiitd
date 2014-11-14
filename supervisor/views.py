@@ -1,27 +1,31 @@
+import datetime
+import xlwt
+import os
+
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.contrib.auth import logout
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.db.models import Q
 from django.utils import timezone
-from supervisor.decorators import supervisor_logged_in, is_int, EmailMessage, EmailMessageAll
 
-from studentportal.models import Project, NGO, Category, Document
-from models import Example, AdvanceSearchForm, NewsForm, News, Notification, NewCategoryForm, NewNGOForm, EmailProjectForm, TA, TAForm, ReportForm
-
-from CW_Portal import global_constants
-import PrivateData
-
-from django.contrib import messages
-import datetime
-import xlwt
-from CW_Portal.settings import BASE_DIR
-import os
+from CW_Portal import settings, access_cache
+from supervisor.decorators import supervisor_logged_in
+from supervisor.communication import send_email, send_email_to_all
+from supervisor.validators import is_int
+from supervisor.notifications import notification_type as nt
+from supervisor.notifications import add_notification
+import receivers
+from studentportal.models import Project, NGO, Category, Document, project_stage
+from models import Example, News, Notification, TA
+from forms import AdvanceSearchForm, NewsForm, NewCategoryForm, NewNGOForm, EmailProjectForm, TAForm, ReportForm
 
 @supervisor_logged_in
 def home(request):
-	recent_projects = Project.objects.extra(order_by=['-date_created'])[:10]
+	recent_projects = access_cache.get('projects_homepage')
 	return render(request, 'supervisorhome.html', {'recent_projects': recent_projects})
 
 @supervisor_logged_in
@@ -31,41 +35,40 @@ def _logout(request):
 
 @supervisor_logged_in
 def unverified_projects(request):
-	projects = Project.objects.filter(stage="to_be_verified")
+	projects = Project.objects.filter(stage=project_stage.TO_BE_VERIFIED)
 	return render(request, 'unverified_projects.html',
 		{'projects': projects})
 
 @supervisor_logged_in
 def verify_project(request, project_id):
 	project = Project.objects.get(pk = project_id)
-	Notification.objects.get(project=project, noti_type='new', project__stage='to_be_verified').delete()
-	global_constants.noti_refresh = True
-	project.stage = "ongoing"
+	Notification.objects.get(project=project, noti_type=nt.NEW_PROJECT).delete()
+	project.stage = project_stage.ONGOING
 	project.save()
 	messages.success(request, "You have verified the project %s."%project.title)
-	EmailMessage("Congrats.. now get to work :)","Congratulations, your project has has been verified. Now start working and making a difference", to=[str(project.student.email)])
+	send_email("Congrats.. now get to work :)","Congratulations, your project has has been verified. Now start working and making a difference", to=[str(project.student.email)])
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
 
 @supervisor_logged_in
 def unverify_project(request, project_id):
 	project = Project.objects.get(pk = project_id)
-	Notification.objects.create(project=project, noti_type='new')
-	project.stage = "to_be_verified"
+	add_notification(noti_type=nt.NEW_PROJECT, project=project)
+	project.stage = project_stage.TO_BE_VERIFIED
 	project.save()
 	messages.warning(request, "You have unverified the project %s."%project.title)
-	EmailMessage("I got bad news :(","It seems that the supervisor has un-approved your project. Contact him to find out the issue", to=[str(project.student.email)])
+	send_email("I got bad news :(","It seems that the supervisor has un-approved your project. Contact him to find out the issue", to=[str(project.student.email)])
 	global_constants.noti_refresh = True
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
 
 @supervisor_logged_in
 def ongoing_projects(request):
-	projects = Project.objects.filter(stage='ongoing')
+	projects = Project.objects.filter(stage=project_stage.ONGOING)
 	return render(request, 'ongoing_projects.html', 
 		{'projects': projects})
 
 @supervisor_logged_in
 def viewproject(request, project_id):
-	project = Project.objects.get(pk = project_id)
+	project = get_object_or_404(Project, pk = project_id)
 	return render(request, 'super_viewproject.html', 
 		{'project': project})
 
@@ -82,7 +85,7 @@ def add_to_examples(request, project_id):
 	project = Project.objects.get(pk = project_id)
 	Example.objects.create(project = project)
 	messages.success(request, "You have marked the project '%s' as an example project."%project.title)
-	EmailMessage("Congrats.. You deserve this :)","Congratulations, your project has has been selected by the admin as an example project. You must have done a mighty fine job. Keep it up.",
+	send_email("Congrats.. You deserve this :)","Congratulations, your project has has been selected by the admin as an example project. You must have done a mighty fine job. Keep it up.",
 	 to=[str(project.student.email)])
 	return HttpResponseRedirect(reverse('super_viewproject', 
 		kwargs={'project_id': project_id}))
@@ -93,7 +96,7 @@ def remove_from_examples(request, example_project_id):
 	p_id = example_project.project.id
 	example_project.delete()
 	messages.warning(request, "You have unmarked the project as an example project.")
-	EmailMessage("Thank you :)","Your project has has been removed by the admin from the example project. Thank you for contributing to the community. Keep it up.",
+	send_email("Thank you :)","Your project has has been removed by the admin from the example project. Thank you for contributing to the community. Keep it up.",
 	 to=[str(Project.objects.get(pk=p_id).student.email)])
 	return HttpResponseRedirect(reverse('super_viewproject',
 		kwargs = {'project_id':p_id}))
@@ -101,22 +104,26 @@ def remove_from_examples(request, example_project_id):
 @supervisor_logged_in
 def submitted_projects(request):
 	projects = Project.objects.filter(documents__category__exact='submission',
-		stage='ongoing').distinct()
+		stage=project_stage.ONGOING).distinct()
 	return render(request, 'super_submittedprojects.html',
 		{'projects': projects})
 
 @supervisor_logged_in
-def allprojects(request, skip='0'):
-	skip = int(skip)
-	step = 9999
-	# next_temp = skip + step if skip+step < Project.objects.count() else None
-	# back_temp = skip - step if skip-step >= 0 else None
-	# print skip, step, back_temp
-	projects = Project.objects.all()[skip: skip + step]
+def allprojects(request):
 	form = ReportForm()
+	paginator = Paginator(Project.objects.all(), 2, orphans=1)
+
+	
+	page = request.GET.get('page', None)
+	try:
+		projects = paginator.page(page)
+	except PageNotAnInteger:
+		projects = paginator.page(1)
+	except EmptyPage:
+		projects = paginator.page(paginator.num_pages)
+
 	return render(request, 'super_allprojects.html',
 		{'projects': projects,
-		 #'next': next_temp, 'back': back_temp,
 		 'form': form,
 		 })
 
@@ -142,7 +149,7 @@ def complete(request,project_id):
 	project.expected_finish_date = timezone.now()
 	project.save()
 	messages.success(request, "You have marked the Community Work project as completed and finished.")
-	EmailMessage("Congrats.. you did it :)","Congratulations, your completed project has has been accepted by the admin. Thanks for giving back to the community. Keep it up.",
+	send_email("Congrats.. you did it :)","Congratulations, your completed project has has been accepted by the admin. Thanks for giving back to the community. Keep it up.",
 	 to=[str(project.student.email)])
 	#send link for feedback form
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project_id}))
@@ -194,8 +201,10 @@ def add_news(request):
 		form = NewsForm(request.POST)
 		if form.is_valid():
 			form.save()
-			if int(form.cleaned_data['priority']) == 2:
-				EmailMessageAll(str(form.cleaned_data['content']))
+			import pdb
+			pdb.set_trace()
+			if form.cleaned_data['priority'] == 'False':
+				send_email_to_all(str(form.cleaned_data['content']))
 			messages.success(request, 'News posted')
 			return HttpResponseRedirect(reverse('all_news'))
 	else:
@@ -238,7 +247,7 @@ def accept_NGO(request, noti_id):
 		link=noti.NGO_link,
 		details=noti.NGO_details,
 		category=Category.objects.last())
-	EmailMessage("Thank you :)","We have added the NGO you suggested as a trusted NGO..",
+	send_email("Thank you :)","We have added the NGO you suggested as a trusted NGO..",
 	 to=[str(noti.NGO_sugg_by)])
 	messages.success(request, "%s is now a trusted NGO."%noti.NGO_name)
 	noti.delete()
@@ -251,7 +260,7 @@ def reject_NGO(request, noti_id):
 	messages.info(request, "You have rejected the suggestion of adding %s as a trusted NGO."%noti.NGO_name)
 	noti.delete()
 	global_constants.noti_refresh = True
-	EmailMessage("Thank you but sorry :|","We have reviewed your suggestion for the NGO but as of now have to reject it. But thank you for your suggestion",
+	send_email("Thank you but sorry :|","We have reviewed your suggestion for the NGO but as of now have to reject it. But thank you for your suggestion",
 	 to=[str(noti.NGO_sugg_by)])
 	return HttpResponseRedirect(reverse('super_suggested_ngos'))
 
@@ -348,7 +357,7 @@ def email_project(request, project_id):
 		if form.is_valid():
 			text = '\n\n'.join([form.cleaned_data['body'],
 			 "P.S. This mail is generated via the CW-portal. So for any further communication regarding the above mentioned issue(s), please reply to this mail, unless explicitly asked to create a new email thread, for proper redressal."])
-			EmailMessage("CW Project '%s' "%project.title, text, to=[form.cleaned_data['to']])
+			send_email("CW Project '%s' "%project.title, text, to=[form.cleaned_data['to']])
 			messages.success(request, "E-mail sent.")
 			return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
 	else:

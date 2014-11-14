@@ -34,7 +34,7 @@
 		</blockquote>
 		<h2>NGO:</h2>
 		<blockquote>
-			{{ project.get_NGO }}
+			{{ project.get_NGO|safe }}
 			<p><a href="{% url 'view_project_NGO' project.id %}">Change NGO details</a></p>
 		</blockquote>
 		<h2>NGO details: </h2>
@@ -74,7 +74,7 @@
 			  </div>
 			</div>
 
-			<strong>{{ doc.category }}: </strong>
+			<strong>{{ doc.get_current_document_type }}: </strong>
 			<a href = "{% url 'download_document' doc.pk %}">
 			{{ doc.name }}</a>
 			&nbsp;
