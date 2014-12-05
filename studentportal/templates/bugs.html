@@ -1,14 +1,15 @@
-{% extends 'core.html' %}
 {% load bootstrap %}
-{% block content %}
-<div class="container">
-<form action="{% url 'bugs'%}" method = "post"> {% csrf_token %}
-{{ form|bootstrap_horizontal }}
-<br />
-<input type="submit" value="Submit" class="btn btn-warning btn-lg" style="float:right; margin-top:10px;"  />
-</form>
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	<h4 class="modal-title" id="ModalLabel"> <strong>Report a bug / Request a feature</strong> </h4>
 </div>
-	<div style="margin-top:25px;" align="center">
-	<p><strong>You could send your feedback / suggestions directly to sambhav 13085 [at] iiitd [dot] ac [dot] in </strong></p>
-	</div>
-{% endblock %}
+
+<div class="modal-body clearfix">
+	<form action="{% url 'bugs'%}" method = "post"> {% csrf_token %}
+		{{ form|bootstrap_horizontal }}
+		<br />
+		<input type="submit" value="Submit" class="btn btn-warning btn-lg" style="margin-top:10px; margin-left:45%; padding-left:5%; padding-right:5%"  />
+		</form>
+		<hr /><strong>You could send your feedback / suggestions directly to sambhav 13085 [at] iiitd [dot] ac [dot] in</strong>
+</div>

@@ -203,6 +203,7 @@ def all_NGOs(request):
 @login_required
 def suggest_NGO(request):
     if not (request.method == "POST" or request.is_ajax()):
+        messages.error(request, "There was an error in the request received.")
         return HttpResponseRedirect(reverse('all_NGO'))
     if request.method == "POST":
         form = suggest_NGOForm(request.POST)
@@ -265,22 +266,22 @@ def view_example(request, example_id):
 def guidelines(request):
     return render(request, 'guidelines.html')
 
-###################
-#Ajaxify
-###################
 @login_required
 def bugs(request):
+    if not (request.method == "POST" or request.is_ajax()):
+        messages.warning(request, "There was an error in the request received.")
+        return HttpResponseRedirect(reverse('index'))
     if request.method == "POST":
         form = BugsForm(request.POST)
         if form.is_valid():
             temp = form.save(commit=False)
             temp.user = request.user
             temp.save()
-            messages.success(request, "Thank you for your suggestions")
+            messages.success(request, "Thank you for your suggestions.")
+        else:
+            messages.warning("There was some error in the data submitted.")
         return HttpResponseRedirect(reverse('index'))
-    else:
-        messages.error(request, "Wooahhh.. what mischief did you attempt to do in such a small function ?")
-        form = BugsForm()
+    form = BugsForm()
     return render(request, "bugs.html", {'form': form})
 
 #handle notifications on deletion

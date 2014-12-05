@@ -63,7 +63,7 @@ body {
   }
 }
 
-.ajaxify-btn{}
+.ajaxify-btn{};
 </style>
 </head>
 
@@ -83,7 +83,7 @@ body {
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}
-            <li><a href="{% url 'bugs' %}"> Report bug </a></li>
+            <li><a class="btn-link ajaxify-btn" data-link="{% url 'bugs' %}"> Report bug </a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ user.first_name }} <b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -161,6 +161,6 @@ body {
           console.log("Loaded opening modal");
           $("#base-modal").modal('show');
         })
-      })
+      });
     </script>
 </body></html>
