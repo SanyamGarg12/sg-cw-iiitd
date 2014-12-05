@@ -5,7 +5,23 @@ from django import forms
 from django.utils import timezone
 from CW_Portal import global_constants
 from django.contrib.admin import widgets
-from notifications import notification_type
+
+class notification_type(object):
+    NEW_PROJECT, PROJECT_EDITED, PROJECT_FINISHED, NGO_SUGGESTION = range(1,5)
+
+nt = notification_type()
+
+def add_notification(noti_type, **kwargs):
+    if noti_type in [nt.NEW_PROJECT, nt.PROJECT_EDITED, nt.PROJECT_FINISHED]:
+        Notification.objects.create(noti_type=noti_type,
+                                    project=kwargs['project'])
+    elif noti_type == nt.NGO_SUGGESTION:
+        Notification.objects.create(noti_type=noti_type,
+                NGO_name=kwargs['NGO_name'],
+                NGO_link=kwargs['NGO_link'],
+                NGO_details=kwargs['NGO_details'],
+                NGO_sugg_by=kwargs['NGO_sugg_by'])
+
 
 class Notification(models.Model):
     noti_id     = models.IntegerField(primary_key= True)

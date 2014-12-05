@@ -10,11 +10,10 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 
 from CW_Portal import access_cache, settings
-from models import Feedback, Project, Document, Category, Bugs, NGO, document_type, project_stage
+from models import Feedback, Project, Document, Category, Bug, NGO, document_type, project_stage
 from forms import ProjectForm, FeedbackForm, UploadDocumentForm, BugsForm, suggest_NGOForm
 from supervisor.forms import NewCommentForm
-from supervisor.models import Notification, Example, News, Like, Comment, TA
-from supervisor.notifications import add_notification, notification_type
+from supervisor.models import Notification, Example, News, Like, Comment, TA, add_notification, notification_type
 
 def index(request):
     if request.user.is_authenticated():
@@ -27,10 +26,11 @@ def home(request):
         return render(request, 'studenthome.html',{
             'example_projects': access_cache.get_example_projects(),
             'news': access_cache.get_news(),
-            'leaderboard': access_cache.get_leaderboard()})
+            'leaderboard': access_cache.get_leaderboard(),
+            'stages': project_stage})
     else:
         return render(request, 'studenthome.html',
-            {'news': access_cache.get_news()})
+            {'news': access_cache.get_news(), 'stages': project_stage})
 
 @login_required
 def addproject(request):
@@ -54,9 +54,12 @@ def viewproject(request, project_id):
     project = get_object_or_404(Project, pk = project_id)
     if request.user == project.student:
         return render(request, 'viewproject.html',
-            {'project': project})
+            {'project': project, 'stages': project_stage})
     return HttpResponseRedirect(reverse('studenthome'))
 
+###################
+#Ajaxify
+###################
 @login_required
 def view_project_NGO(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
@@ -83,6 +86,9 @@ def editproject(request, project_id):
          {'form': form, 'instance': instance})
     return HttpResponseRedirect(reverse('index'))
 
+###################
+#Ajaxify
+###################
 @login_required
 def _upload(request, project_id):
     project = get_object_or_404(Project, pk = project_id)
@@ -111,6 +117,28 @@ def _upload(request, project_id):
     return HttpResponseRedirect(reverse('index'))
 
 @login_required
+def submitproject(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    if project.student != request.user:
+        messages.error(request, "Seriously ?? -_-")
+        return HttpResponseRedirect(reverse('index'))
+    if not project.is_submittable():
+        if project.stage == project_stage.TO_BE_VERIFIED:
+            messages.warning(request, "The TA hasn't approved your project yet.")
+        elif project.stage == project_stage.SUBMITTED:
+            messages.warning(request, "Your request is already under consideration.")
+        elif project.stage == project_stage.COMPLETED:
+            messages.warning(request, "You've already completed your project.")
+        else:
+            messages.warning(request, "Please submit a final report before submitting your project.")
+        return HttpResponseRedirect(reverse('viewproject', kwargs={'project_id': project_id}))
+    project.stage = project_stage.SUBMITTED
+    project.save()
+    add_notification(noti_type=notification_type.PROJECT_FINISHED, project=project)
+    messages.success(request, "Your request has been completed successfully. You'll know the results soon.")
+    return HttpResponseRedirect(reverse('viewproject', kwargs={'project_id': project_id}))
+
+@login_required
 def link_NGO_project(request, NGO_id, project_id):
     ngo = get_object_or_404(NGO, pk = NGO_id)
     project = get_object_or_404(Project, pk = project_id)
@@ -136,7 +164,8 @@ def unlink_NGO_project(request, project_id):
 @login_required
 def profile(request):
     projects = request.user.projects.all()
-    return render(request, 'studentprofile.html', {'projects': projects})
+    return render(request, 'studentprofile.html', {
+        'projects': projects, 'stages': project_stage})
 
 @login_required
 def download(request, document_id):
@@ -171,6 +200,9 @@ def all_NGOs(request):
     return render(request, 'all_ngos.html', 
         {'NGOs': NGOs})
 
+###################
+#Ajaxify
+###################
 @login_required
 def suggest_NGO(request):
     if request.method == "POST":
@@ -222,7 +254,7 @@ def all_projects_open_to_public(request, year):
 def all_examples(request):
     projects = Example.objects.all()
     return render(request, 'all_examples.html',
-        {'projects': projects})
+        {'projects': projects, 'project_stage': project_stage})
 
 @login_required
 def view_example(request, example_id):
@@ -230,11 +262,14 @@ def view_example(request, example_id):
     liked = True if request.user.liked_projects.filter(Q(project=project)) else False
     form = NewCommentForm
     return render(request, 'view_example.html',
-        {'project': project, 'liked': liked, 'form': form})
+        {'project': project, 'liked': liked, 'form': form, 'stages': project_stage})
     
 def guidelines(request):
     return render(request, 'guidelines.html')
 
+###################
+#Ajaxify
+###################
 @login_required
 def bugs(request):
     if request.method == "POST":
@@ -246,6 +281,7 @@ def bugs(request):
             messages.success(request, "Thank you for your suggestions")
         return HttpResponseRedirect(reverse('index'))
     else:
+        messages.error(request, "Wooahhh.. what mischief did you attempt to do in such a small function ?")
         form = BugsForm()
     return render(request, "bugs.html", {'form': form})
 
@@ -267,7 +303,6 @@ def delete_document(request, document_id):
     if not project.student == request.user:
         return HttpResponseRedirect(reverse('studenthome'))
     document.delete()
-    # global_constants.noti_refresh = True
     messages.success(request, "Document has been removed.")
     return HttpResponseRedirect(reverse('viewproject', kwargs={'project_id': project.pk}))
 
@@ -310,7 +345,7 @@ def delete_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     example_id = comment.project.pk 
     if comment.commentor != request.user:
-        messages.info(request, "It seems to me that it ain't your comment.")
+        messages.info(request, "It seems to me that it ain't your comment, mistah..")
     else:
         comment.delete()
         messages.info(request, "Comment deleted.")

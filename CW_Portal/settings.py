@@ -134,6 +134,8 @@ APPEND_SLASH = True
 
 STATIC_URL = '/static/'
 
+STATISTICS_FOLDER_NAME = "some-folder-with-weird-name"
+
 STATICFILES_DIR = (
     os.path.join(
         BASE_DIR,

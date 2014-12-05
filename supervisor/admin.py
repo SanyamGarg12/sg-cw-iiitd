@@ -1,10 +1,9 @@
 from django.contrib import admin
 
-from models import TA 
+from models import TA, Notification, Example, Comment, News
 
 admin.site.register(TA)
-# admin.site.register(NGO)
-# admin.site.register(Project)
-# admin.site.register(Document)
-# admin.site.register(Feedback)
-# admin.site.register(Bugs)
+admin.site.register(Notification)
+admin.site.register(Example)
+admin.site.register(Comment)
+admin.site.register(News)
