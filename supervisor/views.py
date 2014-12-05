@@ -154,6 +154,9 @@ def complete(request,project_id):
 
 @supervisor_logged_in
 def advance_search(request):
+	if not (request.method == "POST" or request.is_ajax()):
+		messages.warning(request, "There's something wrong with the request you sent.")
+		return HttpResponseRedirect(reverse('index'))
 	if request.method == "POST":
 		form = AdvanceSearchForm(request.POST)
 		if form.is_valid():
@@ -162,12 +165,12 @@ def advance_search(request):
 				projects = form.cleaned_data['category'].projects.all()
 			else:
 				projects = Project.objects.all()
-			if form.cleaned_data['stage'] != 'all':
+			if form.cleaned_data['stage'] != '0':
 				projects = projects.filter(stage=form.cleaned_data['stage'])
 			if form.cleaned_data['project_title']:
 				projects = projects.filter(title__icontains=form.cleaned_data['project_title'])
 			if form.cleaned_data['NGO_name']:
-				projects = projects.filter(title__icontains=form.cleaned_data['NGO_name'])
+				projects = projects.filter(NGO_name__icontains=form.cleaned_data['NGO_name'])
 			if form.cleaned_data['proposal_year']:
 				date = int(form.cleaned_data['proposal_year'])
 				projects = projects.filter(date_created__year=date)
@@ -188,8 +191,8 @@ def advance_search(request):
 				''.join([project.student.first_name, project.student.last_name]).lower()]
 			return render(request, 'advance_search_results.html',
 				{'projects': projects})
-	else:
-		form = AdvanceSearchForm()
+		messages.warning(request, "The data provided was wrong somehow.")
+	form = AdvanceSearchForm()
 	return render(request, 'advance_search.html',
 		{'form': form})
 
