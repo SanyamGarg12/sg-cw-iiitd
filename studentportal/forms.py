@@ -1,6 +1,6 @@
 from django import forms
 
-from studentportal.models import Project, Feedback, Bugs, Category
+from studentportal.models import Project, Feedback, Bug, Category
 from studentportal.models import document_type, Document
 
 class ProjectForm(forms.ModelForm):
@@ -54,5 +54,5 @@ class BugsForm(forms.ModelForm):
         ((x,x) for x in range(1,11))
         ), initial =5)
     class Meta:
-        model = Bugs
+        model = Bug
         fields = ['suggestions', 'rating']

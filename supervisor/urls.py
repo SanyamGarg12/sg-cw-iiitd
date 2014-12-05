@@ -26,7 +26,7 @@ urlpatterns = patterns('',
 	url(r'^removefromexamples/(?P<example_project_id>[0-9]+)/$', views.remove_from_examples, name='removefromexamples'),
 	
 	url(r'^basic_search/$', views.basic_search),
-	url(r'^advance_search/$', views.advance_search, name='advance_search'),
+	url(r'^advanced_search/$', views.advance_search, name='advance_search'),
 	
 	url(r'^news/new/$', views.add_news, name='add_news'),
 	url(r'^news/all/$', views.all_news, name='all_news'),

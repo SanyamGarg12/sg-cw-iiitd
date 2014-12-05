@@ -13,20 +13,21 @@ from django.db.models import Q
 from django.utils import timezone
 
 from CW_Portal import settings, access_cache
-from supervisor.decorators import supervisor_logged_in
-from supervisor.communication import send_email, send_email_to_all
-from supervisor.validators import is_int
-from supervisor.notifications import notification_type as nt
-from supervisor.notifications import add_notification
-import receivers
-from studentportal.models import Project, NGO, Category, Document, project_stage
-from models import Example, News, Notification, TA
 from forms import AdvanceSearchForm, NewsForm, NewCategoryForm, NewNGOForm, EmailProjectForm, TAForm, ReportForm
+from models import Example, News, Notification, TA
+from models import notification_type as nt
+from studentportal.models import Project, NGO, Category, Document, project_stage, document_type
+from supervisor.communication import send_email, send_email_to_all
+from supervisor.decorators import supervisor_logged_in
+from supervisor.notifications import add_notification
+from supervisor.validators import is_int
+import receivers
 
 @supervisor_logged_in
 def home(request):
 	recent_projects = access_cache.get('projects_homepage')
-	return render(request, 'supervisorhome.html', {'recent_projects': recent_projects})
+	return render(request, 'supervisorhome.html', {'recent_projects': recent_projects,
+		'statistics_folder_name': getattr(settings, "STATISTICS_FOLDER_NAME")})
 
 @supervisor_logged_in
 def _logout(request):
@@ -57,7 +58,6 @@ def unverify_project(request, project_id):
 	project.save()
 	messages.warning(request, "You have unverified the project %s."%project.title)
 	send_email("I got bad news :(","It seems that the supervisor has un-approved your project. Contact him to find out the issue", to=[str(project.student.email)])
-	global_constants.noti_refresh = True
 	return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
 
 @supervisor_logged_in
@@ -70,7 +70,7 @@ def ongoing_projects(request):
 def viewproject(request, project_id):
 	project = get_object_or_404(Project, pk = project_id)
 	return render(request, 'super_viewproject.html', 
-		{'project': project})
+		{'project': project, 'project_stage': project_stage})
 
 @supervisor_logged_in
 def example_projects(request):
@@ -103,15 +103,14 @@ def remove_from_examples(request, example_project_id):
 
 @supervisor_logged_in
 def submitted_projects(request):
-	projects = Project.objects.filter(documents__category__exact='submission',
-		stage=project_stage.ONGOING).distinct()
+	projects = Project.objects.filter(stage=project_stage.SUBMITTED)
 	return render(request, 'super_submittedprojects.html',
 		{'projects': projects})
 
 @supervisor_logged_in
 def allprojects(request):
 	form = ReportForm()
-	paginator = Paginator(Project.objects.all(), 2, orphans=1)
+	paginator = Paginator(Project.objects.all(), 5, orphans=1)
 
 	
 	page = request.GET.get('page', None)
@@ -143,10 +142,9 @@ def basic_search(request):
 @supervisor_logged_in
 def complete(request,project_id):
 	project = get_object_or_404(Project, pk = project_id)
-	noti = Notification.objects.filter(project=project).delete()
-	global_constants.noti_refresh = True
-	project.stage = 'completed'
-	project.expected_finish_date = timezone.now()
+	Notification.objects.filter(project=project).delete()
+	project.stage = project_stage.COMPLETED
+	project.finish_date = timezone.now()
 	project.save()
 	messages.success(request, "You have marked the Community Work project as completed and finished.")
 	send_email("Congrats.. you did it :)","Congratulations, your completed project has has been accepted by the admin. Thanks for giving back to the community. Keep it up.",
@@ -201,18 +199,16 @@ def add_news(request):
 		form = NewsForm(request.POST)
 		if form.is_valid():
 			form.save()
-			import pdb
-			pdb.set_trace()
 			if form.cleaned_data['priority'] == 'False':
 				send_email_to_all(str(form.cleaned_data['content']))
-			messages.success(request, 'News posted')
+			messages.success(request, 'News has been posted.')
 			return HttpResponseRedirect(reverse('all_news'))
 	else:
 		form = NewsForm
 	return render(request, 'add_news.html',
 		{'form': form})
 
-#should i add or not..??
+@supervisor_logged_in
 def view_news(request, news_id):
 	news = get_object_or_404(News, pk=news_id)
 	return render(request, 'super_view_news.html', {'news': news})
@@ -237,7 +233,7 @@ def all_news(request):
 
 @supervisor_logged_in
 def suggested_NGOs(request):
-	notifications = Notification.objects.filter(noti_type='suggest').distinct()
+	notifications = Notification.objects.filter(noti_type=nt.NGO_SUGGESTION).distinct()
 	return render(request, 'suggested_NGOs.html', {'notifications': notifications})	
 
 @supervisor_logged_in
@@ -251,7 +247,6 @@ def accept_NGO(request, noti_id):
 	 to=[str(noti.NGO_sugg_by)])
 	messages.success(request, "%s is now a trusted NGO."%noti.NGO_name)
 	noti.delete()
-	global_constants.noti_refresh = True
 	return HttpResponseRedirect(reverse('super_suggested_ngos'))
 
 @supervisor_logged_in
@@ -259,7 +254,6 @@ def reject_NGO(request, noti_id):
 	noti = get_object_or_404(Notification, pk=noti_id)
 	messages.info(request, "You have rejected the suggestion of adding %s as a trusted NGO."%noti.NGO_name)
 	noti.delete()
-	global_constants.noti_refresh = True
 	send_email("Thank you but sorry :|","We have reviewed your suggestion for the NGO but as of now have to reject it. But thank you for your suggestion",
 	 to=[str(noti.NGO_sugg_by)])
 	return HttpResponseRedirect(reverse('super_suggested_ngos'))
@@ -320,7 +314,7 @@ def delete_category(request, category_id):
 	category = get_object_or_404(Category,pk =category_id)
 	name = category.name
 	if str(name).lower() == 'other':
-		messages.error(request, "'Other' category cannot be deleted.")
+		messages.warning(request, "'Other' category cannot be deleted.")
 		return HttpResponseRedirect(reverse('super_allcategories'))
 	category.delete()
 	messages.success(request, "%s was deleted"%name)
@@ -413,8 +407,8 @@ def update_ngo(request, NGO_id):
 def change_TA(request, TA_id = '-1'):
 	if eval(TA_id) != -1:
 		ta = get_object_or_404(TA, pk = TA_id)
-		if ta.email in PrivateData.SUPER_SUPERVISOR:
-			messages.error(request, ''.join([ta.email, " can't be removed. Contact the admin to remove this."]))
+		if ta.instructor and not TA.objects.get(email=request.user.email).instructor:
+			messages.info(request, ''.join([ta.email, " can't be removed as the person is an instructor. Contact the admin to remove this."]))
 		else:
 			ta.delete()
 			messages.success(request, "TA deleted successfully.")
@@ -432,10 +426,12 @@ def change_TA(request, TA_id = '-1'):
 
 @supervisor_logged_in
 def generateReport(request):
+	BASE_DIR = getattr(settings, "BASE_DIR")
+
 	months = int(request.POST['date'])
-	projects = Project.objects.filter(stage='completed')
+	projects = Project.objects.filter(stage=project_stage.COMPLETED)
 	projects = projects.filter(
-		expected_finish_date__gte = datetime.datetime.now() - datetime.timedelta(months*31))
+		finish_date__gte = datetime.datetime.now() - datetime.timedelta(months*31))
 
 	report = xlwt.Workbook(encoding="utf-8")
 
@@ -443,6 +439,7 @@ def generateReport(request):
 
 	headings = [
 	"Name",
+	"Batch",
 	"Roll number",
 	"Email",
 	"NGO",
@@ -455,10 +452,11 @@ def generateReport(request):
 		sheet.write(index + 1, 0,  ' '.join([
 			project.student.first_name,
 			project.student.last_name]))
-		sheet.write(index + 1, 1, project.get_rollno())
-		sheet.write(index + 1, 2, project.student.email)
-		sheet.write(index + 1, 3, project.get_NGO())
-		sheet.write(index + 1, 4, project.title)
+		sheet.write(index + 1, 1, project.get_batch())
+		sheet.write(index + 1, 2, project.get_rollno())
+		sheet.write(index + 1, 3, project.student.email)
+		sheet.write(index + 1, 4, project.get_NGO())
+		sheet.write(index + 1, 5, project.title)
 
 	report.save(os.path.join(BASE_DIR, 'report.xls'))
 	report = open(os.path.join(BASE_DIR, 'report.xls'), 'r')

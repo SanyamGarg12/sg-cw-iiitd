@@ -76,8 +76,9 @@ class Project(models.Model):
         return self.NGO_name
 
     def is_submittable(self):
-        return document_type.FINAL_REPORT in (
-                        x.category for x in self.documents.all())
+        return all([self.stage in [project_stage.ONGOING],
+            document_type.FINAL_REPORT in ( x.category for x in self.documents.all()),
+            ])
 
     def delete(self, *args, **kwargs):
         for doc in self.documents.all(): doc.delete()
@@ -119,7 +120,7 @@ class Feedback(models.Model):
     def __unicode__(self):
         return ': '.join([self.project.title, self.experience])
 
-class Bugs(models.Model):
+class Bug(models.Model):
     user        = models.ForeignKey(User, related_name='bugs', null = True)
-    suggestions = models.TextField(max_length=2000)
+    suggestions = models.TextField(max_length=2000, blank=True)
     rating      = models.IntegerField()

@@ -65,11 +65,11 @@
 			{% endif %}
 		</blockquote>
 		<hr />
-{% ifequal project.stage "to_be_verified" %}
+{% ifequal project.stage project_stage.TO_BE_VERIFIED %}
 <a class="btn btn-warning" role="button"  href = "{% url 'verify_project' project.id %}">Verify Project</a>
 {% endifequal %}
 
-{% ifequal project.stage "ongoing" %}
+{% ifequal project.stage project_stage.ONGOING %}
 <a class="btn btn-danger" role="button"  href = "{% url 'unverify_project' project.id %}">Unverify Project</a>
 {% endifequal %}
 
@@ -81,9 +81,9 @@
 
 <a class="btn btn-info" role="button"  href = "{% url 'super_email_project' project.pk %}">Email student about project</a>
 
-{% if project.submitted_and_awaiting_completion %}
+{% ifequal project.stage project_stage.SUBMITTED %}
 <a class="btn btn-warning" role="button"  href = "{% url 'complete' project.pk %}" style="float:right;">Complete Project</a>
-{% endif %}
+{% endifequal %}
 <div class="modal fade" id="confirm_delete_project_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

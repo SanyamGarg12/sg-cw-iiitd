@@ -4,13 +4,13 @@
 <div class="container">
 	<center>
 		<h2>
-		{% ifequal project.project.stage "to_be_verified" %}
+		{% ifequal project.project.stage stages.TO_BE_VERIFIED %}
          <span class="glyphicon glyphicon-flag" title="Unverified" style="color:red"></span>
          {% endifequal %}
-        {% ifequal project.project.stage "ongoing" %}
+        {% ifequal project.project.stage stages.ONGOING %}
           <span class="glyphicon glyphicon-cog" title="Ongoing" style="color:blue"></span>
         {% endifequal %}
-        {% ifequal project.project.stage "completed" %}
+        {% ifequal project.project.stage stages.COMPLETED %}
           <span class="glyphicon glyphicon-ok" title="Completed" style="color:green"></span>
         {% endifequal %}
         {{ project.project.title }}
