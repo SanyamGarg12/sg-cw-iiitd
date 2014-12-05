@@ -86,18 +86,18 @@ def editproject(request, project_id):
          {'form': form, 'instance': instance})
     return HttpResponseRedirect(reverse('index'))
 
-###################
-#Ajaxify
-###################
 @login_required
 def _upload(request, project_id):
     project = get_object_or_404(Project, pk = project_id)
+    if not (request.is_ajax() or request.method == "POST"):
+        messages.warning(request, "There was something wrong in the request made")
+        return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
     if project.student == request.user:
         form = UploadDocumentForm()
-        if not request.FILES.get('document', None):
-            messages.warning(request, "No file selected for upload")
-            return render(request, 'upload_document.html', {'form': form, 'id': project_id})
         if request.method == "POST":
+            if not request.FILES.get('document', None):
+                messages.warning(request, "No file selected for upload")
+                return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
             name = request.FILES['document'].name
             form = UploadDocumentForm(request.POST, request.FILES)
             if form.is_valid():
@@ -106,7 +106,7 @@ def _upload(request, project_id):
                     return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id})) 
                 if request.FILES['document']._size > getattr(settings, 'MAXIMUM_UPLOAD_SIZE_ALLOWED', 10)*1024*1024:
                     messages.warning(request, "File size limit exceeded.")
-                    return render(request, 'upload_document.html', {'form': form, 'id': project_id})
+                    return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
                 Document.objects.create(document=request.FILES['document'],
                  project=project, category=form.cleaned_data['category'], name=name)
                 messages.success(request, "Your document was uploaded successfully")
