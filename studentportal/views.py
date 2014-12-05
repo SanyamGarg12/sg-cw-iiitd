@@ -200,11 +200,10 @@ def all_NGOs(request):
     return render(request, 'all_ngos.html', 
         {'NGOs': NGOs})
 
-###################
-#Ajaxify
-###################
 @login_required
 def suggest_NGO(request):
+    if not (request.method == "POST" or request.is_ajax()):
+        return HttpResponseRedirect(reverse('all_NGO'))
     if request.method == "POST":
         form = suggest_NGOForm(request.POST)
         if form.is_valid():
@@ -214,13 +213,12 @@ def suggest_NGO(request):
                 NGO_details=form.cleaned_data['details'],
                 NGO_sugg_by=request.user)
             messages.success(request, "Thank you for your suggestion. We'll get back to you as soon as possible.")
-            return HttpResponseRedirect(reverse('all_NGO'))
         else:
             messages.warning(request, "There was something wrong in the provided details.")
-    else:
-        form = suggest_NGOForm()
-    return render(request, 'suggest_ngo.html', 
-    {'form': form})
+        return HttpResponseRedirect(reverse('all_NGO'))
+
+    form = suggest_NGOForm()
+    return render(request, 'suggest_ngo.html', {'form': form})
 
 @login_required
 def feedback(request, project_id):
