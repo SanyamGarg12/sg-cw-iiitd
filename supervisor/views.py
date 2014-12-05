@@ -192,13 +192,17 @@ def advance_search(request):
 			return render(request, 'advance_search_results.html',
 				{'projects': projects})
 		messages.warning(request, "The data provided was wrong somehow.")
+		return HttpResponseRedirect(reverse('index'))x`
 	form = AdvanceSearchForm()
 	return render(request, 'advance_search.html',
 		{'form': form})
 
 @supervisor_logged_in
 def add_news(request):
-	if request.method == "POST":
+	if not (request.method == "POST" or request.is_ajax()):
+		messages.warning(request, "There was something funny about the request the server received.")
+		return HttpResponseRedirect(reverse('all_news'))
+	if (request.method == "POST"):
 		form = NewsForm(request.POST)
 		if form.is_valid():
 			form.save()
@@ -206,8 +210,9 @@ def add_news(request):
 				send_email_to_all(str(form.cleaned_data['content']))
 			messages.success(request, 'News has been posted.')
 			return HttpResponseRedirect(reverse('all_news'))
-	else:
-		form = NewsForm
+		messages.warning(request, "The new post data was incomplete or incorrect.")
+		return HttpResponseRedirect(reverse('all_news'))
+	form = NewsForm()
 	return render(request, 'add_news.html',
 		{'form': form})
 
