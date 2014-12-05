@@ -62,6 +62,8 @@ body {
     width: 50%; /* 6 columns */
   }
 }
+
+.ajaxify-btn{}
 </style>
 </head>
 
@@ -150,5 +152,15 @@ body {
       $('.row-offcanvas').toggleClass('active')
         });
       });
+
+      $(".ajaxify-btn").click(function(){
+        console.log("Button clicked");
+        var link = this.dataset['link'];
+        console.log("Link:" + link);
+        $("#base-modal-content").load(link, function(){
+          console.log("Loaded opening modal");
+          $("#base-modal").modal('show');
+        })
+      })
     </script>
 </body></html>
