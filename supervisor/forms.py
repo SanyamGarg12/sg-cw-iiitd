@@ -9,7 +9,7 @@ class AdvanceSearchForm(forms.Form):
                                 (0, 'All'),
                                 (ps.TO_BE_VERIFIED, 'Awaiting acceptance',),
                                 (ps.ONGOING, 'Ongoing'),
-                                (ps.SUBMITTED, 'submitted'),
+                                (ps.SUBMITTED, 'Submitted'),
                                 (ps.COMPLETED, 'Completed')),
                         label="Stage of project")
     name            = forms.CharField(label="Name of student", required = False) 
