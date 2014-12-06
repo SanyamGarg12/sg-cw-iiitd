@@ -71,13 +71,13 @@
             {% for p in example_projects.all %}
             <div class="col-6 col-sm-6 col-lg-4">
             <blockquote>
-              {% ifequal p.project.stage "to_be_verified" %}
+              {% ifequal p.project.stage stages.TO_BE_VERIFIED %}
                  <span class="glyphicon glyphicon-flag" title="Unverified" style="color:red;"></span>
                  {% endifequal %}
-                {% ifequal p.project.stage "ongoing" %}
+                {% ifequal p.project.stage stages.ONGOING %}
                   <span class="glyphicon glyphicon-cog" title="Ongoing" style="color:blue;"></span>
                 {% endifequal %}
-                {% ifequal p.project.stage "completed" %}
+                {% ifequal p.project.stage stages.COMPLETED %}
                   <span class="glyphicon glyphicon-ok" title="Completed" style="color:green;"></span>
                 {% endifequal %}
               <p>
@@ -117,6 +117,7 @@
           </div>
         </div><!--/span-->
 
+        {% if user.is_authenticated %}
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="leaderboard_sidebar" role="navigation">
           <center><span class="list-group-item active">Leaderboard</span></center>
           <div class="list-group">
@@ -134,6 +135,7 @@
             {% endfor %}
           </div>
         </div><!--/span-->
+        {% endif %}
 
       </div><!--/row-->
 

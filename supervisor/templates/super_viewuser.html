@@ -6,13 +6,18 @@
 		<h3>Email: </h3> 
 		<blockquote>{{ student.email }}</blockquote>
 <h3>Projects</h3>
-	{% if student.projects.all %}
+	{% if projects %}
 	<blockquote>
 	<ul>
-	{% for p in student.projects.all %}
-		<li><a href = "{% url 'super_viewproject' p.pk %}">
-		<strong>{{ p.title|truncatechars:"200" }}</strong>
-		</a></li>
+	{% for p in projects %}
+		<li>
+			<a href = "{% url 'super_viewproject' p.pk %}">
+				<strong>{{ p.title|truncatechars:"200" }}</strong> 
+			</a>
+			 {% if p.deleted %}
+			 	<span class="glyphicon glyphicon-trash" style="color:red; margin-left:10px;" title="deleted"></span> 
+			 {% endif %}
+		</li>
 		<br />
 	{% endfor %}
 	</blockquote>

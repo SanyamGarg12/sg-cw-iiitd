@@ -1,19 +1,13 @@
-{% extends 'core.html' %}
 {% load bootstrap %}
-{% block content %}
-<div class="container" style="width:75%;">
-<div class="panel panel-default">
-<div class="panel-heading">
-<h3 class="panel-title">
-Upload a file for your project.
-</h3>
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	<h4 class="modal-title" id="ModalLabel"> <strong>Upload a file for your project</strong> </h4>
 </div>
-<div class="panel-body">
-<form action="{% url 'upload_document' id %}" method = "post" enctype="multipart/form-data"> {% csrf_token %}
-{{ form|bootstrap_horizontal }}
-<input type='submit' value='Upload' class="btn btn-info btn-lg" style="margin-top:10px; float:right;" />
-</form>
+
+<div class="modal-body clearfix">
+	<form action="{% url 'upload_document' id %}" method = "post" enctype="multipart/form-data"> {% csrf_token %}
+	{{ form|bootstrap_horizontal }}
+	<input type='submit' value='Upload' class="btn btn-info btn-lg" style="margin-top:10px; float:right;" />
+	</form>
 </div>
-</div>
-</div>
-{% endblock %}

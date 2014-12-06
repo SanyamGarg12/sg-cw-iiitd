@@ -31,6 +31,7 @@ Add a TA
         <th>#</th>
         <th>Email</th>
         <th></th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -38,7 +39,12 @@ Add a TA
       <tr>
         <td>{{ forloop.counter }}</td>
         <td>{{ t.email }}</td>
-        <td><button class="btn-link glyphicon glyphicon-remove" style="color:red;" data-toggle="modal" data-target="#confirm_delete_TA_{{ t.pk }}_modal"></button></td>
+        <td>
+          <button class="btn-link glyphicon glyphicon-remove" style="color:red;" data-toggle="modal" data-target="#confirm_delete_TA_{{ t.pk }}_modal"></button>
+        </td>
+        <td>
+          <a href="{% url 'super_TA_logs' t.pk %}">View logs</a>
+        </td>
         </tr>
     {% endfor %}
     </tbody>

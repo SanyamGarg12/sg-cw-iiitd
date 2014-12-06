@@ -8,35 +8,29 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
-from PrivateData import EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
-from django.contrib.messages import constants as message_constants
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'vfjmla@4)kxg8s7*8zg&^%y$fu5pn7p66ds%+q1qnde-9-(+$w'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
 TEMPLATE_DIRS = (
     BASE_DIR + '/studentportal/templates/'
-    )
+)
 
 MEDIA_ROOT = BASE_DIR + '/media/'
 MEDIA_URL = '/media/'
 
 SITE_ID = 1
-
-
 
 # Application definition
 
@@ -48,8 +42,14 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'studentportal',
     'supervisor',
+    'djrill',
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers',
     'allauth.socialaccount.providers.google',
     'bootstrapform',
 )
@@ -70,8 +70,7 @@ WSGI_APPLICATION = 'CW_Portal.wsgi.application'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
-    )
-
+)
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
@@ -81,16 +80,19 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
 )
 
-
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/accounts/login'
+LOGIN_URL = '/accounts/login/'
 SOCIALACCOUNT_QUERY_EMAIL = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-    'SCOPE': ['https://www.googleapis.com/auth/userinfo.email',
-     'https://www.googleapis.com/auth/userinfo.profile'],
+    'SCOPE': [
+    'https://www.googleapis.com/auth/userinfo.email',
+     'https://www.googleapis.com/auth/userinfo.profile',
+     'https://www.googleapis.com/auth/plus.login',
+     'https://www.googleapis.com/auth/plus.me'
+     ],
      'AUTH_PARAMS': {'access_type': 'online'}
     }
 }
@@ -99,18 +101,18 @@ SOCIALACCOUNT_PROVIDERS = {
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
-    'development': {
+    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'CW_Portal_DB', #will change
-        'USER': '', #will change
-        'PASSWORD': '', # will change
-        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on WILL CHANGE
-        'PORT': '3306',
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': os.environ['DB_NAME'],
+    #     'USER': os.environ['DB_USER'],
+    #     'PASSWORD': os.environ['DB_PASSWORD'],
+    #     'HOST': 'localhost',   # Or an IP Address that your DB is hosted on WILL CHANGE
+    #     'PORT': '3306',
+    # }
 }
 
 # Internationalization
@@ -133,21 +135,35 @@ APPEND_SLASH = True
 
 STATIC_URL = '/static/'
 
+STATISTICS_FOLDER_NAME = os.environ['STATISTICS_FOLDER_NAME']
+
 STATICFILES_DIR = (
     os.path.join(
         BASE_DIR,
         'static',
         ),
     )
+CACHES = {
+    'default': {
+        'TIMEOUT': None,
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
 
-ALLOWED_DOMAINS = ['iiitd.ac.in','gmail.com',]
+ALLOWED_DOMAINS = ['iiitd.ac.in']
 
-SOCIALACCOUNT_ADAPTER = 'studentportal.views.DomainLoginAdapter'
-ACCOUNT_ADAPTER = 'studentportal.views.NoMessagesLoginAdapter'
+SOCIALACCOUNT_ADAPTER = 'studentportal.adapters.DomainLoginAdapter'
+ACCOUNT_ADAPTER = 'studentportal.adapters.NoMessagesLoginAdapter'
+MAXIMUM_UPLOAD_SIZE_ALLOWED = 10
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 
+EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+MANDRILL_API_KEY = os.environ['MANDRILL_API_KEY']
+LnF404_url = os.environ['LnF404_url']
+LnF404_SiteID = os.environ['LnF404_SiteID']
+LnF404_token  = os.environ['LnF404_token']
 
-MESSAGE_TAGS = {message_constants.ERROR: 'danger'}
+ALLOWED_HOSTS = ['*']
