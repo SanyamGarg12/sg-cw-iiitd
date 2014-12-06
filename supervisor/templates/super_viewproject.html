@@ -92,7 +92,7 @@
         <h4 class="modal-title" id="ModalLabel">Delete Project</h4>
       </div>
       <div class="modal-body">
-        Are you sure you want to delete this CW Project "{{ project.title }}"? This action is irrevocable.
+        Are you sure you want to delete this CW Project "{{ project.title }}"? This action is revertable.
       </div>
       <div class="modal-footer">
 	      <a class="btn btn-danger" href="{% url 'super_delete_project' project.id %}" role="button">Delete</a>
