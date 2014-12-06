@@ -31,28 +31,35 @@
   </table>
 </div>
 
+<style type="text/css">
+  .placeholder{
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+</style>
+{% else %}
+<h1 class="page-header">It's lonely in here :(</h1>
+{% endif %}
 <h1 class="page-header">Statistics</h1>
 <div class="row placeholders">
-  <div class="col-xs-6 col-sm-6 placeholder">
-    <object data="{% static 'statistics/feedback_experience_piechart.svg' %}" type="image/svg+xml">
+  <div class="col-xs-6 col-sm-6 col-md-6 placeholder" style="margin:10px 0px 10px 0px;">
+    <object data="/media/{{ statistics_folder_name }}/feedback_experience_piechart.svg" type="image/svg+xml">
     </object>
     <h4>Student experience while doing Community Work</h4>
     <span class="text-muted">based on the feedback filled by the students after completion.</span>
   </div>
-  <div class="col-xs-6 col-sm-6 placeholder">
-    <object data="{% static 'statistics/project_to_month_distribution.svg' %}" type="image/svg+xml">
+  <div class="col-xs-6 col-sm-6 col-md-6 placeholder" style="margin:10px 0px 10px 0px;">
+    <object data="/media/{{ statistics_folder_name }}/project_to_month_distribution.svg" type="image/svg+xml">
     </object>
     <h4>Project started v/s month of year</h4>
     <span class="text-muted">Projects started at different time of year</span>
   </div>
-  <div class="col-xs-6 col-sm-6 placeholder">
-    <object data="{% static 'statistics/project_category_piechart.svg' %}" type="image/svg+xml">
+  <div class="col-xs-6 col-sm-6 col-md-6 placeholder" style="margin:10px 0px 10px 0px;">
+    <object data="/media/{{ statistics_folder_name }}/project_category_piechart.svg" type="image/svg+xml">
     </object>
     <h4>Projects according to their category</h4>
     <span class="text-muted">Number of projects that students worked in each category</span>
   </div>
 </div>
-{% else %}
-<h1 class="page-header">It's lonely in here :(</h1>
-{% endif %}
+
 {% endblock %}

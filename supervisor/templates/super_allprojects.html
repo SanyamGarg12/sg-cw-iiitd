@@ -39,23 +39,35 @@
     {% for p in projects %}
       <tr>
         <td>{{ forloop.counter }}</td>
-        <td><a href="{% url 'super_viewuser' p.student.pk %}">{{ p.student.first_name }} {{ p.student.last_name }}</td>
+        <td>
+          <a href="{% url 'super_viewuser' p.student.pk %}">{{ p.student.first_name }} {{ p.student.last_name }}
+        </td>
         <td>{{ p.student.email }}</td>
         <td>{{ p.get_rollno }}</td>
         <td><a href="{% url 'super_viewproject' p.id %}">{{ p.title|truncatechars:60 }}</a></td>
-        <td>{{ p.credits }}</td>
+        <td>
+          {{ p.credits }}
+          {% if p.deleted %} <span class="glyphicon glyphicon-trash" style="color:red; margin-left:10px;" title="deleted"></span> {% endif %}
+        </td>
       </tr>
     {% endfor %}
     </tbody>
   </table>
-{% if 0 %}
-  {% if back %}
-  <a class="btn btn-warning" role="button"  href = "{% url 'super_allprojects' back %}">Previous</a>
-  {% endif %}
-  {% if next %}
-  <a class="btn btn-warning" role="button"  href = "{% url 'super_allprojects' next %}" style="float:right;">Next</a>
-  {% endif %}
-{% endif %}
+  <div class="pagination">
+    <span class="step-links">
+        {% if projects.has_previous %}
+            <a class="btn btn-warning" role="button"  href = "?page={{ projects.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page <b>{{ projects.number }}</b> of {{ projects.paginator.num_pages }}
+        </span>
+
+        {% if projects.has_next %}
+            <a class="btn btn-warning" role="button"  href = "?page={{ projects.next_page_number }}" style="float:right;">Next</a>
+        {% endif %}
+    </span>
+  </div>
 </div>
 {% else %}
 There are no projects added.

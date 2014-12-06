@@ -1,0 +1,23 @@
+{% extends 'supervisorcore.html' %}
+{% load humanize %}
+{% block content %}
+	<center>
+		<h1 class="page-header">{{ ta.name }}</h1>
+	</center>
+		<h3>email: {{ ta.email }}</h3> 
+
+		<ul>
+		{% for diff in diffs %}
+			<li>
+				<strong>{{ diff.get_clear_description }}</strong>
+				<blockquote style="font-size:14px;">
+					Project:{% if diff.project %} <a href="{% url 'super_viewproject' diff.project.pk %}">{{ diff.project.title }}</a>{% else %} - {% endif %} <br />
+					When: {{ diff.when|naturaltime }} <br>
+					Details: {{ diff.details }}
+				</blockquote>
+			</li>
+		{% endfor %}
+		</ul>
+<hr />
+
+{% endblock %}

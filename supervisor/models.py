@@ -3,24 +3,60 @@ from django.contrib.auth.models import User
 from studentportal.models import Project, NGO, Category
 from django import forms
 from django.utils import timezone
-from CW_Portal import global_constants
 from django.contrib.admin import widgets
 
+class notification_type(object):
+    NEW_PROJECT, PROJECT_FINISHED, NGO_SUGGESTION = range(1,4)
+
+nt = notification_type()
+
+class diff_type(object):
+    PROJECT_ADDED, PROJECT_EDITED, PROJECT_SUBMITTED, PROJECT_VERIFIED, PROJECT_UNVERIFIED, \
+    ADDED_AS_EXAMPLE, REMOVED_AS_EXAMPLE, PROJECT_COMPLETED, DOCUMENT_UPLOADED, EMAIL_SENT, \
+    PROJECT_DELETED, FEEDBACK_GIVEN, ADD_TA, REMOVE_TA = range(1,15)
+
+_ = diff_type()
+diff_mapping = {
+    _.PROJECT_ADDED: "Project added", _.PROJECT_EDITED: "Project edited",
+    _.PROJECT_SUBMITTED: "Project submitted", _.PROJECT_VERIFIED: "Project verified",
+    _.PROJECT_UNVERIFIED: "Project unverified", _.ADDED_AS_EXAMPLE: "Added as example",
+    _.REMOVED_AS_EXAMPLE: "Removed as example", _.PROJECT_COMPLETED: "Project completed",
+    _.DOCUMENT_UPLOADED: "Document uploaded", _.EMAIL_SENT: "Sent an email",
+    _.PROJECT_DELETED: "Project deleted", _.FEEDBACK_GIVEN: "Feedback given",
+    _.ADD_TA: "Added TA", _.REMOVE_TA: "Removed TA"
+}
+
+def add_notification(noti_type, **kwargs):
+    if noti_type in [nt.NEW_PROJECT, nt.PROJECT_FINISHED]:
+        Notification.objects.create(noti_type=noti_type,
+                                    project=kwargs['project'])
+    elif noti_type == nt.NGO_SUGGESTION:
+        Notification.objects.create(noti_type=noti_type,
+                NGO_name=kwargs['NGO_name'],
+                NGO_link=kwargs['NGO_link'],
+                NGO_details=kwargs['NGO_details'],
+                NGO_sugg_by=kwargs['NGO_sugg_by'])
+
+def add_diff(diff_type, **kwargs):
+    (person, project, details) = map(lambda x: kwargs.get(x, None),
+                                        ['person', 'project', 'details'])
+    Diff.objects.create(diff_type=diff_type, person=person,
+                            project=project, details=details)
+
 class Notification(models.Model):
-    noti_id = models.IntegerField(primary_key= True)
-    noti_type   = models.CharField(max_length=16, null=True, blank=True)
-    #noti_type include -> new, finish, suggest
+    noti_id     = models.IntegerField(primary_key= True)
+    noti_type   = models.IntegerField(max_length=5, null=True, blank=True)
     project     = models.ForeignKey(Project, null= True, unique= False)
-    NGO_name    = models.CharField(max_length=255, blank=True)
+    NGO_name    = models.CharField(max_length=200, blank=True)
     NGO_link    = models.URLField(max_length=200, blank=True)
     NGO_details = models.TextField(blank=True)
-    NGO_sugg_by = models.CharField(max_length=255) 
+    NGO_sugg_by = models.ForeignKey(User, null=True)
 
 class Example(models.Model):
-    project      = models.OneToOneField(Project, primary_key = True)
-    date_created = models.DateTimeField(default = timezone.now)
-    likes_count = models.IntegerField(default=0)
-    comments_count = models.IntegerField(default=0)
+    project         = models.OneToOneField(Project, primary_key = True)
+    date_created    = models.DateTimeField(default = timezone.now)
+    likes_count     = models.IntegerField(default=0)
+    comments_count  = models.IntegerField(default=0)
     
     def delete(self, *args, **kwargs):
         for l in self.likes.all():
@@ -30,23 +66,21 @@ class Example(models.Model):
         super(Example, self).delete(*args, **kwargs)
 
 class Like(models.Model):
-    project = models.ForeignKey(Example, related_name='likes')
-    liked_by = models.ForeignKey(User, related_name='liked_projects')
+    project     = models.ForeignKey(Example, related_name='likes')
+    liked_by    = models.ForeignKey(User, related_name='liked_projects')
     def save(self, *args, **kwargs):
         self.project.likes_count += 1
         self.project.save()
-        global_constants.leaderboard_refresh = True
         super(Like, self).save(*args, **kwargs)
     def delete(self, *args, **kwargs):
         self.project.likes_count -= 1
         self.project.save()
-        global_constants.leaderboard_refresh = True
         super(Like, self).delete(*args, **kwargs)
 
 class Comment(models.Model):
-    text = models.CharField(max_length=200) 
-    project = models.ForeignKey(Example, related_name='comments')
-    commentor = models.ForeignKey(User, related_name='comments')
+    text        = models.CharField(max_length=200) 
+    project     = models.ForeignKey(Example, related_name='comments')
+    commentor   = models.ForeignKey(User, related_name='comments')
     def save(self, *args, **kwargs):
         self.project.comments_count += 1
         self.project.save()
@@ -56,70 +90,23 @@ class Comment(models.Model):
         self.project.save()
         super(Comment, self).delete(*args, **kwargs)
 
-
 class News(models.Model):
-    content = models.TextField(max_length=1000)
-    date_created = models.DateTimeField(default = timezone.now)
-    priority = models.IntegerField()
-    #from 1,2
+    content         = models.TextField(max_length=1000)
+    date_created    = models.DateTimeField(default = timezone.now)
+    priority        = models.BooleanField(default=False)
     def get_priority(self):
-        if self.priority == 1: return "Low"
-        else: return "High"
+        return "High" if self.priority else "Low"
 
 class TA(models.Model):
-    email = models.CharField(max_length = 100)
+    email       = models.CharField(max_length = 100)
+    instructor  = models.BooleanField(default=False)
 
-class TAForm(forms.ModelForm):
-    class Meta:
-        model = TA
-    email = forms.CharField(label = "IIIT-D Email of the TA", required=True)
+class Diff(models.Model):
+    diff_type   = models.IntegerField(max_length=12)
+    person      = models.ForeignKey(User, null=True, related_name='diff')
+    project     = models.ForeignKey(Project, null=True, related_name='diff')
+    details     = models.TextField(max_length=1000, null=True)
+    when        = models.DateTimeField(default=timezone.now)
 
-class AdvanceSearchForm(forms.Form):
-    stage = forms.ChoiceField(choices=(
-        ('all', 'all'),('ongoing', 'ongoing'),('to_be_verified', 'unverified'), ('completed', 'completed')
-        ),
-    label="Stage of project"
-    )
-    name = forms.CharField(label="Name of student", required = False) 
-    email = forms.EmailField(label="Email", required = False)
-    roll_no = forms.IntegerField(required = False, label="Roll number")
-    project_title = forms.CharField(required = False, label = "Words in project title")
-    NGO_name = forms.CharField(required = False, label = "Name of the NGO")
-    year_choices = ((x,str(x)) for x in range(2014, timezone.now().year + 1))
-    proposal_year = forms.ChoiceField(choices = year_choices, label="Year of proposal of CW project")
-    category = forms.ModelChoiceField(queryset=Category.objects.all(),
-         empty_label='All', required=False, label="Category of the project")
-    # time_completed_before
-    # time_completed_after
-
-class NewsForm(forms.ModelForm):
-    priority = forms.ChoiceField( choices=(
-        (1, "Low"), (2, "High"),),
-        help_text = "High priority will also send a mail to all the students who are still doing their projects."
-        )
-    class Meta:
-        model = News
-        fields = ['content', 'priority']
-
-class NewCategoryForm(forms.Form):
-    name = forms.CharField(label="Name of the category", required=True)
-    description = forms.CharField(label="Describe the category", required=False)
-
-class NewNGOForm(forms.Form):
-    name = forms.CharField(label="Name of the NGO")
-    link = forms.CharField(label="Link for the NGO", required = False)
-    details = forms.CharField(label="Something about the NGO", required=False)
-
-class EmailProjectForm(forms.Form):
-    to = forms.CharField(label="Student Email", required = True)
-    body = forms.CharField(label="Body", widget=forms.Textarea, required=True)
-
-class NewCommentForm(forms.ModelForm):
-    text = forms.CharField(label="Comment: ", required=True)
-    class Meta:
-        model = Comment
-        fields = ['text']
-
-class ReportForm(forms.Form):
-    date = forms.ChoiceField(label="Projects which were marked as complete within these past months : ",
-     choices=tuple([(x, x) for x in range(1, 13)]))
+    def get_clear_description(self):
+        return diff_mapping[self.diff_type]

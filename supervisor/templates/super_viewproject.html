@@ -15,6 +15,10 @@
 		<blockquote>
 			{{ project.student.email }}
 		</blockquote>
+		<h2>Status</h2>
+		<blockquote>
+			{{ project.get_project_status }}
+		</blockquote>
 		<h2>Credits</h2>
 		<blockquote>
 			{{ project.credits }}
@@ -65,11 +69,11 @@
 			{% endif %}
 		</blockquote>
 		<hr />
-{% ifequal project.stage "to_be_verified" %}
+{% ifequal project.stage project_stage.TO_BE_VERIFIED %}
 <a class="btn btn-warning" role="button"  href = "{% url 'verify_project' project.id %}">Verify Project</a>
 {% endifequal %}
 
-{% ifequal project.stage "ongoing" %}
+{% ifequal project.stage project_stage.ONGOING %}
 <a class="btn btn-danger" role="button"  href = "{% url 'unverify_project' project.id %}">Unverify Project</a>
 {% endifequal %}
 
@@ -80,10 +84,11 @@
 {% endif %}
 
 <a class="btn btn-info" role="button"  href = "{% url 'super_email_project' project.pk %}">Email student about project</a>
+<a class="btn btn-default" role="button"  href = "{% url 'super_project_logs' project.pk %}">Project logs</a>
 
-{% if project.submitted_and_awaiting_completion %}
+{% ifequal project.stage project_stage.SUBMITTED %}
 <a class="btn btn-warning" role="button"  href = "{% url 'complete' project.pk %}" style="float:right;">Complete Project</a>
-{% endif %}
+{% endifequal %}
 <div class="modal fade" id="confirm_delete_project_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -92,7 +97,7 @@
         <h4 class="modal-title" id="ModalLabel">Delete Project</h4>
       </div>
       <div class="modal-body">
-        Are you sure you want to delete this CW Project "{{ project.title }}"? This action is irrevocable.
+        Are you sure you want to delete this CW Project "{{ project.title }}"? This action is revertable.
       </div>
       <div class="modal-footer">
 	      <a class="btn btn-danger" href="{% url 'super_delete_project' project.id %}" role="button">Delete</a>
@@ -100,5 +105,29 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="confirm_force_delete_project_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="ModalLabel">Delete Project</h4>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this ? All data would be lost. This action is irrevocable.
+      </div>
+      <div class="modal-footer">
+	      <a href="{% url 'super_force_delete_project' project.pk %}" class="btn btn-danger pull-right">Delete forever</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% if project.deleted %}
+<a href="{% url 'super_revert_delete_project' project.pk %}" class="btn btn-info">Revert delete</a>
+<button class="btn btn-danger pull-right" data-toggle="modal" data-target="#confirm_force_delete_project_modal" >Delete forever</button>
+{% else %}
 <button class="btn btn-danger pull-right" data-toggle="modal" data-target="#confirm_delete_project_modal" >Delete project</button>
+{% endif %}
 {% endblock %}

@@ -1,12 +1,13 @@
-{% extends 'supervisorcore.html' %}
 {% load bootstrap %}
-{% block content %}
 
-<h2 class="page-header">
-Advance search filters
-</h2>
-<form action="{% url 'advance_search' %}" method = "post" enctype="multipart/form-data"> {% csrf_token %}
-{{ form|bootstrap_horizontal:'col-lg-3' }}
-<input type="submit" value="Search" class="btn btn-info btn-lg pull-right" style="margin-right:10px; margin-top:10px;" >
-</form>
-{% endblock %}
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	<h4 class="modal-title" id="ModalLabel"> <strong>Advanced search filters</strong> </h4>
+</div>
+
+<div class="modal-body clearfix">
+	<form action="{% url 'advance_search' %}" method = "post" enctype="multipart/form-data"> {% csrf_token %}
+	{{ form|bootstrap_horizontal:'col-lg-5 col-md-6 col-sm-6' }}
+	<input type="submit" value="Search" class="btn btn-info btn-lg pull-right" style="margin-right:10px; margin-top:10px;" >
+	</form>
+</div>

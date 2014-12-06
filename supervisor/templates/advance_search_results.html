@@ -19,7 +19,7 @@
     <tbody>
     {% for p in projects %}
       <tr>
-        <td>{{ forloop.counter }}</td>
+        <td>{{ forloop.counter }} {% if p.deleted %} <span class="glyphicon glyphicon-trash" style="color:red; margin-left:10px;" title="deleted"></span> {% endif %}</td>
         <td><a href="{% url 'super_viewuser' p.student.pk %}">{{ p.student.first_name }} {{ p.student.last_name }}</a></td>
         <td>{{ p.student.email }}</td>
         <td>{{ p.get_rollno }}</td>

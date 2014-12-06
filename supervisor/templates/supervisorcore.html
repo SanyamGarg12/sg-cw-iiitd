@@ -13,6 +13,7 @@
   .col-sm-offset-3 {
     margin-left: 0%;
   };
+  .ajaxify-btn{};
   </style>
   </head>
   <body style="padding-top: 70px;">
@@ -30,8 +31,9 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="{% url 'advance_search' %}">Advance Search</a></li>
-            <li><a href="{% url 'bugs' %}"> Report bug </a></li>
+            <li><a href="{% url 'studenthome' %}">View as Student</a></li>
+            <li><a  class="btn-link ajaxify-btn" data-link="{% url 'advance_search' %}">Advanced Search</a></li>
+            <li><a class="btn-link ajaxify-btn" data-link="{% url 'bugs' %}"> Report bug </a></li>
             <li><a href="{% url 'supervisor_logout' %}">Logout</a></li>
           </ul>
           <form class="navbar-form navbar-right" action="/supervisor/basic_search/" method="POST">
@@ -85,6 +87,20 @@
       </div>
     </div>
 
+    <div class="modal fade" id="base-modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content" id="base-modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
+
 {% block core-footer %}
 <hr />
 <div class="container">
@@ -101,5 +117,15 @@
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}" type="text/javascript"></script>
     <!-- // <script src="Dashboard%20Template%20for%20Bootstrap_files/docs.js"></script> -->
-  
+    <script type="text/javascript">
+    $(".ajaxify-btn").click(function(){
+        console.log("Button clicked");
+        var link = this.dataset['link'];
+        console.log("Link:" + link);
+        $("#base-modal-content").load(link, function(){
+          console.log("Loaded opening modal");
+          $("#base-modal").modal('show');
+        })
+      });
+    </script>
 </body></html>
