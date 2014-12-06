@@ -43,7 +43,7 @@ def _RenderProjectToMonthDistribution():
         for project in Project.objects.all():
             month[project.date_created.month] += 1
         chart.add(str(year),[month[x] for x in sorted(month)] )
-    chart.render_to_file(os.path.join(media_root, 
+    chart.render_to_file(os.path.join(media_root,
                         '%s/project_to_month_distribution.svg'%folder))
 
 def _RenderProjectCategoryPieChart():
