@@ -10,8 +10,21 @@ class notification_type(object):
 
 nt = notification_type()
 
-# class diff_type(object):
-#     PROJECT_EDITED, EMAIL_SENT, PROJECT_DELETED, 
+class diff_type(object):
+    PROJECT_ADDED, PROJECT_EDITED, PROJECT_SUBMITTED, PROJECT_VERIFIED, PROJECT_UNVERIFIED, \
+    ADDED_AS_EXAMPLE, REMOVED_AS_EXAMPLE, PROJECT_COMPLETED, DOCUMENT_UPLOADED, EMAIL_SENT, \
+    PROJECT_DELETED, FEEDBACK_GIVEN, ADD_TA, REMOVE_TA = range(1,15)
+
+_ = diff_type()
+diff_mapping = {
+    _.PROJECT_ADDED: "Project added", _.PROJECT_EDITED: "Project edited",
+    _.PROJECT_SUBMITTED: "Project submitted", _.PROJECT_VERIFIED: "Project verified",
+    _.PROJECT_UNVERIFIED: "Project unverified", _.ADDED_AS_EXAMPLE: "Added as example",
+    _.REMOVED_AS_EXAMPLE: "Removed as example", _.PROJECT_COMPLETED: "Project completed",
+    _.DOCUMENT_UPLOADED: "Document uploaded", _.EMAIL_SENT: "Sent an email",
+    _.PROJECT_DELETED: "Project deleted", _.FEEDBACK_GIVEN: "Feedback given",
+    _.ADD_TA: "Added TA", _.REMOVE_TA: "Removed TA"
+}
 
 def add_notification(noti_type, **kwargs):
     if noti_type in [nt.NEW_PROJECT, nt.PROJECT_FINISHED]:
@@ -23,6 +36,12 @@ def add_notification(noti_type, **kwargs):
                 NGO_link=kwargs['NGO_link'],
                 NGO_details=kwargs['NGO_details'],
                 NGO_sugg_by=kwargs['NGO_sugg_by'])
+
+def add_diff(diff_type, **kwargs):
+    (person, project, details) = map(lambda x: kwargs.get(x, None),
+                                        ['person', 'project', 'details'])
+    Diff.objects.create(diff_type=diff_type, person=person,
+                            project=project, details=details)
 
 class Notification(models.Model):
     noti_id     = models.IntegerField(primary_key= True)
@@ -82,5 +101,12 @@ class TA(models.Model):
     email       = models.CharField(max_length = 100)
     instructor  = models.BooleanField(default=False)
 
-# class Diff(models.Model):
-# 
+class Diff(models.Model):
+    diff_type   = models.IntegerField(max_length=12)
+    person      = models.ForeignKey(User, null=True, related_name='diff')
+    project     = models.ForeignKey(Project, null=True, related_name='diff')
+    details     = models.TextField(max_length=1000, null=True)
+    when        = models.DateTimeField(default=timezone.now)
+
+    def get_clear_description(self):
+        return diff_mapping[self.diff_type]
