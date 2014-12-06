@@ -1,5 +1,8 @@
 *.sqlite3
 *.pyc
-PrivateData.py
+*.conf
+*.ini
+*.log
 media
 static
+uwsgi_params
