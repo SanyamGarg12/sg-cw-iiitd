@@ -11,6 +11,8 @@ from studentportal.views import index
 from studentportal import startup
 
 startup.work()
+handler404 = 'studentportal.views.handle404_LnF'
+handler500 = 'studentportal.views.handle404_LnF'
 
 urlpatterns = patterns('',
     url(r'^$', index, name='index'),

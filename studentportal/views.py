@@ -1,4 +1,7 @@
 from datetime import date
+import json
+from urllib import urlencode
+from urllib2 import urlopen
 
 from django.contrib import messages
 from django.contrib.auth import logout
@@ -367,3 +370,36 @@ def delete_comment(request, comment_id):
         comment.delete()
         messages.info(request, "Comment deleted.")
     return HttpResponseRedirect(reverse('view_example', kwargs={'example_id': example_id}))
+
+def handle404_LnF(request):
+
+    class Item(object):
+        def __init__(self, name, location, info, email):
+            self.name = name
+            self.location = location
+            self.info = info
+            self.email = email
+
+    url = settings.LnF404_url
+    site_id = settings.LnF404_SiteID
+    token = settings.LnF404_token
+    q = 6
+
+    data = urlencode({
+        'id': site_id, 'token': token, 'quantity': q
+        })
+    request = urlopen(url, data)
+    resp = json.loads(request.read())
+
+    items = []
+    if resp['success'] == 'true' and resp['quantity'] != 0:
+        for i in range(int(resp['quantity'])):
+            items.append(Item(
+            resp[str(i)]['item-name'],
+            resp[str(i)]['location'],
+            resp[str(i)]['info'],
+            resp[str(i)]['email'],
+            ))
+    return render(request, 'LnF404.html',{
+                    'items': items})
+    # render LnF404.html. Also check if items is empty

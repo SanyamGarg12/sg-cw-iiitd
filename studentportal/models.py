@@ -139,7 +139,7 @@ class Feedback(models.Model):
                       (4,"Good"), (5,"Very Good")), default=1)
 
     def __unicode__(self):
-        return ': '.join([self.project.title, self.experience])
+        return ': '.join([self.project.title, str(self.experience)])
 
 class Bug(models.Model):
     user        = models.ForeignKey(User, related_name='bugs', null = True)
