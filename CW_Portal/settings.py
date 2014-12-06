@@ -16,7 +16,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'vfjmla@4)kxg8s7*8zg&^%y$fu5pn7p66ds%+q1qnde-9-(+$w'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -107,9 +107,9 @@ DATABASES = {
     },
     # 'default': {
     #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'CW_Portal_DB', #will change
-    #     'USER': '', #will change
-    #     'PASSWORD': '', # will change
+    #     'NAME': os.environ['DB_NAME'],
+    #     'USER': os.environ['DB_USER'],
+    #     'PASSWORD': os.environ['DB_PASSWORD'],
     #     'HOST': 'localhost',   # Or an IP Address that your DB is hosted on WILL CHANGE
     #     'PORT': '3306',
     # }
@@ -135,7 +135,7 @@ APPEND_SLASH = True
 
 STATIC_URL = '/static/'
 
-STATISTICS_FOLDER_NAME = "some-folder-with-weird-name"
+STATISTICS_FOLDER_NAME = os.environ['STATISTICS_FOLDER_NAME']
 
 STATICFILES_DIR = (
     os.path.join(
@@ -152,12 +152,13 @@ CACHES = {
 }
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
 
 ALLOWED_DOMAINS = ['iiitd.ac.in']
 
 SOCIALACCOUNT_ADAPTER = 'studentportal.adapters.DomainLoginAdapter'
 ACCOUNT_ADAPTER = 'studentportal.adapters.NoMessagesLoginAdapter'
 MAXIMUM_UPLOAD_SIZE_ALLOWED = 10
-EMAIL_HOST_USER = "abc@gmail.com"
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+
+EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+MANDRILL_API_KEY = os.environ['MANDRILL_API_KEY']
