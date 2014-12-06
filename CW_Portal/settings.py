@@ -81,7 +81,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/accounts/login/'
+LOGIN_URL = '/accounts/google/login/'
 SOCIALACCOUNT_QUERY_EMAIL = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
@@ -101,18 +101,18 @@ SOCIALACCOUNT_PROVIDERS = {
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': os.environ['DB_NAME'],
-    #     'USER': os.environ['DB_USER'],
-    #     'PASSWORD': os.environ['DB_PASSWORD'],
-    #     'HOST': 'localhost',   # Or an IP Address that your DB is hosted on WILL CHANGE
-    #     'PORT': '3306',
-    # }
+    #'default': {
+    #    'ENGINE': 'django.db.backends.sqlite3',
+    #    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    #},
+     'default': {
+         'ENGINE': 'django.db.backends.mysql',
+         'NAME': os.environ['DB_NAME'],
+         'USER': os.environ['DB_USER'],
+         'PASSWORD': os.environ['DB_PASSWORD'],
+         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on WILL CHANGE
+         'PORT': '3306',
+     }
 }
 
 # Internationalization
