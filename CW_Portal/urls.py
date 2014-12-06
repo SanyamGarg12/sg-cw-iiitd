@@ -10,6 +10,8 @@ admin.autodiscover()
 from studentportal.views import index
 from studentportal import startup
 
+startup.work()
+
 urlpatterns = patterns('',
     url(r'^$', index, name='index'),
     url(r'^student/', include('studentportal.urls')),
