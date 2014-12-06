@@ -38,6 +38,14 @@ class NGO(models.Model):
     def __unicode__(self):
         return self.name
 
+class UndeletedProjects(models.Manager):
+    def get_query_set(self):
+        return super(UndeletedProjects, self).get_query_set().filter(deleted=False)
+
+class AllProjects(models.Manager):
+    def get_query_set(self):
+        return super(AllProjects, self).get_query_set()
+
 class Project(models.Model):
     student             = models.ForeignKey(User, related_name='projects')
     title               = models.CharField(max_length=1000)
@@ -59,6 +67,10 @@ class Project(models.Model):
     category            = models.ForeignKey(Category, 
                             related_name='projects', null=False, blank=False,
                             on_delete=models.SET(Category.get_other_category))
+    deleted             = models.BooleanField(default = False)
+
+    objects             = UndeletedProjects()
+    all_projects        = AllProjects()
 
     def __unicode__(self):
         return self.title

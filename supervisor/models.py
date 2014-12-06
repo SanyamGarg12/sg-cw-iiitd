@@ -10,6 +10,9 @@ class notification_type(object):
 
 nt = notification_type()
 
+# class diff_type(object):
+#     PROJECT_EDITED, EMAIL_SENT, PROJECT_DELETED, 
+
 def add_notification(noti_type, **kwargs):
     if noti_type in [nt.NEW_PROJECT, nt.PROJECT_FINISHED]:
         Notification.objects.create(noti_type=noti_type,
@@ -20,7 +23,6 @@ def add_notification(noti_type, **kwargs):
                 NGO_link=kwargs['NGO_link'],
                 NGO_details=kwargs['NGO_details'],
                 NGO_sugg_by=kwargs['NGO_sugg_by'])
-
 
 class Notification(models.Model):
     noti_id     = models.IntegerField(primary_key= True)
@@ -79,3 +81,6 @@ class News(models.Model):
 class TA(models.Model):
     email       = models.CharField(max_length = 100)
     instructor  = models.BooleanField(default=False)
+
+# class Diff(models.Model):
+# 
