@@ -162,3 +162,8 @@ EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 
 EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
 MANDRILL_API_KEY = os.environ['MANDRILL_API_KEY']
+LnF404_url = os.environ['LnF404_url']
+LnF404_SiteID = os.environ['LnF404_SiteID']
+LnF404_token  = os.environ['LnF404_token']
+
+ALLOWED_HOSTS = ['*']
