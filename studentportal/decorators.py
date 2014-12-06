@@ -7,7 +7,7 @@ def path_and_rename(path):
         extension = filename.split('.')[-1]
         a = string.letters + string.digits
         while True:
-            filename = ''.join(choice(a) for x in range(10))
+            filename = ''.join(choice(a) for _ in range(10))
             filename = '.'.join([filename, extension])
             if not os.path.isfile(filename):
                 break

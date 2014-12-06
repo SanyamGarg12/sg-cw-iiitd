@@ -115,7 +115,6 @@ def submitted_projects(request):
 def allprojects(request):
     form = ReportForm()
     paginator = Paginator(Project.all_projects.all(), 5, orphans=1)
-
     
     page = request.GET.get('page', None)
     try:
@@ -383,14 +382,16 @@ def deleteproject(request, project_id):
     for noti in project.notification_set.all(): noti.delete()
     add_diff(diff_type.PROJECT_DELETED, person=request.user, project=project)
     messages.info(request, "Project has been marked as deleted")
-    return HttpResponseRedirect(reverse('super_allprojects'))
+    return HttpResponseRedirect(reverse('index'))
 
 @supervisor_logged_in
 def force_delete_project(request, project_id):
     project = get_object_or_404(Project.all_projects, pk = project_id)
+    title = project.title
     project.delete()
+    add_diff(diff_type.PROJECT_DELETED, person=request.user, details="Force deleted %s."%title)
     messages.info(request, "Project has been irrevocably deleted")
-    return HttpResponseRedirect(reverse('super_allprojects'))
+    return HttpResponseRedirect(reverse('index'))
 
 @supervisor_logged_in
 def revert_delete_project(request, project_id):
@@ -443,7 +444,6 @@ def change_TA(request, TA_id = '-1'):
         if ta.instructor and not TA.objects.get(email=request.user.email).instructor:
             messages.info(request, ''.join([ta.email, " can't be removed as the person is an instructor. Contact the admin to remove this."]))
         else:
-            ta_email = ta.email
             ta.delete()
             add_diff(diff_type.REMOVE_TA, person=request.user, details=ta.email)
             messages.success(request, "TA deleted successfully.")
@@ -517,7 +517,7 @@ def get_TA_logs(request, ta_id):
         messages.warning(request, "This TA has never logged in till now.")
         return HttpResponseRedirect(reverse('TA'))
     if not request.user.email == email:
-        if not TA.objects.get(email=self.request.user.email).instructor:
+        if not TA.objects.get(email=request.user.email).instructor:
             messages.warning(request, "You don't have permission to view these logs.")
             return HttpResponseRedirect(reverse('index'))
     diffs = ta.diff.all()
