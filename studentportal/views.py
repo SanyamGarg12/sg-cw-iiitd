@@ -78,7 +78,7 @@ def editproject(request, project_id):
             if form.is_valid():
                 form.save(student=request.user)
                 messages.success(request, "Your project details have been succesfully updated.")
-                add_notification(notification_type.PROJECT_EDITED, project=instance)
+                # add_notification(notification_type.PROJECT_EDITED, project=instance)
                 return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
             else:
                 messages.warning(request, "There was something wrong in the provided details.")
@@ -225,6 +225,9 @@ def suggest_NGO(request):
 def feedback(request, project_id):
     project = get_object_or_404(Project, pk = project_id)
     if not project.student == request.user:
+        return HttpResponseRedirect(reverse('index'))
+    if project.feedback.all():
+        messages.info(request, "You've already filled in your feedback.")
         return HttpResponseRedirect(reverse('index'))
     if request.method == 'POST':
         form = FeedbackForm(request.POST)
