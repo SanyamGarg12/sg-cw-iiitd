@@ -15,6 +15,10 @@
 		<blockquote>
 			{{ project.student.email }}
 		</blockquote>
+		<h2>Status</h2>
+		<blockquote>
+			{{ project.get_project_status }}
+		</blockquote>
 		<h2>Credits</h2>
 		<blockquote>
 			{{ project.credits }}
@@ -80,6 +84,7 @@
 {% endif %}
 
 <a class="btn btn-info" role="button"  href = "{% url 'super_email_project' project.pk %}">Email student about project</a>
+<a class="btn btn-default" role="button"  href = "{% url 'super_project_logs' project.pk %}">Project logs</a>
 
 {% ifequal project.stage project_stage.SUBMITTED %}
 <a class="btn btn-warning" role="button"  href = "{% url 'complete' project.pk %}" style="float:right;">Complete Project</a>

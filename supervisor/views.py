@@ -14,7 +14,7 @@ from django.utils import timezone
 
 from CW_Portal import settings, access_cache
 from forms import AdvanceSearchForm, NewsForm, NewCategoryForm, NewNGOForm, EmailProjectForm, TAForm, ReportForm
-from models import Example, News, Notification, TA
+from models import Example, News, Notification, TA, diff_type, add_diff, Diff, add_notification
 from models import notification_type as nt
 from studentportal.models import Project, NGO, Category, Document, project_stage, document_type
 from supervisor.communication import send_email, send_email_to_all
@@ -42,9 +42,10 @@ def unverified_projects(request):
 @supervisor_logged_in
 def verify_project(request, project_id):
     project = Project.objects.get(pk = project_id)
-    Notification.objects.get(project=project, noti_type=nt.NEW_PROJECT).delete()
+    Notification.objects.filter(project=project, noti_type=nt.NEW_PROJECT).delete()
     project.stage = project_stage.ONGOING
     project.save()
+    add_diff(diff_type.PROJECT_VERIFIED, person=request.user, project=project)
     messages.success(request, "You have verified the project %s."%project.title)
     send_email("Congrats.. now get to work :)","Congratulations, your project has has been verified. Now start working and making a difference", to=[str(project.student.email)])
     return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
@@ -55,6 +56,7 @@ def unverify_project(request, project_id):
     add_notification(noti_type=nt.NEW_PROJECT, project=project)
     project.stage = project_stage.TO_BE_VERIFIED
     project.save()
+    add_diff(diff_type.PROJECT_UNVERIFIED, person=request.user, project=project)
     messages.warning(request, "You have unverified the project %s."%project.title)
     send_email("I got bad news :(","It seems that the supervisor has un-approved your project. Contact him to find out the issue", to=[str(project.student.email)])
     return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
@@ -84,6 +86,7 @@ def example_projects(request):
 def add_to_examples(request, project_id):
     project = Project.objects.get(pk = project_id)
     Example.objects.create(project = project)
+    add_diff(diff_type.ADDED_AS_EXAMPLE, person=request.user, project=project)
     messages.success(request, "You have marked the project '%s' as an example project."%project.title)
     send_email("Congrats.. You deserve this :)","Congratulations, your project has has been selected by the admin as an example project. You must have done a mighty fine job. Keep it up.",
      to=[str(project.student.email)])
@@ -95,6 +98,7 @@ def remove_from_examples(request, example_project_id):
     example_project = Example.objects.get(pk = example_project_id)
     p_id = example_project.project.id
     example_project.delete()
+    add_diff(diff_type.REMOVED_AS_EXAMPLE, person=request.user, project=get_object_or_404(Project, pk=p_id))
     messages.warning(request, "You have unmarked the project as an example project.")
     send_email("Thank you :)","Your project has has been removed by the admin from the example project. Thank you for contributing to the community. Keep it up.",
      to=[str(Project.objects.get(pk=p_id).student.email)])
@@ -146,6 +150,7 @@ def complete(request,project_id):
     project.stage = project_stage.COMPLETED
     project.finish_date = timezone.now()
     project.save()
+    add_diff(diff_type.PROJECT_COMPLETED, person=request.user, project=project)
     messages.success(request, "You have marked the Community Work project as completed and finished.")
     send_email("Congrats.. you did it :)","Congratulations, your completed project has has been accepted by the admin. Thanks for giving back to the community. Keep it up.",
      to=[str(project.student.email)])
@@ -361,6 +366,7 @@ def email_project(request, project_id):
              "P.S. This mail is generated via the CW-portal. So for any further communication regarding the above mentioned issue(s), please reply to this mail, unless explicitly asked to create a new email thread, for proper redressal."])
             send_email("CW Project '%s' "%project.title, text, to=[form.cleaned_data['to']])
             messages.success(request, "E-mail sent.")
+            add_diff(diff_type.EMAIL_SENT, person=request.user, project=project, details=form.cleaned_data['body'])
             return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id':project.id}))
     else:
         form = EmailProjectForm({'to':str(project.student.email), 'body': "This is regarding your project '%s'." %project.title
@@ -375,6 +381,7 @@ def deleteproject(request, project_id):
     if is_example: is_example.delete()
     project.save()
     for noti in project.notification_set.all(): noti.delete()
+    add_diff(diff_type.PROJECT_DELETED, person=request.user, project=project)
     messages.info(request, "Project has been marked as deleted")
     return HttpResponseRedirect(reverse('super_allprojects'))
 
@@ -390,6 +397,7 @@ def revert_delete_project(request, project_id):
     project = get_object_or_404(Project.all_projects, pk = project_id)
     project.deleted = False
     project.save()
+    add_diff(diff_type.PROJECT_DELETED, person=request.user, project=project, details="Undeleted.")
     messages.info(request, "Project has been brought back from the dead")
     return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project.pk}))
 
@@ -435,7 +443,9 @@ def change_TA(request, TA_id = '-1'):
         if ta.instructor and not TA.objects.get(email=request.user.email).instructor:
             messages.info(request, ''.join([ta.email, " can't be removed as the person is an instructor. Contact the admin to remove this."]))
         else:
+            ta_email = ta.email
             ta.delete()
+            add_diff(diff_type.REMOVE_TA, person=request.user, details=ta.email)
             messages.success(request, "TA deleted successfully.")
         return HttpResponseRedirect(reverse('TA'))
     tas = TA.objects.all()
@@ -443,8 +453,9 @@ def change_TA(request, TA_id = '-1'):
     if request.method == "POST":
         form = TAForm(request.POST)
         if form.is_valid():
-            form.save()
+            ta = form.save()
             messages.success(request, "TA added successfully.")
+            add_diff(diff_type.ADD_TA, person=request.user, details=ta.email)
             return HttpResponseRedirect(reverse('TA'))
         messages.error(request, "There was something wrong in the email provided.")
     return render(request, 'TA.html', {'form': form, 'tas': tas})
@@ -488,3 +499,27 @@ def generateReport(request):
     response = StreamingHttpResponse(report)
     response['Content-Disposition'] = 'attachment; filename=Report.xls'
     return response
+
+@supervisor_logged_in
+def get_project_logs(request, project_id):
+    project = get_object_or_404(Project.all_projects, pk=project_id)
+    diffs = project.diff.all()
+    return render(request, 'super_project_log.html', {
+                            'project': project ,'diffs': diffs})
+
+@supervisor_logged_in
+def get_TA_logs(request, ta_id):
+    email = get_object_or_404(TA, pk=ta_id).email
+    ta = User.objects.filter(email=email)
+    if ta:
+        ta = ta[0]
+    else:
+        messages.warning(request, "This TA has never logged in till now.")
+        return HttpResponseRedirect(reverse('TA'))
+    if not request.user.email == email:
+        if not TA.objects.get(email=self.request.user.email).instructor:
+            messages.warning(request, "You don't have permission to view these logs.")
+            return HttpResponseRedirect(reverse('index'))
+    diffs = ta.diff.all()
+    return render(request, 'super_ta_log.html',{
+        'ta': ta, 'diffs': diffs })

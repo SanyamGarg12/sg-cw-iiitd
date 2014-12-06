@@ -13,7 +13,7 @@ from CW_Portal import access_cache, settings
 from models import Feedback, Project, Document, Category, Bug, NGO, document_type, project_stage
 from forms import ProjectForm, FeedbackForm, UploadDocumentForm, BugsForm, suggest_NGOForm
 from supervisor.forms import NewCommentForm
-from supervisor.models import Notification, Example, News, Like, Comment, TA, add_notification, notification_type
+from supervisor.models import Notification, Example, News, Like, Comment, TA, add_notification, notification_type, diff_type, add_diff, Diff
 
 def index(request):
     if request.user.is_authenticated():
@@ -39,6 +39,7 @@ def addproject(request):
         if form.is_valid():
             project = form.save(student=request.user)
             add_notification(notification_type.NEW_PROJECT, project=project)
+            add_diff(diff_type.PROJECT_ADDED, person=request.user, project=project)
             messages.success(request, 'Your project was added successfully.')
             return HttpResponseRedirect(reverse('view_project_NGO', kwargs = {
                                                     'project_id': project.pk}))
@@ -77,8 +78,9 @@ def editproject(request, project_id):
         if request.method == 'POST':
             form = ProjectForm(request.POST, instance = instance)
             if form.is_valid():
-                form.save(student=request.user)
+                instance = form.save(student=request.user)
                 messages.success(request, "Your project details have been succesfully updated.")
+                add_diff(diff_type.PROJECT_EDITED, person=request.user, project=instance)
                 # add_notification(notification_type.PROJECT_EDITED, project=instance)
                 return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
             else:
@@ -110,6 +112,7 @@ def _upload(request, project_id):
                     return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
                 Document.objects.create(document=request.FILES['document'],
                  project=project, category=form.cleaned_data['category'], name=name)
+                add_diff(diff_type.DOCUMENT_UPLOADED, person=request.user, project=project, details=name)
                 messages.success(request, "Your document was uploaded successfully")
                 return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
             else:
@@ -135,6 +138,7 @@ def submitproject(request, project_id):
         return HttpResponseRedirect(reverse('viewproject', kwargs={'project_id': project_id}))
     project.stage = project_stage.SUBMITTED
     project.save()
+    add_diff(diff_type.PROJECT_SUBMITTED, person=request.user, project=project)
     add_notification(noti_type=notification_type.PROJECT_FINISHED, project=project)
     messages.success(request, "Your request has been completed successfully. You'll know the results soon.")
     return HttpResponseRedirect(reverse('viewproject', kwargs={'project_id': project_id}))
@@ -147,6 +151,7 @@ def link_NGO_project(request, NGO_id, project_id):
         project.NGO = ngo
         project.save()
         messages.success(request, "You have linked your project with %s"%ngo.name)
+        add_diff(diff_type.PROJECT_EDITED, person=request.user, project=project, details="Link ngo to " + ngo.name)
         return HttpResponseRedirect(reverse('view_project_NGO', 
             kwargs = {'project_id': project_id}))
     return HttpResponseRedirect(reverse('index'))
@@ -157,6 +162,7 @@ def unlink_NGO_project(request, project_id):
     if project.student == request.user:
         project.NGO = None
         project.save()
+        add_diff(diff_type.PROJECT_EDITED, person=request.user, project=project, details="Unliked NGO.")
         messages.success(request, "You have unlinked your project")
         return HttpResponseRedirect(reverse('view_project_NGO', 
             kwargs = {'project_id': project_id}))
@@ -236,6 +242,7 @@ def feedback(request, project_id):
         if form.is_valid():
             form.instance.project = project
             form.save()
+            add_diff(diff_type.FEEDBACK_GIVEN, person=request.user, project=project)
             messages.success(request, "Thank you for your feedback.")
             return HttpResponseRedirect(reverse('index'))
         else:
@@ -300,6 +307,7 @@ def delete_project(request, project_id):
     is_example = Example.objects.filter(project=project) 
     if is_example: is_example.delete()
     project.save()
+    add_diff(diff_type.PROJECT_DELETED, person=request.user, project=project)
     for noti in project.notification_set.all(): noti.delete()
     messages.info(request, "Project has been deleted")
     return HttpResponseRedirect(reverse('studentprofile'))
@@ -308,6 +316,7 @@ def delete_project(request, project_id):
 def delete_document(request, document_id):
     document = get_object_or_404(Document, pk=document_id)
     project = document.project
+    doc_name = document.name
     if not project.student == request.user:
         return HttpResponseRedirect(reverse('studenthome'))
     document.delete()

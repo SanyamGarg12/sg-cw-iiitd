@@ -8,6 +8,12 @@ from validators import validate_credits, validate_feedback_hours
 
 class project_stage(object):
     TO_BE_VERIFIED, ONGOING, SUBMITTED, COMPLETED = range(1,5)
+_project_stage_mapping = {
+    project_stage.TO_BE_VERIFIED : "Yet to be verified",
+    project_stage.ONGOING : "Ongoing",
+    project_stage.SUBMITTED: "Submitted for final check",
+    project_stage.COMPLETED: "Completed"
+}
 
 class document_type(object):
     PROPOSAL, LOG, FINAL_REPORT = range(1,4)
@@ -91,6 +97,9 @@ class Project(models.Model):
         return all([self.stage in [project_stage.ONGOING],
             document_type.FINAL_REPORT in ( x.category for x in self.documents.all()),
             ])
+
+    def get_project_status(self):
+        return _project_stage_mapping[self.stage]
 
     def delete(self, *args, **kwargs):
         for doc in self.documents.all(): doc.delete()
