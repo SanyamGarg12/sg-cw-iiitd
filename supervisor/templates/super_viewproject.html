@@ -100,5 +100,10 @@
     </div>
   </div>
 </div>
+{% if project.deleted %}
+<a href="{% url 'super_revert_delete_project' project.pk %}" class="btn btn-info pull-right">Revert delete</a>
+<a href="{% url 'super_force_delete_project' project.pk %}" class="btn btn-danger pull-right">Already deleted. Delete forever</a>
+{% else %}
 <button class="btn btn-danger pull-right" data-toggle="modal" data-target="#confirm_delete_project_modal" >Delete project</button>
+{% endif %}
 {% endblock %}

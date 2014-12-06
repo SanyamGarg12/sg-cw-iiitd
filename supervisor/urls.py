@@ -18,6 +18,8 @@ urlpatterns = patterns('',
 	url(r'^student/(?P<user_id>[0-9]+)/$', views.view_student, name='super_viewuser'),
 	url(r'^email/project/(?P<project_id>[0-9]+)/$', views.email_project, name='super_email_project'),
 	url(r'^delete/project/(?P<project_id>[0-9]+)/$', views.deleteproject, name = 'super_delete_project'),
+	url(r'^delete/project/(?P<project_id>[0-9]+)/force/$', views.force_delete_project, name='super_force_delete_project'),
+	url(r'^delete/project/(?P<project_id>[0-9]+)/revert/$', views.revert_delete_project, name='super_revert_delete_project'),
 	
 	url(r'^allprojects/$', views.allprojects, name = 'super_allprojects'),
 	

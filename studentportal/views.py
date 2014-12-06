@@ -51,6 +51,7 @@ def addproject(request):
 
 @login_required
 def viewproject(request, project_id):
+    # don't allow deleted_projects
     project = get_object_or_404(Project, pk = project_id)
     if request.user == project.student:
         return render(request, 'viewproject.html',
@@ -170,6 +171,7 @@ def profile(request):
 @login_required
 def download(request, document_id):
     doc = get_object_or_404(Document, pk=document_id)
+    if doc.project.deleted: raise Http404
     if doc.project.student == request.user:
         response = HttpResponse(doc.document)
         response['Content-Disposition'] = 'attachment; filename=%s' %doc.name
@@ -294,7 +296,11 @@ def delete_project(request, project_id):
     project = get_object_or_404(Project, pk = project_id)
     if not project.student == request.user:
         return HttpResponseRedirect(reverse('studenthome'))
-    project.delete()
+    project.deleted = True
+    is_example = Example.objects.filter(project=project) 
+    if is_example: is_example.delete()
+    project.save()
+    for noti in project.notification_set.all(): noti.delete()
     messages.info(request, "Project has been deleted")
     return HttpResponseRedirect(reverse('studentprofile'))
 

@@ -65,7 +65,7 @@
 			        <h4 class="modal-title" id="ModalLabel">Delete Document</h4>
 			      </div>
 			      <div class="modal-body">
-			        Are you sure you want to delete {{ doc.name }}? This action is irrevocable.
+			        Are you sure you want to delete {{ doc.name }}? Only the admin can undo this operation.
 			      </div>
 			      <div class="modal-footer">
 				      <a class="btn btn-danger" href="{% url 'delete_document' doc.pk %}" role="button">Delete</a>
