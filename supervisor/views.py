@@ -19,7 +19,6 @@ from models import notification_type as nt
 from studentportal.models import Project, NGO, Category, Document, project_stage, document_type
 from supervisor.communication import send_email, send_email_to_all
 from supervisor.decorators import supervisor_logged_in
-from supervisor.notifications import add_notification
 from supervisor.validators import is_int
 import receivers
 
@@ -192,7 +191,7 @@ def advance_search(request):
 			return render(request, 'advance_search_results.html',
 				{'projects': projects})
 		messages.warning(request, "The data provided was wrong somehow.")
-		return HttpResponseRedirect(reverse('index'))x`
+		return HttpResponseRedirect(reverse('index'))
 	form = AdvanceSearchForm()
 	return render(request, 'advance_search.html',
 		{'form': form})
