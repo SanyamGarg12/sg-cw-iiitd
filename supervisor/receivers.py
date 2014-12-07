@@ -58,15 +58,18 @@ def _RenderProjectCategoryPieChart():
 
 @receiver([post_save, post_delete], sender=Feedback)
 def RenderFeedbackExperiencePieChart(sender, **kwargs):
-    Process(target=_RenderFeedbackExperiencePieChart).start()
+    # Process(target=_RenderFeedbackExperiencePieChart).start()
+    _RenderFeedbackExperiencePieChart()
 
 @receiver([post_save, post_delete], sender=Project)
 def RenderProjectToMonthDistribution(sender, **kwargs):
-    Process(target=_RenderProjectToMonthDistribution).start()
+    # Process(target=_RenderProjectToMonthDistribution).start()
+    _RenderProjectToMonthDistribution()
 
 @receiver([post_save, post_delete], sender=Project)
 def RenderProjectCategoryPieChart(sender, **kwargs):
-    Process(target=_RenderProjectCategoryPieChart).start()
+    # Process(target=_RenderProjectCategoryPieChart).start()
+    _RenderProjectCategoryPieChart()
 
 #listen for changes in notifications.
 @receiver([post_save, post_delete], sender=Notification)
