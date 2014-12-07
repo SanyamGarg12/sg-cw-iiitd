@@ -30,6 +30,6 @@
   </table>
 </div>
 {% else %}
-No data was found which matched this query. Note that this simply queries the rollno. / first name / email. Use <a href="{% url 'advance_search' %}">Advanced Search</a> for better searches.
+No data was found which matched this query. Note that this simply queries the rollno. / first name / email. Use <a class="ajaxify-btn" data-link="{% url 'advance_search' %}">Advanced Search</a> for better searches.
 {% endif %}
 {% endblock %}

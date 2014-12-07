@@ -44,7 +44,6 @@ def add_diff(diff_type, **kwargs):
                             project=project, details=details)
 
 class Notification(models.Model):
-    noti_id     = models.IntegerField(primary_key= True)
     noti_type   = models.IntegerField(max_length=5, null=True, blank=True)
     project     = models.ForeignKey(Project, null= True, unique= False)
     NGO_name    = models.CharField(max_length=200, blank=True)
