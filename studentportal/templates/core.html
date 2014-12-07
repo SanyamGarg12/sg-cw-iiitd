@@ -154,11 +154,8 @@ body {
       });
 
       $(".ajaxify-btn").click(function(){
-        console.log("Button clicked");
         var link = this.dataset['link'];
-        console.log("Link:" + link);
         $("#base-modal-content").load(link, function(){
-          console.log("Loaded opening modal");
           $("#base-modal").modal('show');
         })
       });
