@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from studentportal import receivers as r1
 from supervisor import receivers as r2
 
@@ -14,3 +15,5 @@ def work():
     r2.RenderFeedbackExperiencePieChart(Feedback)
     r2.refresh_notifications(Project)
     r2.refresh_projects_on_home_page(Project)
+
+    cache.set('cache-valid', True)
