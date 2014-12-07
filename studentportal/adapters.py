@@ -35,3 +35,7 @@ def send_report_to_admins():
         body = "".join([body, "     New suggested NGOs: ", str(ngos), "\n"])
 
         supervisor.communication.send_email("[CW-portal] - Notifications", body, access_cache.get_TA())
+
+        print "Sent report to admins: ", body
+    else:
+        print "No report sending required."
