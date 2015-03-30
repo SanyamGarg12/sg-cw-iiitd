@@ -1,9 +1,16 @@
-def path_and_rename(path):
-    def wrapper(instance, filename):
-        import os
-        import string
-        from django.utils import timezone
-        from random import choice
+from random import choice
+import os
+import string
+from django.utils import timezone
+from django.utils.deconstruct import deconstructible
+
+
+@deconstructible
+class _PathAndRename(object):
+    def __init__(self, filename):
+        self.filename = filename
+
+    def __call__(self, instance, filename):
         extension = filename.split('.')[-1]
         a = string.letters + string.digits
         while True:
@@ -12,4 +19,5 @@ def path_and_rename(path):
             if not os.path.isfile(filename):
                 break
         return os.path.join(path.replace('%Y', str(timezone.now().year)), filename)
-    return wrapper
+
+path_and_rename = _PathAndRename('uploads/%Y/')

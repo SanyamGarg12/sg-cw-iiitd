@@ -30,27 +30,26 @@ class Category(models.Model):
     def __unicode__(self):
         return self.name
 
-    @staticmethod
-    def get_other_category():
-        return Category.objects.get(name='Other')
+def _get_other_category():
+    return Category.objects.get(name='Other')
 
 class NGO(models.Model):
     name        = models.CharField(max_length=1000)
     link        = models.URLField(blank=True)
     details     = models.TextField(blank=True)
     category    = models.ForeignKey(Category, related_name='NGOs', null=True,
-                    on_delete=models.SET(Category.get_other_category))
+                    on_delete=models.SET(_get_other_category))
 
     def __unicode__(self):
         return self.name
 
 class UndeletedProjects(models.Manager):
-    def get_query_set(self):
-        return super(UndeletedProjects, self).get_query_set().filter(deleted=False)
+    def get_queryset(self):
+        return super(UndeletedProjects, self).get_queryset().filter(deleted=False)
 
 class AllProjects(models.Manager):
-    def get_query_set(self):
-        return super(AllProjects, self).get_query_set()
+    def get_queryset(self):
+        return super(AllProjects, self).get_queryset()
 
 class Project(models.Model):
     student             = models.ForeignKey(User, related_name='projects')
@@ -72,7 +71,7 @@ class Project(models.Model):
                             default = project_stage.TO_BE_VERIFIED)
     category            = models.ForeignKey(Category, 
                             related_name='projects', null=False, blank=False,
-                            on_delete=models.SET(Category.get_other_category))
+                            on_delete=models.SET(_get_other_category))
     deleted             = models.BooleanField(default = False)
 
     objects             = UndeletedProjects()
@@ -108,7 +107,7 @@ class Project(models.Model):
 
 
 class Document(models.Model):
-    document     = models.FileField(upload_to=path_and_rename('uploads/%Y/'))
+    document     = models.FileField(upload_to=path_and_rename)
     name         = models.CharField(max_length=100)
     date_added   = models.DateTimeField(default=timezone.now)
     category     = models.IntegerField(max_length=5)

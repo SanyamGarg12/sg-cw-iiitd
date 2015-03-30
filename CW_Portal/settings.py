@@ -24,7 +24,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 TEMPLATE_DIRS = (
-    BASE_DIR + '/studentportal/templates/'
+    BASE_DIR + '/studentportal/templates/',
 )
 
 MEDIA_ROOT = BASE_DIR + '/media/'

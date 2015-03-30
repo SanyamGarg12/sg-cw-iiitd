@@ -9,7 +9,7 @@ import supervisor.communication
 
 class DomainLoginAdapter(DefaultSocialAccountAdapter):
     def pre_social_login(self, request, sociallogin):
-        user = sociallogin.account.user
+        user = sociallogin.user
         if user.email.split('@')[1] not in \
                             getattr(settings,"ALLOWED_DOMAINS", []):
             logout(request)
