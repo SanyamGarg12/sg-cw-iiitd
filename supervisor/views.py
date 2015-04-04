@@ -137,7 +137,7 @@ def basic_search(request):
             if len(query)==7 and is_int(query):
                 #full roll number
                 query = str(query)[2:]
-            projects = Project.objects.filter(student__email__icontains = query)
+            projects = Project.all_projects.filter(student__email__icontains = query)
             return render(request, 'search_results.html',
                 {'projects': projects, 'query': query})
     return HttpResponseRedirect(reverse('index'))
