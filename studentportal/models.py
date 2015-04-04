@@ -74,8 +74,8 @@ class Project(models.Model):
                             on_delete=models.SET(_get_other_category))
     deleted             = models.BooleanField(default = False)
 
-    objects             = UndeletedProjects()
     all_projects        = AllProjects()
+    objects             = UndeletedProjects()
 
     def __unicode__(self):
         return self.title
