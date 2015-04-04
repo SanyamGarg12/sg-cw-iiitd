@@ -465,13 +465,16 @@ def generateReport(request):
     BASE_DIR = getattr(settings, "BASE_DIR")
 
     months = int(request.POST['date'])
-    projects = Project.objects.filter(stage=project_stage.COMPLETED)
+
+    projects = Project.objects.filter(~Q(stage=project_stage.TO_BE_VERIFIED))
     projects = projects.filter(
-        finish_date__gte = datetime.datetime.now() - datetime.timedelta(months*31))
+        Q(finish_date__gte = datetime.datetime.now() - datetime.timedelta(months*31)) |
+        Q(finish_date=None)) # for incomplete projects
 
     report = xlwt.Workbook(encoding="utf-8")
 
-    sheet = report.add_sheet("Community Work Projects")
+    completed_sheet = report.add_sheet("Completed CW Projects")
+    ongoing_sheet   = report.add_sheet("Ongoing CW Projects")
 
     headings = [
     "Name",
@@ -480,19 +483,34 @@ def generateReport(request):
     "Email",
     "NGO",
     "Title",
+    "Started on"
     ]
     for (index, h) in enumerate(headings):
-        sheet.write(0, index, h)
+        ongoing_sheet.write(0, index, h)
+        completed_sheet.write(0, index, h)
 
-    for index, project in enumerate(projects):
-        sheet.write(index + 1, 0,  ' '.join([
-            project.student.first_name,
-            project.student.last_name]))
-        sheet.write(index + 1, 1, project.get_batch())
-        sheet.write(index + 1, 2, project.get_rollno())
-        sheet.write(index + 1, 3, project.student.email)
-        sheet.write(index + 1, 4, project.get_NGO())
-        sheet.write(index + 1, 5, project.title)
+    completed_projects_row = 0
+    ongoing_projects_row = 0
+    for  project in projects:
+        if project.stage == project_stage.COMPLETED:
+            sheet = completed_sheet
+            completed_projects_row += 1
+            row = completed_projects_row
+        else: # for both SUBMITTED as well as ONGOING
+            sheet = ongoing_sheet
+            ongoing_projects_row += 1
+            row = ongoing_projects_row
+
+        for col,x in enumerate([
+                ' '.join([project.student.first_name, project.student.last_name]),
+                project.get_batch(),
+                project.get_rollno(),
+                project.student.email,
+                project.get_NGO(),
+                project.title,
+                project.date_created.strftime('%d-%m-%Y')
+            ]):
+            sheet.write(row, col, x)
 
     report.save(os.path.join(BASE_DIR, 'report.xls'))
     report = open(os.path.join(BASE_DIR, 'report.xls'), 'r')
