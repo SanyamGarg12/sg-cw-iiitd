@@ -18,6 +18,7 @@
 		<h2>Status</h2>
 		<blockquote>
 			{{ project.get_project_status }}
+			<a href="#" style="margin-left:10px;" data-toggle="modal" data-target="#progress_graph"> <span class="glyphicon glyphicon-question-sign"></span> </a>
 		</blockquote>
 		<h2>Credits</h2>
 		<blockquote>
@@ -123,6 +124,35 @@
   </div>
 </div>
 
+<div class="modal fade" id="progress_graph" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="ModalLabel">Progress Graph [As seen by the student] </h4>
+      </div>
+      <div class="modal-body">
+      {% for stage in project_graph %}
+      	<h1><span class="glyphicon glyphicon-{{ stage.stage_glyphicon }}" style="margin-right:25px; color:{% if stage.stage_cleared %}green{% else %}red{% endif %};"></span>
+      	<span style="font-size:24px;">
+      	{% ifequal project.get_project_status stage.stage_name %}
+      	<strong>
+      	{% endifequal %}
+      	{{ stage.stage_name }}
+      	{% ifequal project.get_project_status stage.stage_name %}
+      	</strong>
+      	{% endifequal %}
+      	</span></h1>
+      	{{ stage.info }}
+      	<br /><br />
+      {% endfor %}
+      </div>
+      <div class="modal-footer" align="">
+	      In case of any queries, please mail at communitywork [magic-symbol] iiitd.ac.in.
+      </div>
+    </div>
+  </div>
+</div>
 
 {% if project.deleted %}
 <a href="{% url 'super_revert_delete_project' project.pk %}" class="btn btn-info">Revert delete</a>

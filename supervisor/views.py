@@ -71,8 +71,10 @@ def ongoing_projects(request):
 def viewproject(request, project_id):
     # allow to see deleted projects.
     project = get_object_or_404(Project.all_projects, pk = project_id)
+    project_graph = project.get_project_status_graph()
     return render(request, 'super_viewproject.html', 
-        {'project': project, 'project_stage': project_stage})
+        {'project': project, 'project_stage': project_stage,
+        'project_graph': project_graph})
 
 @supervisor_logged_in
 def example_projects(request):
