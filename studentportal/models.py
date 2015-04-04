@@ -8,11 +8,20 @@ from validators import validate_credits, validate_feedback_hours
 
 class project_stage(object):
     TO_BE_VERIFIED, ONGOING, SUBMITTED, COMPLETED = range(1,5)
+    _all_stages_ = [TO_BE_VERIFIED, ONGOING, SUBMITTED, COMPLETED]
+
 _project_stage_mapping = {
     project_stage.TO_BE_VERIFIED : "Yet to be verified",
     project_stage.ONGOING : "Ongoing",
     project_stage.SUBMITTED: "Submitted for final check",
     project_stage.COMPLETED: "Completed"
+}
+
+_project_stage_glyphicon_mapping = {
+    project_stage.TO_BE_VERIFIED : "exclamation-sign",
+    project_stage.ONGOING : "tree-conifer",
+    project_stage.SUBMITTED: "list-alt",
+    project_stage.COMPLETED: "ok"
 }
 
 class document_type(object):
@@ -100,6 +109,15 @@ class Project(models.Model):
     def get_project_status(self):
         return _project_stage_mapping[self.stage]
 
+    def get_project_status_graph(self):
+        return [{
+                    'stage_cleared':x <= self.stage,
+                    'stage_glyphicon': _project_stage_glyphicon_mapping[x],
+                    'info': ProgressAnalyser.next_steps[x](self),
+                    'stage_name': _project_stage_mapping[x]
+                }
+                 for x in project_stage._all_stages_]
+
     def delete(self, *args, **kwargs):
         for doc in self.documents.all(): doc.delete()
         for noti in self.notification_set.all(): noti.delete()
@@ -144,3 +162,80 @@ class Bug(models.Model):
     user        = models.ForeignKey(User, related_name='bugs', null = True)
     suggestions = models.TextField(max_length=2000, blank=True)
     rating      = models.IntegerField()
+
+
+class ProgressAnalyser(object):
+    _unverified = "Your proposal has been sent to the TA for approval. You may receive a mail asking for clarifications about your proposal before accepting. If this takes more than a couple of days, please drop a mail at communitywork <magic> iiitd.ac.in."
+    _ongoing = "Continue working on your project. Also keep uploading regular log reports for faster review. Click on 'Submit Project' on completion of the project."
+    _submit_final_report = "Also, it seems you haven't submitted the final report as of now."
+    _submitted = "Your project details has been sent to the TA for final acceptance. You may receive a mail asking for your project details or logs. If this takes more than a couple of days, please drop a mail at communitywork <magic> iiitd.ac.in."
+
+    _all_unverified = "Your project has not been verified until now."
+    _all_completed = "You have completed your CW project! :)"
+
+    _ongoing_submitted = "You submitted your project for final approval on %s."
+
+    _submitted_ongoing = "Please submit the project for final consideration by clicking on 'Submit Project'."
+    _submitted_submitted = _ongoing_submitted
+
+    _completed_ongoing = _submitted_ongoing
+    _completed_submitted = _ongoing_submitted
+
+    @staticmethod
+    def _base_analyse_stage(project):
+        if project.stage == project_stage.TO_BE_VERIFIED: return ProgressAnalyser._all_unverified
+        if project.stage == project_stage.COMPLETED: return ProgressAnalyser._all_completed
+        return None # could not give a generic return statement
+
+    def _analyse_to_be_verified_stage(project):
+        from supervisor.models import diff_type
+        if project.stage == project_stage.TO_BE_VERIFIED:
+            return ProgressAnalyser._unverified
+        time = [d for d in project.diff.all() if d.diff_type == diff_type().PROJECT_VERIFIED][0].when
+        return "Your proposal was accepted on %(accept_time)s." % {'accept_time': time.strftime('%d-%m-%Y')}
+
+    def _analyse_ongoing_stage(project):
+        from supervisor.models import diff_type
+        base_try = ProgressAnalyser._base_analyse_stage(project)
+        if base_try: return base_try
+
+        if project.stage == project_stage.ONGOING:
+            if not project.is_submittable():
+                return ' '.join([ProgressAnalyser._ongoing, ProgressAnalyser._submit_final_report])
+            return ProgressAnalyser._ongoing
+
+        if project.stage == project_stage.SUBMITTED:
+            date = [d for d in project.diff.all() if d.diff_type == diff_type.PROJECT_SUBMITTED][0].when
+            return ProgressAnalyser._ongoing_submitted % (date.strftime('%d-%m-%Y'))
+
+    def _analyse_submitted_stage(project):
+        from supervisor.models import diff_type
+        base_try = ProgressAnalyser._base_analyse_stage(project)
+        if base_try: return base_try
+
+        if project.stage == project_stage.ONGOING:
+            return ProgressAnalyser._submitted_ongoing
+
+        if project.stage == project_stage.SUBMITTED:
+            date = [d for d in project.diff.all() if d.diff_type == diff_type.PROJECT_SUBMITTED][0].when
+            return ProgressAnalyser._submitted_submitted % (date.strftime('%d-%m-%Y'))
+
+    def _analyse_completed_stage(project):
+        from supervisor.models import diff_type
+        base_try = ProgressAnalyser._base_analyse_stage(project)
+        if base_try: return base_try
+
+        if project.stage == project_stage.ONGOING: return ProgressAnalyser._completed_ongoing
+        if project.stage == project_stage.SUBMITTED:
+            date = [d for d in project.diff.all() if d.diff_type == diff_type.PROJECT_SUBMITTED][0].when
+            return ProgressAnalyser._completed_submitted % (date.strftime('%d-%m-%Y'))
+        return _all_completed
+
+    # next steps returns a mapping of stage to a function that needs a project as an argument
+    # The function returns the string to be displayed according to the stage of the project in the popup
+    next_steps = {
+        project_stage.TO_BE_VERIFIED: _analyse_to_be_verified_stage,
+        project_stage.ONGOING: _analyse_ongoing_stage,
+        project_stage.SUBMITTED: _analyse_submitted_stage,
+        project_stage.COMPLETED: _analyse_completed_stage
+    }
