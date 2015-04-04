@@ -1,7 +1,7 @@
 {% extends 'supervisorcore.html' %}
 {% block content %}
 	<center>
-		<h2>{{ project.title }}</h2>
+		<h2>{{ project.title }}{% if project.deleted %} <span class="glyphicon glyphicon-trash" style="color:red; margin-left:10px;" title="deleted"></span> {% endif %}</h2>
 	</center>
 		<h2>Student </h2>
 		<blockquote>
