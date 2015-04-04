@@ -24,6 +24,9 @@
         <td>{{ p.get_rollno }}</td>
         <td><a href="{% url 'super_viewproject' p.id %}">{{ p.title|truncatechars:60 }}</a></td>
         <td>{{ p.credits }}</td>
+        <td>
+          {% if p.deleted %} <span class="glyphicon glyphicon-trash" style="color:red; margin-left:10px;" title="deleted"></span> {% endif %}
+        </td>
       </tr>
     {% endfor %}
     </tbody>
