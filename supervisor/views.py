@@ -16,7 +16,7 @@ from CW_Portal import settings, access_cache
 from forms import AdvanceSearchForm, NewsForm, NewCategoryForm, NewNGOForm, EmailProjectForm, TAForm, ReportForm
 from models import Example, News, Notification, TA, diff_type, add_diff, Diff, add_notification
 from models import notification_type as nt
-from studentportal.models import Project, NGO, Category, Document, project_stage, document_type
+from studentportal.models import Project, NGO, Category, Document, project_stage, document_type, Edit
 from supervisor.communication import send_email, send_email_to_all
 from supervisor.decorators import supervisor_logged_in
 from supervisor.validators import is_int
@@ -72,6 +72,15 @@ def viewproject(request, project_id):
     # allow to see deleted projects.
     project = get_object_or_404(Project.all_projects, pk = project_id)
     project_graph = project.get_project_status_graph()
+    project.viewable_edits = [
+        {'when': edit.when.strftime("%T [%d-%m-%Y]"),
+        'diff_html': [
+            {
+                'label': x.split("<LABEL_AND_EDIT_SEPARATOR>")[0],
+                'content': x.split("<LABEL_AND_EDIT_SEPARATOR>")[1].replace('&para;', '').replace('\r', ''),
+            } for x in edit.diff_text.split('<MULTIPLE_FIELDS_SEPARATOR>') if x
+        ]} for edit in project.edits.all()
+    ]
     return render(request, 'super_viewproject.html', 
         {'project': project, 'project_stage': project_stage,
         'project_graph': project_graph})

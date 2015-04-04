@@ -69,6 +69,40 @@
 				No logs uploaded till now.
 			{% endif %}
 		</blockquote>
+		<h2>View revision history:</h2>
+		<blockquote>
+			{% if project.edits.all %}
+				{% for edit in project.viewable_edits %}
+
+					<div class="modal fade" id="project_edit_{{ forloop.counter }}_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+					  <div class="modal-dialog">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					        <h4 class="modal-title" id="ModalLabel">Edit history</h4>
+					      </div>
+					      <div class="modal-body">
+					      	{% for edit_part in edit.diff_html %}
+					      		<strong>{{ edit_part.label }}:</strong>
+					      		<div class="well">
+					      			{{edit_part.content|safe}}
+					      		</div>
+					      	{% endfor %}
+					      </div>
+					      <div class="modal-footer">
+						      Edited on {{ edit.when }}
+					      </div>
+					    </div>
+					  </div>
+					</div>
+
+					<a href = "#" data-toggle="modal" data-target="#project_edit_{{ forloop.counter }}_modal">{{ edit.when }}</a> 
+					<br />
+				{% endfor %}
+			{% else %}
+				No edits made to the details until now.
+			{% endif %}
+		</blockquote>
 		<hr />
 {% ifequal project.stage project_stage.TO_BE_VERIFIED %}
 <a class="btn btn-warning" role="button"  href = "{% url 'verify_project' project.id %}">Verify Project</a>
