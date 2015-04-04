@@ -163,6 +163,10 @@ class Bug(models.Model):
     suggestions = models.TextField(max_length=2000, blank=True)
     rating      = models.IntegerField()
 
+class Edit(models.Model):
+    project     = models.ForeignKey(Project, related_name='edits')
+    diff_text   = models.TextField(max_length=2000, blank=True)
+    when        = models.DateTimeField(default=timezone.now)
 
 class ProgressAnalyser(object):
     _unverified = "Your proposal has been sent to the TA for approval. You may receive a mail asking for clarifications about your proposal before accepting. If this takes more than a couple of days, please drop a mail at communitywork <magic> iiitd.ac.in."

@@ -12,11 +12,13 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 
-from CW_Portal import access_cache, settings
-from models import Feedback, Project, Document, Category, Bug, NGO, document_type, project_stage
+from CW_Portal import access_cache, settings, diff_match_patch
+from models import Feedback, Project, Document, Category, Bug, NGO, document_type, project_stage, Edit
 from forms import ProjectForm, FeedbackForm, UploadDocumentForm, BugsForm, suggest_NGOForm
 from supervisor.forms import NewCommentForm
 from supervisor.models import Notification, Example, News, Like, Comment, TA, add_notification, notification_type, diff_type, add_diff, Diff
+
+diff_worker = diff_match_patch.diff_match_patch()
 
 def index(request):
     if request.user.is_authenticated():
@@ -58,6 +60,15 @@ def viewproject(request, project_id):
     # don't allow deleted_projects
     project = get_object_or_404(Project, pk = project_id)
     project_graph = project.get_project_status_graph()
+    project.viewable_edits = [
+        {'when': edit.when.strftime("%T [%d-%m-%Y]"),
+        'diff_html': [
+            {
+                'label': x.split("<LABEL_AND_EDIT_SEPARATOR>")[0],
+                'content': x.split("<LABEL_AND_EDIT_SEPARATOR>")[1].replace('&para;', '').replace('\r', ''),
+            } for x in edit.diff_text.split('<MULTIPLE_FIELDS_SEPARATOR>') if x
+        ]} for edit in project.edits.all()
+    ]
     if request.user == project.student:
         return render(request, 'viewproject.html',
             {'project': project, 'stages': project_stage,
@@ -82,10 +93,27 @@ def editproject(request, project_id):
         form = ProjectForm(None, instance = instance)
         if request.method == 'POST':
             form = ProjectForm(request.POST, instance = instance)
+
+            # get edits
+            # fields = instance._meta.get_all_field_names()
+            fields = ['title', 'credits', 'schedule_text', 'goals', 'NGO_name', 'NGO_super', 'NGO_super_contact', 'NGO_details']
+            differences = [(field, diff_worker.diff_main(str(getattr(instance, field)), str(form.data[field]))) for field in fields]
+            differences = [x for x in differences if not (len(x[1]) == 1 and x[1][0][0] == 0)] #keeping only those with diff
+
             if form.is_valid():
-                instance = form.save(student=request.user)
+                new_instance = form.save(student=request.user)
                 messages.success(request, "Your project details have been succesfully updated.")
-                add_diff(diff_type.PROJECT_EDITED, person=request.user, project=instance)
+                add_diff(diff_type.PROJECT_EDITED, person=request.user, project=new_instance)
+
+                # save edit information
+                edit_history = ""
+                if differences:
+                    for diff in differences:
+                        diff_worker.diff_cleanupSemantic(diff[1])
+                        _ = '<LABEL_AND_EDIT_SEPARATOR>'.join([str(diff[0]), diff_worker.diff_prettyHtml(diff[1])])
+                        edit_history = '<MULTIPLE_FIELDS_SEPARATOR>'.join([_, edit_history])
+                    Edit.objects.create(project=new_instance, diff_text=edit_history)
+
                 # add_notification(notification_type.PROJECT_EDITED, project=instance)
                 return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
             else:
