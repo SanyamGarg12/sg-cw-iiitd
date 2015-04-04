@@ -153,7 +153,9 @@ def complete(request,project_id):
     project.save()
     add_diff(diff_type.PROJECT_COMPLETED, person=request.user, project=project)
     messages.success(request, "You have marked the Community Work project as completed and finished.")
-    send_email("Congrats.. you did it :)","Congratulations, your completed project has has been accepted by the admin. Thanks for giving back to the community. Keep it up.",
+    send_email("Congrats.. you did it :)","Congratulations, your completed project has has been accepted by the admin.Please fill the feedback at %(feedback_link)s. \n\nThanks for giving back to the community. Keep it up." %{
+        'feedback_link': request.build_absolute_uri(reverse('feedback', kwargs={'project_id': project.pk}))
+    },
      to=[str(project.student.email)])
     #send link for feedback form
     return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project_id}))
