@@ -57,9 +57,11 @@ def addproject(request):
 def viewproject(request, project_id):
     # don't allow deleted_projects
     project = get_object_or_404(Project, pk = project_id)
+    project_graph = project.get_project_status_graph()
     if request.user == project.student:
         return render(request, 'viewproject.html',
-            {'project': project, 'stages': project_stage})
+            {'project': project, 'stages': project_stage,
+            'project_graph': project_graph})
     return HttpResponseRedirect(reverse('studenthome'))
 
 ###################

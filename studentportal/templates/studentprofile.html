@@ -17,6 +17,9 @@
           {% ifequal p.stage stages.ONGOING %}
             <span class="glyphicon glyphicon-cog" title="Ongoing" style="color:blue;"></span>
           {% endifequal %}
+          {% ifequal p.stage stages.SUBMITTED %}
+            <span class="glyphicon glyphicon-cog" title="Submitted" style="color:green;"></span>
+          {% endifequal %}
           {% ifequal p.stage stages.COMPLETED %}
             <span class="glyphicon glyphicon-ok" title="Completed" style="color:green;"></span>
           {% endifequal %}
