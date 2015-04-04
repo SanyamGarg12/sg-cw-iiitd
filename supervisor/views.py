@@ -114,7 +114,7 @@ def submitted_projects(request):
 @supervisor_logged_in
 def allprojects(request):
     form = ReportForm()
-    paginator = Paginator(Project.all_projects.all(), 5, orphans=1)
+    paginator = Paginator(Project.all_projects.all(), 10, orphans=5)
     
     page = request.GET.get('page', None)
     try:
