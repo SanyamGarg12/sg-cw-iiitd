@@ -7,8 +7,8 @@ from django.utils.deconstruct import deconstructible
 
 @deconstructible
 class _PathAndRename(object):
-    def __init__(self, filename):
-        self.filename = filename
+    def __init__(self, path):
+        self.path = path
 
     def __call__(self, instance, filename):
         extension = filename.split('.')[-1]
@@ -18,6 +18,6 @@ class _PathAndRename(object):
             filename = '.'.join([filename, extension])
             if not os.path.isfile(filename):
                 break
-        return os.path.join(os.path.replace('%Y', str(timezone.now().year)), filename)
+        return os.path.join(self.path.replace('%Y', str(timezone.now().year)), filename)
 
 path_and_rename = _PathAndRename('uploads/%Y/')
