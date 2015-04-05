@@ -13,7 +13,7 @@ nt = notification_type()
 class diff_type(object):
     PROJECT_ADDED, PROJECT_EDITED, PROJECT_SUBMITTED, PROJECT_VERIFIED, PROJECT_UNVERIFIED, \
     ADDED_AS_EXAMPLE, REMOVED_AS_EXAMPLE, PROJECT_COMPLETED, DOCUMENT_UPLOADED, EMAIL_SENT, \
-    PROJECT_DELETED, FEEDBACK_GIVEN, ADD_TA, REMOVE_TA = range(1,15)
+    PROJECT_DELETED, FEEDBACK_GIVEN, ADD_TA, REMOVE_TA, PROJECT_PRESENTED = range(1,16)
 
 _ = diff_type()
 diff_mapping = {
@@ -23,7 +23,7 @@ diff_mapping = {
     _.REMOVED_AS_EXAMPLE: "Removed as example", _.PROJECT_COMPLETED: "Project completed",
     _.DOCUMENT_UPLOADED: "Document uploaded", _.EMAIL_SENT: "Sent an email",
     _.PROJECT_DELETED: "Project deleted", _.FEEDBACK_GIVEN: "Feedback given",
-    _.ADD_TA: "Added TA", _.REMOVE_TA: "Removed TA"
+    _.ADD_TA: "Added TA", _.REMOVE_TA: "Removed TA", _.PROJECT_PRESENTED: "Project presented"
 }
 
 def add_notification(noti_type, **kwargs):

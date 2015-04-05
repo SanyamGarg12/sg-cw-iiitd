@@ -61,74 +61,78 @@
 		<blockquote>
 		{{ project.category.name }}
 		</blockquote>
-	<h2>Documents:</h2>
-	<blockquote>
-		{% if project.documents.all %}
-			{% for doc in project.documents.all %}
-				<div class="modal fade" id="confirm_delete_document_{{ doc.pk }}_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
-				    <div class="modal-content">
-				      <div class="modal-header">
-				        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				        <h4 class="modal-title" id="ModalLabel">Delete Document</h4>
-				      </div>
-				      <div class="modal-body">
-				        Are you sure you want to delete {{ doc.name }}?
-				      </div>
-				      <div class="modal-footer">
-					      <a class="btn btn-danger" href="{% url 'delete_document' doc.pk %}" role="button">Delete</a>
-				      </div>
-				    </div>
-				  </div>
-				</div>
+		<h2>Presented</h2>
+		<blockquote>
+		{% if project.presented %} Yes {% else %} No {% endif %}
+		</blockquote>
+		<h2>Documents:</h2>
+		<blockquote>
+			{% if project.documents.all %}
+				{% for doc in project.documents.all %}
+					<div class="modal fade" id="confirm_delete_document_{{ doc.pk }}_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					        <h4 class="modal-title" id="ModalLabel">Delete Document</h4>
+					      </div>
+					      <div class="modal-body">
+					        Are you sure you want to delete {{ doc.name }}?
+					      </div>
+					      <div class="modal-footer">
+						      <a class="btn btn-danger" href="{% url 'delete_document' doc.pk %}" role="button">Delete</a>
+					      </div>
+					    </div>
+					  </div>
+					</div>
 
-				<strong>{{ doc.get_current_document_type }}: </strong>
-				<a href = "{% url 'download_document' doc.pk %}">
-				{{ doc.name }}</a>
-				&nbsp;
-				<button class="btn-link glyphicon glyphicon-remove" style="color:red" data-toggle="modal" data-target="#confirm_delete_document_{{ doc.pk }}_modal"></button>
-				<br />
-			{% endfor %}
-		{% else %}
-			No documents uploaded till now.
-		{% endif %}
-	</blockquote>
-	<h2>View revision history:</h2>
-	<blockquote>
-		{% if project.edits.all %}
-			{% for edit in project.viewable_edits %}
+					<strong>{{ doc.get_current_document_type }}: </strong>
+					<a href = "{% url 'download_document' doc.pk %}">
+					{{ doc.name }}</a>
+					&nbsp;
+					<button class="btn-link glyphicon glyphicon-remove" style="color:red" data-toggle="modal" data-target="#confirm_delete_document_{{ doc.pk }}_modal"></button>
+					<br />
+				{% endfor %}
+			{% else %}
+				No documents uploaded till now.
+			{% endif %}
+		</blockquote>
+		<h2>View revision history:</h2>
+		<blockquote>
+			{% if project.edits.all %}
+				{% for edit in project.viewable_edits %}
 
-				<div class="modal fade" id="project_edit_{{ forloop.counter }}_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-				  <div class="modal-dialog">
-				    <div class="modal-content">
-				      <div class="modal-header">
-				        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				        <h4 class="modal-title" id="ModalLabel">Edit history</h4>
-				      </div>
-				      <div class="modal-body">
-				      	{% for edit_part in edit.diff_html %}
-				      		<strong>{{ edit_part.label }}:</strong>
-				      		<div class="well">
-				      			{{edit_part.content|safe}}
-				      		</div>
-				      	{% endfor %}
-				      </div>
-				      <div class="modal-footer">
-					      Edited on {{ edit.when }}
-				      </div>
-				    </div>
-				  </div>
-				</div>
+					<div class="modal fade" id="project_edit_{{ forloop.counter }}_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+					  <div class="modal-dialog">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					        <h4 class="modal-title" id="ModalLabel">Edit history</h4>
+					      </div>
+					      <div class="modal-body">
+					      	{% for edit_part in edit.diff_html %}
+					      		<strong>{{ edit_part.label }}:</strong>
+					      		<div class="well">
+					      			{{edit_part.content|safe}}
+					      		</div>
+					      	{% endfor %}
+					      </div>
+					      <div class="modal-footer">
+						      Edited on {{ edit.when }}
+					      </div>
+					    </div>
+					  </div>
+					</div>
 
-				<a href = "#" data-toggle="modal" data-target="#project_edit_{{ forloop.counter }}_modal">{{ edit.when }}</a> 
-				<br />
-			{% endfor %}
-		{% else %}
-			No edits made to the details until now.
-		{% endif %}
-	</blockquote>
+					<a href = "#" data-toggle="modal" data-target="#project_edit_{{ forloop.counter }}_modal">{{ edit.when }}</a> 
+					<br />
+				{% endfor %}
+			{% else %}
+				No edits made to the details until now.
+			{% endif %}
+		</blockquote>
 
-	<hr />
+		<hr />
 
 <a class="btn btn-warning" role="button"  href = "{% url 'editproject' project.id %}">Edit CW project details</a>
 <a class="btn btn-primary ajaxify-btn" role="button" data-link = "{% url 'upload_document' project.id %}">Upload files</a>
@@ -164,17 +168,23 @@
       {% for stage in project_graph %}
       	<h1><span class="glyphicon glyphicon-{{ stage.stage_glyphicon }}" style="margin-right:25px; color:{% if stage.stage_cleared %}green{% else %}red{% endif %};"></span>
       	<span style="font-size:24px;">
-      	{% ifequal project.get_project_status stage.stage_name %}
-      	<strong>
-      	{% endifequal %}
-      	{{ stage.stage_name }}
-      	{% ifequal project.get_project_status stage.stage_name %}
-      	</strong>
-      	{% endifequal %}
+	      	{% ifequal project.get_project_status stage.stage_name %}
+	      	<strong>
+		      	{% endifequal %}
+		      		{{ stage.stage_name }}
+		      	{% ifequal project.get_project_status stage.stage_name %}
+	      	</strong>
+	      	{% endifequal %}
       	</span></h1>
       	{{ stage.info }}
-      	<br /><br />
       {% endfor %}
+      <hr />
+	  	<h1><span class="glyphicon glyphicon-facetime-video" style="margin-right:25px; color:{% if project.presented %}green{% else %}red{% endif %};"></span>
+	      	<span style="font-size:24px;">
+	      		<strong>Presented</strong>
+	      	</span>
+	  	</h1>
+      	{% if project.presented %} Yes {% else %} No {% endif %}
       </div>
       <div class="modal-footer" align="">
 	      In case of any queries, please mail at communitywork [magic-symbol] iiitd.ac.in.
