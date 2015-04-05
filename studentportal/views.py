@@ -203,7 +203,7 @@ def unlink_NGO_project(request, project_id):
 
 @login_required
 def profile(request):
-    projects = request.user.projects.all()
+    projects = request.user.projects.filter(deleted=False)
     return render(request, 'studentprofile.html', {
         'projects': projects, 'stages': project_stage})
 

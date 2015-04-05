@@ -53,6 +53,7 @@ class NGO(models.Model):
         return self.name
 
 class UndeletedProjects(models.Manager):
+    use_for_related_fields = True
     def get_queryset(self):
         return super(UndeletedProjects, self).get_queryset().filter(deleted=False)
 
