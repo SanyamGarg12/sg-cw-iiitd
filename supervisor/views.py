@@ -105,6 +105,17 @@ def add_to_examples(request, project_id):
         kwargs={'project_id': project_id}))
 
 @supervisor_logged_in
+def toggle_presented_project(request, project_id):
+    project = get_object_or_404(Project.all_projects, pk=project_id)
+    project.presented = not project.presented
+    project.save()
+    add_diff(diff_type.PROJECT_PRESENTED, person=request.user,
+         project=project, details="New value set to %s"%project.presented)
+    messages.success(request, "You have changed whether the student has presented his project to %s."%project.presented)
+    return HttpResponseRedirect(reverse('super_viewproject',
+        kwargs={'project_id': project_id}))
+
+@supervisor_logged_in
 def remove_from_examples(request, example_project_id):
     example_project = Example.objects.get(pk = example_project_id)
     p_id = example_project.project.id
@@ -496,7 +507,8 @@ def generateReport(request):
     "Email",
     "NGO",
     "Title",
-    "Started on"
+    "Started on",
+    "Presented"
     ]
     for (index, h) in enumerate(headings):
         ongoing_sheet.write(0, index, h)
@@ -521,7 +533,8 @@ def generateReport(request):
                 project.student.email,
                 project.get_NGO(),
                 project.title,
-                project.date_created.strftime('%d-%m-%Y')
+                project.date_created.strftime('%d-%m-%Y'),
+                "%s" % project.presented
             ]):
             sheet.write(row, col, x)
 
@@ -542,8 +555,7 @@ def get_project_logs(request, project_id):
 def get_TA_logs(request, ta_id):
     email = get_object_or_404(TA, pk=ta_id).email
     ta = User.objects.filter(email=email)
-    if ta:
-        ta = ta[0]
+    if ta: ta = ta[0]
     else:
         messages.warning(request, "This TA has never logged in till now.")
         return HttpResponseRedirect(reverse('TA'))
