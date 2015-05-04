@@ -18,7 +18,6 @@
 	<blockquote>
 	  <p>{{ item.name }} {% if item.location %}in or near {{ item.location }} {% endif %}</p>
           {% if item.info %}<p>{{ item.info|truncatechars:60 }}</p>{% endif %}
-	  {% if item.email %}<small>Contact {{ item.email }}</small>{% endif %}
 	</blockquote>
     </div>
   {% endfor %}
