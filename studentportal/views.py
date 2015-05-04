@@ -404,11 +404,10 @@ def delete_comment(request, comment_id):
 def handle404_LnF(request):
 
     class Item(object):
-        def __init__(self, name, location, info, email):
+        def __init__(self, name, location, info):
             self.name = name
             self.location = location
             self.info = info
-            self.email = email
 
     url = settings.LnF404_url
     site_id = settings.LnF404_SiteID
@@ -428,7 +427,6 @@ def handle404_LnF(request):
             resp[str(i)]['item-name'],
             resp[str(i)]['location'],
             resp[str(i)]['info'],
-            resp[str(i)]['email'],
             ))
     return render(request, 'LnF404.html',{
                     'items': items})
