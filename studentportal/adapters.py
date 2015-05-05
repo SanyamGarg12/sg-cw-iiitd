@@ -13,7 +13,7 @@ class DomainLoginAdapter(DefaultSocialAccountAdapter):
         if user.email.split('@')[1] not in \
                             getattr(settings,"ALLOWED_DOMAINS", []):
             logout(request)
-            messages.error(request,
+            messages.warning(request,
                     "Sorry. You must login through a IIIT-D account only.")
             raise ImmediateHttpResponse(views.home(request))
 

@@ -7,7 +7,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 admin.autodiscover()
 
-from studentportal.views import index
+from studentportal.views import index, first_login
 from studentportal import startup
 
 startup.work()
@@ -16,6 +16,7 @@ handler500 = 'studentportal.views.handle404_LnF'
 
 urlpatterns = patterns('',
     url(r'^$', index, name='index'),
+    url(r'^first_login/$', first_login),
     url(r'^student/', include('studentportal.urls')),
     url(r'^supervisor/', include('supervisor.urls')),
     url(r'^admin/', include(admin.site.urls)),

@@ -26,6 +26,11 @@ def index(request):
             return HttpResponseRedirect(reverse('supervisor_home'))
     return HttpResponseRedirect(reverse('studenthome'))
 
+def first_login(request):
+    if request.user.email in access_cache.get_TA():
+        return HttpResponseRedirect(reverse('supervisor_home'))
+    return HttpResponseRedirect(reverse('studentprofile'))
+
 def home(request):
     if request.user.is_authenticated():
         return render(request, 'studenthome.html',{
