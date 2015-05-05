@@ -81,11 +81,12 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
 )
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/first_login/'
 LOGIN_URL = '/accounts/google/login/'
 SOCIALACCOUNT_QUERY_EMAIL = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
+SOCIALACCOUNT_AUTO_SIGNUP =True
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
     'SCOPE': [
