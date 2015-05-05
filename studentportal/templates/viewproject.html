@@ -19,6 +19,9 @@
         {{ project.title }}
         </h2>
 	</center>
+
+	<div class="row">
+	  <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
 		<h2>Credits: </h2>
 		<blockquote>
 			{{ project.credits }}
@@ -26,19 +29,10 @@
 		<h2>Status</h2>
 		<blockquote>
 			{{ project.get_project_status }}
-			<a href="#" style="margin-left:10px;" data-toggle="modal" data-target="#progress_graph"> <span class="glyphicon glyphicon-question-sign"></span> </a>
 		</blockquote>
 		<h2>Date created: </h2>
 		<blockquote>
 			{{ project.date_created|date:"D, d M Y"}}
-		</blockquote>
-		<h2>Goals: </h2>
-		<blockquote>
-			{{ project.goals|linebreaksbr }}
-		</blockquote>
-		<h2>Schedule: </h2>
-		<blockquote>
-			{{ project.schedule_text|linebreaksbr }}
 		</blockquote>
 		<h2>NGO:</h2>
 		<blockquote>
@@ -57,6 +51,41 @@
 		<blockquote>
 			{{ project.NGO_super_contact}}
 		</blockquote>	
+	  </div>
+	  <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-radius:25px; border: 3px solid #F0F0F0; padding: 20px;">
+		{% for stage in project_graph %}
+      		<h1>
+	      		<span class="glyphicon glyphicon-{{ stage.stage_glyphicon }}" style="margin-right:10px; color:{% if stage.stage_cleared %}green{% else %}red{% endif %};"></span>
+	      		<span style="font-size:24px;">
+		      		{% ifequal project.get_project_status stage.stage_name %}
+			      	<strong>
+				      	{% endifequal %}
+				      		{{ stage.stage_name }}
+				      	{% ifequal project.get_project_status stage.stage_name %}
+			      	</strong>
+		      		{% endifequal %}
+	      		</span>
+			</h1>
+      		{{ stage.info }}
+      	{% endfor %}
+      	<hr />
+	  	<h1>
+	  		<span class="glyphicon glyphicon-facetime-video" style="margin-right:25px; color:{% if project.presented %}green{% else %}red{% endif %};"></span>
+	      	<span style="font-size:24px;">
+	      		{% if project.presented %}P{% else %}Not p{% endif %}resented
+	      	</span>
+	  	</h1>
+      	In case of any queries, please mail at communitywork [magic-symbol] iiitd.ac.in.
+	  </div>
+	</div>
+		<h2>Goals: </h2>
+		<blockquote>
+			{{ project.goals|linebreaksbr }}
+		</blockquote>
+		<h2>Schedule: </h2>
+		<blockquote>
+			{{ project.schedule_text|linebreaksbr }}
+		</blockquote>
 		<h2>Category</h2>
 		<blockquote>
 		{{ project.category.name }}
@@ -152,42 +181,6 @@
       </div>
       <div class="modal-footer">
 	      <a class="btn btn-danger" href="{% url 'delete_project' project.id %}" role="button">Delete</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="progress_graph" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="ModalLabel">Progress Graph</h4>
-      </div>
-      <div class="modal-body">
-      {% for stage in project_graph %}
-      	<h1><span class="glyphicon glyphicon-{{ stage.stage_glyphicon }}" style="margin-right:25px; color:{% if stage.stage_cleared %}green{% else %}red{% endif %};"></span>
-      	<span style="font-size:24px;">
-	      	{% ifequal project.get_project_status stage.stage_name %}
-	      	<strong>
-		      	{% endifequal %}
-		      		{{ stage.stage_name }}
-		      	{% ifequal project.get_project_status stage.stage_name %}
-	      	</strong>
-	      	{% endifequal %}
-      	</span></h1>
-      	{{ stage.info }}
-      {% endfor %}
-      <hr />
-	  	<h1><span class="glyphicon glyphicon-facetime-video" style="margin-right:25px; color:{% if project.presented %}green{% else %}red{% endif %};"></span>
-	      	<span style="font-size:24px;">
-	      		<strong>Presented</strong>
-	      	</span>
-	  	</h1>
-      	{% if project.presented %} Yes {% else %} No {% endif %}
-      </div>
-      <div class="modal-footer" align="">
-	      In case of any queries, please mail at communitywork [magic-symbol] iiitd.ac.in.
       </div>
     </div>
   </div>
