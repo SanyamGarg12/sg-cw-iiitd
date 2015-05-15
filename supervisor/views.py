@@ -305,7 +305,7 @@ def remove_NGO(request, ngo_id):
 def download(request, doc_id):
     doc = get_object_or_404(Document, pk=doc_id)
     response = HttpResponse(doc.document)
-    response['Content-Disposition'] = 'attachment; filename=%s' %doc.name
+    response['Content-Disposition'] = 'inline; filename=%s' %doc.name
     return response
 
 @supervisor_logged_in
@@ -541,7 +541,7 @@ def generateReport(request):
     report.save(os.path.join(BASE_DIR, 'report.xls'))
     report = open(os.path.join(BASE_DIR, 'report.xls'), 'r')
     response = StreamingHttpResponse(report)
-    response['Content-Disposition'] = 'attachment; filename=Report.xls'
+    response['Content-Disposition'] = 'inline; filename=Report.xls'
     return response
 
 @supervisor_logged_in
