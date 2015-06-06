@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from CW_Portal import settings
@@ -107,6 +109,16 @@ class Project(models.Model):
         return all([self.stage in [project_stage.ONGOING],
             document_type.FINAL_REPORT in ( x.category for x in self.documents.all()),
             ])
+
+    @classmethod
+    def get_student_viewable_project(kls, pk):
+        # allow exceptions to be raised up
+        project = get_object_or_404(kls, pk=pk)
+        if not project.is_viewable_by_student(): raise Http404
+        return project
+
+    def is_viewable_by_student(self):
+        return not self.deleted
 
     def get_project_status(self):
         return _project_stage_mapping[self.stage]
