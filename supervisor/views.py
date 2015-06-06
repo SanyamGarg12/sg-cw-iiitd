@@ -305,7 +305,7 @@ def remove_NGO(request, ngo_id):
 def download(request, doc_id):
     doc = get_object_or_404(Document, pk=doc_id)
     response = HttpResponse(doc.document)
-    response['Content-Disposition'] = 'inline; filename=%s' %doc.name
+    response['Content-Disposition'] = 'download; filename=%s' %doc.name
     return response
 
 @supervisor_logged_in
