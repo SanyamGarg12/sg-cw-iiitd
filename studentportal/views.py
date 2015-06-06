@@ -74,11 +74,10 @@ def viewproject(request, project_id):
             } for x in edit.diff_text.split('<MULTIPLE_FIELDS_SEPARATOR>') if x
         ]} for edit in project.edits.all()
     ]
-    if request.user == project.student:
-        return render(request, 'viewproject.html',
-            {'project': project, 'stages': project_stage,
-            'project_graph': project_graph})
-    return HttpResponseRedirect(reverse('studenthome'))
+    if request.user != project.student: raise Http404
+    return render(request, 'viewproject.html',
+        {'project': project, 'stages': project_stage,
+        'project_graph': project_graph})
 
 ###################
 #Ajaxify
