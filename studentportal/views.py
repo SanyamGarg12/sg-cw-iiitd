@@ -63,7 +63,7 @@ def addproject(request):
 @login_required
 def viewproject(request, project_id):
     # don't allow deleted_projects
-    project = get_object_or_404(Project, pk = project_id)
+    project = Project.get_student_viewable_project(project_id)
     project_graph = project.get_project_status_graph()
     project.viewable_edits = [
         {'when': edit.when.strftime("%T [%d-%m-%Y]"),
@@ -85,7 +85,7 @@ def viewproject(request, project_id):
 ###################
 @login_required
 def view_project_NGO(request, project_id):
-    project = get_object_or_404(Project, pk=project_id)
+    project = Project.get_student_viewable_project(project_id)
     NGOs = NGO.objects.all()
     if request.user == project.student:
         return render(request, 'view_project_NGO.html',{'project': project, 'NGOs': NGOs})
@@ -93,7 +93,7 @@ def view_project_NGO(request, project_id):
 
 @login_required
 def editproject(request, project_id):
-    instance = get_object_or_404(Project, pk = project_id)
+    instance = Project.get_student_viewable_project(project_id)
     if instance.student == request.user:
         form = ProjectForm(None, instance = instance)
         if request.method == 'POST':
@@ -129,7 +129,7 @@ def editproject(request, project_id):
 
 @login_required
 def _upload(request, project_id):
-    project = get_object_or_404(Project, pk = project_id)
+    project = Project.get_student_viewable_project(project_id)
     if not (request.is_ajax() or request.method == "POST"):
         messages.warning(request, "There was something wrong in the request made")
         return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
@@ -160,7 +160,7 @@ def _upload(request, project_id):
 
 @login_required
 def submitproject(request, project_id):
-    project = get_object_or_404(Project, pk=project_id)
+    project = Project.get_student_viewable_project(project_id)
     if project.student != request.user:
         messages.error(request, "Seriously ?? -_-")
         return HttpResponseRedirect(reverse('index'))
@@ -184,7 +184,7 @@ def submitproject(request, project_id):
 @login_required
 def link_NGO_project(request, NGO_id, project_id):
     ngo = get_object_or_404(NGO, pk = NGO_id)
-    project = get_object_or_404(Project, pk = project_id)
+    project = Project.get_student_viewable_project(project_id)
     if project.student == request.user:
         project.NGO = ngo
         project.save()
@@ -196,7 +196,7 @@ def link_NGO_project(request, NGO_id, project_id):
 
 @login_required
 def unlink_NGO_project(request, project_id):
-    project = get_object_or_404(Project, pk = project_id)
+    project = Project.get_student_viewable_project(project_id)
     if project.student == request.user:
         project.NGO = None
         project.save()
@@ -269,7 +269,7 @@ def suggest_NGO(request):
 
 @login_required
 def feedback(request, project_id):
-    project = get_object_or_404(Project, pk = project_id)
+    project = Project.get_student_viewable_project(project_id)
     if not project.student == request.user:
         return HttpResponseRedirect(reverse('index'))
     if project.feedback.all():
