@@ -217,7 +217,7 @@ def download(request, document_id):
     if doc.project.deleted: raise Http404
     if doc.project.student == request.user:
         response = HttpResponse(doc.document)
-        response['Content-Disposition'] = 'inline; filename=%s' %doc.name
+        response['Content-Disposition'] = 'download; filename=%s' %doc.name
         return response
     return HttpResponseRedirect(reverse('index'))
 
