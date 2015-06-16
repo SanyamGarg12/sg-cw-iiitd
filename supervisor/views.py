@@ -1,9 +1,10 @@
 import datetime
+import mimetypes
 import xlwt
 import os
 
 from django.shortcuts import render, get_object_or_404, get_list_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.contrib.auth import logout
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
@@ -304,8 +305,14 @@ def remove_NGO(request, ngo_id):
 @supervisor_logged_in
 def download(request, doc_id):
     doc = get_object_or_404(Document, pk=doc_id)
-    response = HttpResponse(doc.document)
-    response['Content-Disposition'] = 'download; filename=%s' %doc.name
+    content_type = mimetypes.guess_type(doc.name)[0]
+    if content_type is not None:
+        response = HttpResponse(doc.document,
+                                content_type=content_type)
+        response['Content-Disposition'] = 'inline; filename=%s' % doc.name
+    else:
+        response = HttpResponse(doc.document)
+        response['Content-Disposition'] = 'download; filename=%s' % doc.name
     return response
 
 @supervisor_logged_in
@@ -541,7 +548,7 @@ def generateReport(request):
     report.save(os.path.join(BASE_DIR, 'report.xls'))
     report = open(os.path.join(BASE_DIR, 'report.xls'), 'r')
     response = StreamingHttpResponse(report)
-    response['Content-Disposition'] = 'inline; filename=Report.xls'
+    response['Content-Disposition'] = 'download; filename=Report.xls'
     return response
 
 @supervisor_logged_in
