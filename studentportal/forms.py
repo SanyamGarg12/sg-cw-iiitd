@@ -32,7 +32,7 @@ class ProjectForm(forms.ModelForm):
 
 class UploadDocumentForm(forms.Form):
     document = forms.FileField( label='Select a file',
-                help_text='max. 5 Mb.')
+                help_text='max. 10 Mb.')
     CHOICES  = tuple([(i, Document.get_document_type(i)) for i in [
                 document_type.PROPOSAL, document_type.LOG,
                 document_type.FINAL_REPORT]])
