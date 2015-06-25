@@ -128,6 +128,7 @@ def editproject(request, project_id):
 
 @login_required
 def _upload(request, project_id):
+    max_size = getattr(settings, 'MAXIMUM_UPLOAD_SIZE_ALLOWED', 10)*1024*1024
     project = Project.get_student_viewable_project(project_id)
     if not (request.is_ajax() or request.method == "POST"):
         messages.warning(request, "There was something wrong in the request made")
@@ -144,7 +145,7 @@ def _upload(request, project_id):
                 if int(form.cleaned_data['category']) == document_type.FINAL_REPORT and project.stage == project_stage.TO_BE_VERIFIED:
                     messages.warning(request, "You can't submit the final submission until the supervisor has verified your project.")
                     return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id})) 
-                if request.FILES['document']._size > getattr(settings, 'MAXIMUM_UPLOAD_SIZE_ALLOWED', 10)*1024*1024:
+                if request.FILES['document']._size > max_size:
                     messages.warning(request, "File size limit exceeded.")
                     return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
                 Document.objects.create(document=request.FILES['document'],
@@ -154,7 +155,7 @@ def _upload(request, project_id):
                 return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
             else:
                 messages.warning(request, "There was an error in uploading your file.")
-        return render(request, 'upload_document.html', {'form': form, 'id': project_id})
+        return render(request, 'upload_document.html', {'form': form, 'id': project_id, 'max_size': max_size})
     return HttpResponseRedirect(reverse('index'))
 
 @login_required
