@@ -10,8 +10,11 @@ import supervisor.communication
 class DomainLoginAdapter(DefaultSocialAccountAdapter):
     def pre_social_login(self, request, sociallogin):
         user = sociallogin.user
-        if user.email.split('@')[1] not in \
-                            getattr(settings,"ALLOWED_DOMAINS", []):
+        # allow TAs be outside ALLOWED DOMAINS
+        email = user.email
+        if all([email.split('@')[1] not in \
+                 getattr(settings,"ALLOWED_DOMAINS", []),
+                email in access_cache.get_TA()]):
             logout(request)
             messages.warning(request,
                     "Sorry. You must login through a IIIT-D account only.")
