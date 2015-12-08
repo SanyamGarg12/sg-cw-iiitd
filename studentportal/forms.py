@@ -22,6 +22,7 @@ class ProjectForm(forms.ModelForm):
                 'NGO_super', 'NGO_super_contact', 'goals',
                 'schedule_text','category']
 
+    # injecting student in the save method itself.
     def save(self, force_insert=False, force_update=False, commit=True, student=None):
         _project = super(ProjectForm, self).save(commit=False)
         _project.student = student

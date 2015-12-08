@@ -1,6 +1,7 @@
 from django.core.cache import cache
 from decorators import validate_cache
 
+# This get/set is for getting/setting custom attributes.
 @validate_cache
 def get(key):
     return cache.get('-'.join(['custom', key]))

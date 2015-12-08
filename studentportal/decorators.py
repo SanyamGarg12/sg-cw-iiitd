@@ -3,7 +3,7 @@ import os
 import string
 from django.utils import timezone
 from django.utils.deconstruct import deconstructible
-
+from CW_Portal import settings
 
 @deconstructible
 class _PathAndRename(object):
@@ -20,4 +20,7 @@ class _PathAndRename(object):
                 break
         return os.path.join(self.path.replace('%Y', str(timezone.now().year)), filename)
 
-path_and_rename = _PathAndRename('uploads/%Y/')
+# this creates a function (in Python, functions are high level objects).
+# Whenever `path_and_rename` is called, it'll apply the logic of creating
+# and returning a random and unique name for the file.
+path_and_rename = _PathAndRename(getattr(settings, 'UPLOAD_PATH', 'uploads/%Y/'))
