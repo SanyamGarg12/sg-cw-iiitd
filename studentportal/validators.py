@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 
 def validate_credits(value):
-	if value != 1 and value != 2:
+	if value not in (1, 2,):
 		raise ValidationError('You can only work for 1 or 2 credits.')
 
 def validate_feedback_hours(value):

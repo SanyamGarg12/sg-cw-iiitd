@@ -19,6 +19,7 @@ _project_stage_mapping = {
     project_stage.COMPLETED: "Completed"
 }
 
+# Pretty bad idea to mix html with logic! :/
 _project_stage_glyphicon_mapping = {
     project_stage.TO_BE_VERIFIED : "exclamation-sign",
     project_stage.ONGOING : "tree-conifer",
@@ -26,6 +27,7 @@ _project_stage_glyphicon_mapping = {
     project_stage.COMPLETED: "ok"
 }
 
+# Type of the uploaded document
 class document_type(object):
     PROPOSAL, LOG, FINAL_REPORT = range(1,4)
     mapping = {
@@ -89,6 +91,7 @@ class Project(models.Model):
 
     all_projects        = AllProjects()
     objects             = UndeletedProjects()
+    # override `objects` with custom manager to prevent showing deleted objects.
 
     def __unicode__(self):
         return self.title
@@ -106,6 +109,8 @@ class Project(models.Model):
         return self.NGO_name
 
     def is_submittable(self):
+        # It should be in the `ONGOING` stage and
+        # a final report should have been submitted.
         return all([self.stage in [project_stage.ONGOING],
             document_type.FINAL_REPORT in ( x.category for x in self.documents.all()),
             ])
@@ -124,6 +129,9 @@ class Project(models.Model):
         return _project_stage_mapping[self.stage]
 
     def get_project_status_graph(self):
+        # Returns a list of dictionaries.
+        # Each dictionary is the state of what should be shown
+        # in the corresponding project state entry in the graph. 
         return [{
                     'stage_cleared':x <= self.stage,
                     'stage_glyphicon': _project_stage_glyphicon_mapping[x],
@@ -143,7 +151,7 @@ class Document(models.Model):
     name         = models.CharField(max_length=100)
     date_added   = models.DateTimeField(default=timezone.now)
     category     = models.IntegerField(max_length=5)
-    project      = models.ForeignKey(Project, related_name = 'documents')
+    project      = models.ForeignKey(Project, related_name='documents')
 
     def __unicode__(self):
         return ': '.join([self.project.title, self.document.name])
@@ -161,6 +169,8 @@ class Document(models.Model):
         return self.get_document_type(self.category)
 
 class Feedback(models.Model):
+    # The feedback that has to filled by the students at the end of
+    # their project.
     project       = models.ForeignKey(Project, primary_key = True,
                       related_name='feedback')
     hours         = models.IntegerField(validators=[validate_feedback_hours])
@@ -178,11 +188,13 @@ class Bug(models.Model):
     rating      = models.IntegerField()
 
 class Edit(models.Model):
+    # store the prettified diff of the changes made to the project details.
     project     = models.ForeignKey(Project, related_name='edits')
     diff_text   = models.TextField(max_length=2000, blank=True)
     when        = models.DateTimeField(default=timezone.now)
 
 class ProgressAnalyser(object):
+    
     _unverified = "Your proposal has been sent to the TA for approval. You may receive a mail asking for clarifications about your proposal before accepting. If this takes more than a couple of days, please drop a mail at communitywork <magic> iiitd.ac.in."
     _ongoing = "Continue working on your project. Also keep uploading regular log reports for faster review. Click on 'Submit Project' on completion of the project."
     _submit_final_report = "Also, it seems you haven't submitted the final report as of now."

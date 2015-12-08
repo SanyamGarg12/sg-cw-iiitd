@@ -6,7 +6,6 @@ from supervisor.models import Like, Example, News
 
 @receiver([post_save, post_delete], sender=Like)
 def refresh_leaderboard(sender, **kwargs):
-    # improve the algorithm
     temp = Example.objects.all().order_by('-likes_count')[:5]
     access_cache.set_leaderboard(temp)
 
