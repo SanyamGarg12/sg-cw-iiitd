@@ -46,11 +46,25 @@ INSTALLED_APPS = (
     'studentportal',
     'supervisor',
     'djrill',
+
+    # There's a reason for why these following apps
+    # have been commented out.
+    # While setting up the project, these apps are essential
+    # for building up the models needed and should be uncommented
+    # out. However, once the migrations for these apps have been
+    # synced, `allauth.socialaccount.providers.*` apps can handle
+    # the login magic logic on their own. These apps, rather,
+    # add a bit of exploits, because going to specific urls
+    # lead to the pages of these apps, which have the options
+    # of resetting passwords.
+    # ---
     # 'allauth',
     # 'social.apps.django_app.default',
     # 'allauth.account',
     # 'allauth.socialaccount',
     # 'allauth.socialaccount.providers',
+    # ---
+
     'allauth.socialaccount.providers.google',
     'bootstrapform',
 )
@@ -138,7 +152,7 @@ APPEND_SLASH = True
 STATIC_URL = '/static/'
 
 STATISTICS_FOLDER_NAME = os.environ['STATISTICS_FOLDER_NAME']
-
+UPLOAD_PATH = 'uploads/%Y/'
 STATICFILES_DIR = (
     os.path.join(
         BASE_DIR,

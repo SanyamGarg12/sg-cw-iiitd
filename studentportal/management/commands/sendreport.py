@@ -1,4 +1,4 @@
-from django.core.management.base import NoArgsCommand, make_option
+from django.core.management.base import NoArgsCommand
 
 class Command(NoArgsCommand):
     help = "Checks and sends daily reports to the admins"
