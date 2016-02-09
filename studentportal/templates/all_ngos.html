@@ -19,7 +19,7 @@
       <tr>
         <td>{{ forloop.counter }}</td>
         <td>{{ n.name }}</td>
-        <td>{{ n.link }}</td>
+        <td>{{ n.link|urlize }}</td>
         <td>{{ n.details }}</td>
       </tr>
     {% endfor %}

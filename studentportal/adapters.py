@@ -16,11 +16,8 @@ class DomainLoginAdapter(DefaultSocialAccountAdapter):
         email = user.email
         if all([email.split('@')[1] not in \
                  getattr(settings,"ALLOWED_DOMAINS", []),
-<<<<<<< HEAD
-                email in access_cache.get_TA()]):
-=======
-                email not in access_cache.get_TA()]):
->>>>>>> opensource_cleanup
+                 email not in access_cache.get_TA()]):
+            print "Rejecting login to", user, "with email", email, "because of invalid domain as well as not in list of TAs", access_cache.get_TA()
             logout(request)
             messages.warning(request, fmt.MESSAGE_LOGIN_INVALID_DOMAIN)
             raise ImmediateHttpResponse(views.home(request))
