@@ -45,7 +45,7 @@ def home(request):
 @login_required
 def addproject(request):
     if request.method == 'POST':
-        form = ProjectForm(request.POST)      
+        form = ProjectForm(request.POST)
         if form.is_valid():
             project = form.save(student=request.user)
             add_notification(notification_type.NEW_PROJECT, project=project)
@@ -144,7 +144,7 @@ def _upload(request, project_id):
             if form.is_valid():
                 if int(form.cleaned_data['category']) == document_type.FINAL_REPORT and project.stage == project_stage.TO_BE_VERIFIED:
                     messages.warning(request, "You can't submit the final submission until the supervisor has verified your project.")
-                    return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id})) 
+                    return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
                 if request.FILES['document']._size > max_size:
                     messages.warning(request, "File size limit exceeded.")
                     return HttpResponseRedirect(reverse('viewproject', kwargs = {'project_id': project_id}))
@@ -190,7 +190,7 @@ def link_NGO_project(request, NGO_id, project_id):
         project.save()
         messages.success(request, "You have linked your project with %s"%ngo.name)
         add_diff(diff_type.PROJECT_EDITED, person=request.user, project=project, details="Link ngo to " + ngo.name)
-        return HttpResponseRedirect(reverse('view_project_NGO', 
+        return HttpResponseRedirect(reverse('view_project_NGO',
             kwargs = {'project_id': project_id}))
     return HttpResponseRedirect(reverse('index'))
 
@@ -202,7 +202,7 @@ def unlink_NGO_project(request, project_id):
         project.save()
         add_diff(diff_type.PROJECT_EDITED, person=request.user, project=project, details="Unliked NGO.")
         messages.success(request, "You have unlinked your project")
-        return HttpResponseRedirect(reverse('view_project_NGO', 
+        return HttpResponseRedirect(reverse('view_project_NGO',
             kwargs = {'project_id': project_id}))
     return HttpResponseRedirect(reverse('index'))
 
@@ -216,7 +216,9 @@ def profile(request):
 def download(request, document_id):
     doc = get_object_or_404(Document, pk=document_id)
     if doc.project.deleted: raise Http404
-    if doc.project.student == request.user:
+    if ((doc.project.student == request.user) or
+        (doc.project.get_project_status() == project_stage.COMPLETED and doc.category == document_type.FINAL_REPORT)
+        ):
         response = HttpResponse(doc.document)
         response['Content-Disposition'] = 'download; filename=%s' %doc.name
         return response
@@ -243,7 +245,7 @@ def view_news(request, news_id='0'):
 # Anyone should view this acccording to requirements put forward
 def all_NGOs(request):
     NGOs = NGO.objects.all()
-    return render(request, 'all_ngos.html', 
+    return render(request, 'all_ngos.html',
         {'NGOs': NGOs})
 
 @login_required
@@ -312,7 +314,7 @@ def view_example(request, example_id):
     form = NewCommentForm
     return render(request, 'view_example.html',
         {'project': project, 'liked': liked, 'form': form, 'stages': project_stage})
-    
+
 def guidelines(request):
     return render(request, 'guidelines.html')
 
@@ -342,7 +344,7 @@ def delete_project(request, project_id):
     if not project.student == request.user:
         return HttpResponseRedirect(reverse('studenthome'))
     project.deleted = True
-    is_example = Example.objects.filter(project=project) 
+    is_example = Example.objects.filter(project=project)
     if is_example: is_example.delete()
     project.save()
     add_diff(diff_type.PROJECT_DELETED, person=request.user, project=project)
@@ -398,7 +400,7 @@ def add_comment(request, example_id):
 @login_required
 def delete_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
-    example_id = comment.project.pk 
+    example_id = comment.project.pk
     if comment.commentor != request.user:
         messages.info(request, "It seems to me that it ain't your comment, mistah..")
     else:

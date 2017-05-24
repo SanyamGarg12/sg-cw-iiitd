@@ -39,7 +39,7 @@ class document_type(object):
 class Category(models.Model):
     name        = models.CharField(max_length=300)
     description = models.CharField(max_length=1000, blank=True)
-    
+
     def __unicode__(self):
         return self.name
 
@@ -69,7 +69,7 @@ class Project(models.Model):
     student             = models.ForeignKey(User, related_name='projects')
     title               = models.CharField(max_length=1000)
     date_created        = models.DateTimeField(default=timezone.now)
-    credits             = models.IntegerField(default=2, 
+    credits             = models.IntegerField(default=2,
                             validators=[validate_credits])
     NGO                 = models.ForeignKey(NGO, blank=True,
                             null = True,related_name='projects',
@@ -81,9 +81,9 @@ class Project(models.Model):
     goals               = models.TextField()
     schedule_text       = models.TextField()
     finish_date         = models.DateTimeField(blank = True, null = True)
-    stage               = models.IntegerField(max_length = 5, 
+    stage               = models.IntegerField(max_length = 5,
                             default = project_stage.TO_BE_VERIFIED)
-    category            = models.ForeignKey(Category, 
+    category            = models.ForeignKey(Category,
                             related_name='projects', null=False, blank=False,
                             on_delete=models.SET(_get_other_category))
     deleted             = models.BooleanField(default = False)
@@ -122,6 +122,12 @@ class Project(models.Model):
         if not project.is_viewable_by_student(): raise Http404
         return project
 
+    def final_submission_document(self):
+        final_report = self.documents.filter(category=document_type.FINAL_REPORT)
+        if len(final_report) == 0:
+            return None
+        return final_report[0]
+
     def is_viewable_by_student(self):
         return not self.deleted
 
@@ -131,7 +137,7 @@ class Project(models.Model):
     def get_project_status_graph(self):
         # Returns a list of dictionaries.
         # Each dictionary is the state of what should be shown
-        # in the corresponding project state entry in the graph. 
+        # in the corresponding project state entry in the graph.
         return [{
                     'stage_cleared':x <= self.stage,
                     'stage_glyphicon': _project_stage_glyphicon_mapping[x],
@@ -194,7 +200,7 @@ class Edit(models.Model):
     when        = models.DateTimeField(default=timezone.now)
 
 class ProgressAnalyser(object):
-    
+
     _unverified = "Your proposal has been sent to the TA for approval. You may receive a mail asking for clarifications about your proposal before accepting. If this takes more than a couple of days, please drop a mail at communitywork <magic> iiitd.ac.in."
     _ongoing = "Continue working on your project. Also keep uploading regular log reports for faster review. Click on 'Submit Project' on completion of the project."
     _submit_final_report = "Also, it seems you haven't submitted the final report as of now."
