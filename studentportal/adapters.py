@@ -6,7 +6,7 @@ from allauth.exceptions import ImmediateHttpResponse
 from allauth.account.adapter import DefaultAccountAdapter
 from studentportal import views
 import supervisor.communication
-import format_resources as fmt
+import studentportal.format_resources as fmt
 
 # prevent login from accounts other than allowed providers.
 class DomainLoginAdapter(DefaultSocialAccountAdapter):
@@ -17,7 +17,7 @@ class DomainLoginAdapter(DefaultSocialAccountAdapter):
         if all([email.split('@')[1] not in \
                  getattr(settings,"ALLOWED_DOMAINS", []),
                  email not in access_cache.get_TA()]):
-            print "Rejecting login to", user, "with email", email, "because of invalid domain as well as not in list of TAs", access_cache.get_TA()
+            print ("Rejecting login to", user, "with email", email, "because of invalid domain as well as not in list of TAs", access_cache.get_TA())
             logout(request)
             messages.warning(request, fmt.MESSAGE_LOGIN_INVALID_DOMAIN)
             raise ImmediateHttpResponse(views.home(request))
@@ -43,6 +43,6 @@ def send_report_to_admins():
 
         supervisor.communication.send_email(fmt.MAIL_TITLE_ADMIN_DAILY_REPORT, body, access_cache.get_TA())
 
-        print "Sent report to admins: ", body
+        print ("Sent report to admins: ", body)
     else:
-        print "No report sending required."
+        print ("No report sending required.")

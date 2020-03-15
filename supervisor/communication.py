@@ -6,14 +6,14 @@ from studentportal.models import Project, project_stage
 def _send_mail(subject, text_content, recipient_list):
     msg = EmailMultiAlternatives(subject, text_content, settings.EMAIL_HOST_USER, recipient_list)
     msg.send()
-    print "sending mail", subject, ": ", text_content, " to ", recipient_list
+    print ("sending mail", subject, ": ", text_content, " to ", recipient_list)
 
 def send_email(subject, text_content, to=[]):
     p = Process(target=_send_mail, args=(subject, text_content, to,))
     p.start()
 
 def chunks(full, size):
-    for i in xrange(0, len(full), size):
+    for i in range(0, len(full), size):
         yield full[i:i+size]
 
 def send_email_to_all(text_content,subject="New Announcement"):

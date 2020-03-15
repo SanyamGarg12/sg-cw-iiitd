@@ -45,14 +45,14 @@ def add_diff(diff_type, **kwargs):
 
 class Notification(models.Model):
     noti_type   = models.IntegerField(max_length=5, null=True, blank=True)
-    project     = models.ForeignKey(Project, null= True, unique= False)
+    project     = models.ForeignKey(Project, null= True, unique= False, on_delete=models.SET_DEFAULT)
     NGO_name    = models.CharField(max_length=200, blank=True)
     NGO_link    = models.URLField(max_length=200, blank=True)
     NGO_details = models.TextField(blank=True)
-    NGO_sugg_by = models.ForeignKey(User, null=True)
+    NGO_sugg_by = models.ForeignKey(User, null=True, on_delete=models.SET_DEFAULT)
 
 class Example(models.Model):
-    project         = models.OneToOneField(Project, primary_key = True)
+    project         = models.OneToOneField(Project, primary_key = True, on_delete=models.SET_DEFAULT)
     date_created    = models.DateTimeField(default = timezone.now)
     likes_count     = models.IntegerField(default=0)
     comments_count  = models.IntegerField(default=0)
@@ -65,8 +65,8 @@ class Example(models.Model):
         super(Example, self).delete(*args, **kwargs)
 
 class Like(models.Model):
-    project     = models.ForeignKey(Example, related_name='likes')
-    liked_by    = models.ForeignKey(User, related_name='liked_projects')
+    project     = models.ForeignKey(Example, related_name='likes', on_delete=models.SET_DEFAULT)
+    liked_by    = models.ForeignKey(User, related_name='liked_projects', on_delete=models.SET_DEFAULT)
     def save(self, *args, **kwargs):
         self.project.likes_count += 1
         self.project.save()
@@ -78,8 +78,8 @@ class Like(models.Model):
 
 class Comment(models.Model):
     text        = models.CharField(max_length=200) 
-    project     = models.ForeignKey(Example, related_name='comments')
-    commentor   = models.ForeignKey(User, related_name='comments')
+    project     = models.ForeignKey(Example, related_name='comments', on_delete=models.SET_DEFAULT)
+    commentor   = models.ForeignKey(User, related_name='comments', on_delete=models.SET_DEFAULT)
     def save(self, *args, **kwargs):
         self.project.comments_count += 1
         self.project.save()
@@ -102,8 +102,8 @@ class TA(models.Model):
 
 class Diff(models.Model):
     diff_type   = models.IntegerField(max_length=12)
-    person      = models.ForeignKey(User, null=True, related_name='diff')
-    project     = models.ForeignKey(Project, null=True, related_name='diff')
+    person      = models.ForeignKey(User, null=True, related_name='diff', on_delete=models.SET_DEFAULT)
+    project     = models.ForeignKey(Project, null=True, related_name='diff', on_delete=models.SET_DEFAULT)
     details     = models.TextField(max_length=1000, null=True)
     when        = models.DateTimeField(default=timezone.now)
 

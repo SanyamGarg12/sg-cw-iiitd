@@ -1,5 +1,5 @@
 from django.core.cache import cache
-from decorators import validate_cache
+from CW_Portal.decorators import validate_cache
 
 # This get/set is for getting/setting custom attributes.
 @validate_cache

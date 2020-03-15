@@ -1,20 +1,20 @@
 from datetime import date
 import json
-from urllib import urlencode
-from urllib2 import urlopen
+from urllib.parse import urlencode
+from urllib.request import urlopen
 
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models import Q
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 
 from CW_Portal import access_cache, settings, diff_match_patch
-from models import Feedback, Project, Document, Category, Bug, NGO, document_type, project_stage, Edit
-from forms import ProjectForm, FeedbackForm, UploadDocumentForm, BugsForm, suggest_NGOForm
+from studentportal.models import Feedback, Project, Document, Category, Bug, NGO, document_type, project_stage, Edit
+from studentportal.forms import ProjectForm, FeedbackForm, UploadDocumentForm, BugsForm, suggest_NGOForm
 from supervisor.forms import NewCommentForm
 from supervisor.models import Notification, Example, News, Like, Comment, TA, add_notification, notification_type, diff_type, add_diff, Diff
 

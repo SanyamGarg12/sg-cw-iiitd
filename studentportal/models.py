@@ -5,8 +5,8 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from CW_Portal import settings
-from decorators import path_and_rename
-from validators import validate_credits, validate_feedback_hours
+from studentportal.decorators import path_and_rename
+from studentportal.validators import validate_credits, validate_feedback_hours
 
 class project_stage(object):
     TO_BE_VERIFIED, ONGOING, SUBMITTED, COMPLETED = range(1,5)
@@ -50,8 +50,7 @@ class NGO(models.Model):
     name        = models.CharField(max_length=1000)
     link        = models.URLField(blank=True)
     details     = models.TextField(blank=True)
-    category    = models.ForeignKey(Category, related_name='NGOs', null=True,
-                    on_delete=models.SET(_get_other_category))
+    category    = models.ForeignKey(Category, related_name='NGOs', null=True, on_delete=models.SET(_get_other_category))
 
     def __unicode__(self):
         return self.name
@@ -66,14 +65,12 @@ class AllProjects(models.Manager):
         return super(AllProjects, self).get_queryset()
 
 class Project(models.Model):
-    student             = models.ForeignKey(User, related_name='projects')
+    student             = models.ForeignKey(User, related_name='projects', on_delete=models.SET_DEFAULT)
     title               = models.CharField(max_length=1000)
     date_created        = models.DateTimeField(default=timezone.now)
     credits             = models.IntegerField(default=2,
                             validators=[validate_credits])
-    NGO                 = models.ForeignKey(NGO, blank=True,
-                            null = True,related_name='projects',
-                            on_delete=models.SET_NULL)
+    NGO                 = models.ForeignKey(NGO, blank=True, null = True,related_name='projects', on_delete=models.SET_NULL)
     NGO_name            = models.CharField(max_length=1000)
     NGO_details         = models.CharField(max_length=1000)
     NGO_super           = models.CharField(max_length=1000)
@@ -81,11 +78,8 @@ class Project(models.Model):
     goals               = models.TextField()
     schedule_text       = models.TextField()
     finish_date         = models.DateTimeField(blank = True, null = True)
-    stage               = models.IntegerField(max_length = 5,
-                            default = project_stage.TO_BE_VERIFIED)
-    category            = models.ForeignKey(Category,
-                            related_name='projects', null=False, blank=False,
-                            on_delete=models.SET(_get_other_category))
+    stage               = models.IntegerField(max_length = 5, default = project_stage.TO_BE_VERIFIED)
+    category            = models.ForeignKey(Category, related_name='projects', null=False, blank=False, on_delete=models.SET(_get_other_category))
     deleted             = models.BooleanField(default = False)
     presented           = models.BooleanField(default = False)
 
@@ -157,7 +151,7 @@ class Document(models.Model):
     name         = models.CharField(max_length=100)
     date_added   = models.DateTimeField(default=timezone.now)
     category     = models.IntegerField(max_length=5)
-    project      = models.ForeignKey(Project, related_name='documents')
+    project      = models.ForeignKey(Project, related_name='documents', on_delete=models.SET_DEFAULT)
 
     def __unicode__(self):
         return ': '.join([self.project.title, self.document.name])
@@ -177,8 +171,7 @@ class Document(models.Model):
 class Feedback(models.Model):
     # The feedback that has to filled by the students at the end of
     # their project.
-    project       = models.ForeignKey(Project, primary_key = True,
-                      related_name='feedback')
+    project       = models.ForeignKey(Project, primary_key = True, related_name='feedback', on_delete=models.SET_DEFAULT)
     hours         = models.IntegerField(validators=[validate_feedback_hours])
     achievements  = models.TextField(max_length = 2000)
     experience    = models.IntegerField(choices=(
@@ -189,13 +182,13 @@ class Feedback(models.Model):
         return ': '.join([self.project.title, str(self.experience)])
 
 class Bug(models.Model):
-    user        = models.ForeignKey(User, related_name='bugs', null = True)
+    user        = models.ForeignKey(User, related_name='bugs', null = True, on_delete=models.SET_DEFAULT)
     suggestions = models.TextField(max_length=2000, blank=True)
     rating      = models.IntegerField()
 
 class Edit(models.Model):
     # store the prettified diff of the changes made to the project details.
-    project     = models.ForeignKey(Project, related_name='edits')
+    project     = models.ForeignKey(Project, related_name='edits', on_delete=models.SET_DEFAULT)
     diff_text   = models.TextField(max_length=2000, blank=True)
     when        = models.DateTimeField(default=timezone.now)
 
@@ -265,7 +258,7 @@ class ProgressAnalyser(object):
         if project.stage == project_stage.SUBMITTED:
             date = [d for d in project.diff.all() if d.diff_type == diff_type.PROJECT_SUBMITTED][0].when
             return ProgressAnalyser._completed_submitted % (date.strftime('%d-%m-%Y'))
-        return _all_completed
+        return ProgressAnalyser._all_completed
 
     # next steps returns a mapping of stage to a function that needs a project as an argument
     # The function returns the string to be displayed according to the stage of the project in the popup

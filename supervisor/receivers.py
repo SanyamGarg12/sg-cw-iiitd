@@ -9,8 +9,8 @@ from pygal import Pie, StackedLine
 from pygal.style import CleanStyle as pygal_CleanStyle
 
 from CW_Portal import access_cache, settings
-from models import TA, Notification
-from models import notification_type as nt
+from supervisor.models import TA, Notification
+from supervisor.models import notification_type as nt
 from studentportal.models import Project, Category, project_stage,  Feedback
 
 media_root = getattr(settings, "MEDIA_ROOT")

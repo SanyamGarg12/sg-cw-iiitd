@@ -122,10 +122,14 @@ DATABASES = {
     #    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     #},
      'default': {
+         # TODO: Change values here
          'ENGINE': 'django.db.backends.mysql',
-         'NAME': os.environ['DB_NAME'],
-         'USER': os.environ['DB_USER'],
-         'PASSWORD': os.environ['DB_PASSWORD'],
+         'NAME': 'cw_portal',
+         'USER': 'cw',
+         'PASSWORD': 'test',
+         # 'NAME': os.environ['DB_NAME'],
+         # 'USER': os.environ['DB_USER'],
+         # 'PASSWORD': os.environ['DB_PASSWORD'],
          'HOST': 'localhost',   # Or an IP Address that your DB is hosted on WILL CHANGE
          'PORT': '3306',
      }

@@ -7,21 +7,21 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.contrib.auth import logout
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db.models import Q
 from django.utils import timezone
 
 from CW_Portal import settings, access_cache
-from forms import AdvanceSearchForm, NewsForm, NewCategoryForm, NewNGOForm, EmailProjectForm, TAForm, ReportForm
-from models import Example, News, Notification, TA, diff_type, add_diff, Diff, add_notification
-from models import notification_type as nt
+from supervisor.forms import AdvanceSearchForm, NewsForm, NewCategoryForm, NewNGOForm, EmailProjectForm, TAForm, ReportForm
+from supervisor.models import Example, News, Notification, TA, diff_type, add_diff, Diff, add_notification
+from supervisor.models import notification_type as nt
 from studentportal.models import Project, NGO, Category, Document, project_stage, document_type, Edit
 from supervisor.communication import send_email, send_email_to_all
 from supervisor.decorators import supervisor_logged_in
 from supervisor.validators import is_int
-import receivers
+import supervisor.receivers
 
 @supervisor_logged_in
 def home(request):

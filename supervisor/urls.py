@@ -1,7 +1,7 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from . import views
 
-urlpatterns = patterns('',
+urlpatterns = ['',
 	url(r'^$', views.home),
 	url(r'^home/', views.home, name='supervisor_home'),
 	url(r'^logout/$', views._logout, name='supervisor_logout'),
@@ -59,4 +59,4 @@ urlpatterns = patterns('',
 	url(r'^logs/project/(?P<project_id>[0-9]+)/$', views.get_project_logs, name='super_project_logs'),
 	url(r'^logs/TA/(?P<ta_id>[0-9]+)/$', views.get_TA_logs, name='super_TA_logs'),
 
-)
+]

@@ -61,5 +61,6 @@ class ReportForm(forms.Form):
 
 class TAForm(forms.ModelForm):
     class Meta:
+        fields = '__all__'
         model = TA
     email = forms.CharField(label = "IIIT-D Email of the TA", required=True)

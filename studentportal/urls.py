@@ -1,9 +1,9 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from . import views
 
 # fixing width at 78/79 messes up with code readability.
 
-urlpatterns = patterns('',
+urlpatterns = ['',
     # basic
     url(r'^$', views.index, name='index'),
     url(r'^home/', views.home, name='studenthome'),
@@ -47,4 +47,4 @@ urlpatterns = patterns('',
     url(r'^comment/(?P<example_id>[0-9]+)/$', views.add_comment, name='add_comment'),
     url(r'^comment/delete/(?P<comment_id>[0-9]+)/$', views.delete_comment, name='delete_comment'),
     
-)
+]
