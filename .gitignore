@@ -7,3 +7,4 @@ media
 static
 uwsgi_params
 env
+venv

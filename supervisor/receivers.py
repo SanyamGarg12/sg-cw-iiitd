@@ -51,7 +51,7 @@ def _RenderProjectCategoryPieChart():
     category_dict = {c: 0 for c in Category.objects.all()}
     for project in Project.objects.all():
         category_dict[project.category] += 1
-    for k,v in category_dict.iteritems():
+    for k,v in category_dict.items():
         pie_chart.add(k.name, v)
     pie_chart.render_to_file(os.path.join(media_root,
                      '%s/project_category_piechart.svg'%folder))
