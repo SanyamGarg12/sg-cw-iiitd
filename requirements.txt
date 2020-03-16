@@ -2,6 +2,8 @@ Django
 PyJWT
 argparse
 django-allauth
+setuptools
+django-bootstrap-form
 django-bootstrap3-form
 djrill
 oauthlib
