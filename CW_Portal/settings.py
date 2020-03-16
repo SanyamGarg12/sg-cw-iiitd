@@ -9,14 +9,17 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import json
 import os
+import credentials
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = credentials.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -155,7 +158,7 @@ APPEND_SLASH = True
 
 STATIC_URL = '/static/'
 
-STATISTICS_FOLDER_NAME = os.environ['STATISTICS_FOLDER_NAME']
+STATISTICS_FOLDER_NAME = credentials.STATISTICS_FOLDER_NAME
 UPLOAD_PATH = 'uploads/%Y/'
 STATICFILES_DIR = (
     os.path.join(
@@ -178,12 +181,12 @@ ALLOWED_DOMAINS = ['iiitd.ac.in']
 SOCIALACCOUNT_ADAPTER = 'studentportal.adapters.DomainLoginAdapter'
 ACCOUNT_ADAPTER = 'studentportal.adapters.NoMessagesLoginAdapter'
 MAXIMUM_UPLOAD_SIZE_ALLOWED = 10
-EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+EMAIL_HOST_USER = credentials.EMAIL_HOST_USER
 
 EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
-MANDRILL_API_KEY = os.environ['MANDRILL_API_KEY']
-LnF404_url = os.environ['LnF404_url']
-LnF404_SiteID = os.environ['LnF404_SiteID']
-LnF404_token  = os.environ['LnF404_token']
+MANDRILL_API_KEY = credentials.MANDRILL_API_KEY
+LnF404_url = credentials.LnF404_url
+LnF404_SiteID = credentials.LnF404_SiteID
+LnF404_token  = credentials.LnF404_token
 
 ALLOWED_HOSTS = ['*']
