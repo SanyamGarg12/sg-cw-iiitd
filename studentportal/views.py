@@ -21,7 +21,7 @@ from supervisor.models import Notification, Example, News, Like, Comment, TA, ad
 diff_worker = diff_match_patch.diff_match_patch()
 
 def index(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if request.user.email in access_cache.get_TA():
             return HttpResponseRedirect(reverse('supervisor_home'))
     return HttpResponseRedirect(reverse('studenthome'))
@@ -32,7 +32,7 @@ def first_login(request):
     return HttpResponseRedirect(reverse('studentprofile'))
 
 def home(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return render(request, 'studenthome.html',{
             'example_projects': access_cache.get_example_projects(),
             'news': access_cache.get_news(),
@@ -408,7 +408,7 @@ def delete_comment(request, comment_id):
         messages.info(request, "Comment deleted.")
     return HttpResponseRedirect(reverse('view_example', kwargs={'example_id': example_id}))
 
-def handle404_LnF(request):
+def handle404_LnF(request, *args, **kwargs):
 
     class Item(object):
         def __init__(self, name, location, info):

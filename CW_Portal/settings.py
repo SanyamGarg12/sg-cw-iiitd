@@ -208,6 +208,6 @@ EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
 MANDRILL_API_KEY = credentials.MANDRILL_API_KEY
 LnF404_url = credentials.LnF404_url
 LnF404_SiteID = credentials.LnF404_SiteID
-LnF404_token  = credentials.LnF404_token
+LnF404_token = credentials.LnF404_token
 
 ALLOWED_HOSTS = ['*']
