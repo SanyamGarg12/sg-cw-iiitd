@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import json
 import os
-import CW_Portal.credentials as credentials
+import credentials
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -109,10 +109,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                "django.core.context_processors.request",
+                # "django.core.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
-                "allauth.account.context_processors.account",
-                "allauth.socialaccount.context_processors.socialaccount",
+                # "allauth.account.context_processors.account",
+                # "allauth.socialaccount.context_processors.socialaccount",
                 "django.contrib.messages.context_processors.messages",
             ],
         },
