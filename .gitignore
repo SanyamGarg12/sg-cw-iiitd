@@ -7,3 +7,5 @@ media
 static
 uwsgi_params
 env
+
+.idea/workspace.xml
