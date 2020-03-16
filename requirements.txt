@@ -13,6 +13,7 @@ python-openid
 python-social-auth
 requests
 requests-oauthlib
+social_auth_app_django
 six
 # wsgiref==0.1.2
 xlwt
