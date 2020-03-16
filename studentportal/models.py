@@ -81,7 +81,7 @@ class Project(models.Model):
     stage               = models.IntegerField(max_length = 5, default = project_stage.TO_BE_VERIFIED)
     category            = models.ForeignKey(Category, related_name='projects', null=False, blank=False, on_delete=models.SET(_get_other_category))
     deleted             = models.BooleanField(default = False)
-    presented           = models.BooleanField(default = False)
+    # presented           = models.BooleanField(default = False)
 
     all_projects        = AllProjects()
     objects             = UndeletedProjects()

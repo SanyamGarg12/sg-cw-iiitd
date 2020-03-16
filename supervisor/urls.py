@@ -1,9 +1,9 @@
 from django.conf.urls import url
 from . import views
 
-urlpatterns = ['',
-	url(r'^$', views.home),
+urlpatterns = (
 	url(r'^home/', views.home, name='supervisor_home'),
+	url(r'^$', views.home),
 	url(r'^logout/$', views._logout, name='supervisor_logout'),
 	
 	url(r'^ongoing/$', views.ongoing_projects, name='ongoing_projects'),
@@ -58,5 +58,4 @@ urlpatterns = ['',
 
 	url(r'^logs/project/(?P<project_id>[0-9]+)/$', views.get_project_logs, name='super_project_logs'),
 	url(r'^logs/TA/(?P<ta_id>[0-9]+)/$', views.get_TA_logs, name='super_TA_logs'),
-
-]
+)

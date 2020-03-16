@@ -61,18 +61,18 @@ INSTALLED_APPS = (
     # lead to the pages of these apps, which have the options
     # of resetting passwords.
     # ---
-    # 'allauth',
-    # 'social.apps.django_app.default',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.providers',
+    'allauth',
+    'social.apps.django_app.default',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers',
     # ---
 
     'allauth.socialaccount.providers.google',
     'bootstrapform',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -90,13 +90,34 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.core.context_processors.request",
-    "django.contrib.auth.context_processors.auth",
-    "allauth.account.context_processors.account",
-    "allauth.socialaccount.context_processors.socialaccount",
-    "django.contrib.messages.context_processors.messages",
-)
+# TEMPLATE_CONTEXT_PROCESSORS = (
+#     "django.core.context_processors.request",
+#     "django.contrib.auth.context_processors.auth",
+#     "allauth.account.context_processors.account",
+#     "allauth.socialaccount.context_processors.socialaccount",
+#     "django.contrib.messages.context_processors.messages",
+# )
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                "django.core.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "allauth.account.context_processors.account",
+                "allauth.socialaccount.context_processors.socialaccount",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]
 
 LOGIN_REDIRECT_URL = '/first_login/'
 LOGIN_URL = '/accounts/google/login/'
