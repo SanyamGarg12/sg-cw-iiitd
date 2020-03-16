@@ -65,7 +65,7 @@ class AllProjects(models.Manager):
         return super(AllProjects, self).get_queryset()
 
 class Project(models.Model):
-    student             = models.ForeignKey(User, related_name='projects', on_delete=models.SET_DEFAULT)
+    student             = models.ForeignKey(User, related_name='projects', on_delete=models.CASCADE)
     title               = models.CharField(max_length=1000)
     date_created        = models.DateTimeField(default=timezone.now)
     credits             = models.IntegerField(default=2,
@@ -151,7 +151,7 @@ class Document(models.Model):
     name         = models.CharField(max_length=100)
     date_added   = models.DateTimeField(default=timezone.now)
     category     = models.IntegerField(max_length=5)
-    project      = models.ForeignKey(Project, related_name='documents', on_delete=models.SET_DEFAULT)
+    project      = models.ForeignKey(Project, related_name='documents', on_delete=models.CASCADE)
 
     def __unicode__(self):
         return ': '.join([self.project.title, self.document.name])
@@ -171,7 +171,7 @@ class Document(models.Model):
 class Feedback(models.Model):
     # The feedback that has to filled by the students at the end of
     # their project.
-    project       = models.ForeignKey(Project, primary_key = True, related_name='feedback', on_delete=models.SET_DEFAULT)
+    project       = models.ForeignKey(Project, primary_key = True, related_name='feedback', on_delete=models.CASCADE)
     hours         = models.IntegerField(validators=[validate_feedback_hours])
     achievements  = models.TextField(max_length = 2000)
     experience    = models.IntegerField(choices=(
@@ -182,13 +182,13 @@ class Feedback(models.Model):
         return ': '.join([self.project.title, str(self.experience)])
 
 class Bug(models.Model):
-    user        = models.ForeignKey(User, related_name='bugs', null = True, on_delete=models.SET_DEFAULT)
+    user        = models.ForeignKey(User, related_name='bugs', null = True, on_delete=models.CASCADE)
     suggestions = models.TextField(max_length=2000, blank=True)
     rating      = models.IntegerField()
 
 class Edit(models.Model):
     # store the prettified diff of the changes made to the project details.
-    project     = models.ForeignKey(Project, related_name='edits', on_delete=models.SET_DEFAULT)
+    project     = models.ForeignKey(Project, related_name='edits', on_delete=models.CASCADE)
     diff_text   = models.TextField(max_length=2000, blank=True)
     when        = models.DateTimeField(default=timezone.now)
 
