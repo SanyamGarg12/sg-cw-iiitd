@@ -44,7 +44,7 @@ def add_diff(diff_type, **kwargs):
                             project=project, details=details)
 
 class Notification(models.Model):
-    noti_type   = models.IntegerField(max_length=5, null=True, blank=True)
+    noti_type   = models.IntegerField(null=True, blank=True)
     project     = models.ForeignKey(Project, null= True, unique= False, on_delete=models.CASCADE)
     NGO_name    = models.CharField(max_length=200, blank=True)
     NGO_link    = models.URLField(max_length=200, blank=True)
@@ -101,7 +101,7 @@ class TA(models.Model):
     instructor  = models.BooleanField(default=False)
 
 class Diff(models.Model):
-    diff_type   = models.IntegerField(max_length=12)
+    diff_type   = models.IntegerField()
     person      = models.ForeignKey(User, null=True, related_name='diff', on_delete=models.CASCADE)
     project     = models.ForeignKey(Project, null=True, related_name='diff', on_delete=models.CASCADE)
     details     = models.TextField(max_length=1000, null=True)

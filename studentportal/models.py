@@ -78,7 +78,7 @@ class Project(models.Model):
     goals               = models.TextField()
     schedule_text       = models.TextField()
     finish_date         = models.DateTimeField(blank = True, null = True)
-    stage               = models.IntegerField(max_length = 5, default = project_stage.TO_BE_VERIFIED)
+    stage               = models.IntegerField(default = project_stage.TO_BE_VERIFIED)
     category            = models.ForeignKey(Category, related_name='projects', null=False, blank=False, on_delete=models.SET(_get_other_category))
     deleted             = models.BooleanField(default = False)
     # presented           = models.BooleanField(default = False)
@@ -150,7 +150,7 @@ class Document(models.Model):
     document     = models.FileField(upload_to=path_and_rename)
     name         = models.CharField(max_length=100)
     date_added   = models.DateTimeField(default=timezone.now)
-    category     = models.IntegerField(max_length=5)
+    category     = models.IntegerField()
     project      = models.ForeignKey(Project, related_name='documents', on_delete=models.CASCADE)
 
     def __unicode__(self):
