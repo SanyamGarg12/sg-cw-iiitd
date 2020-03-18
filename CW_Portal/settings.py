@@ -79,6 +79,8 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 )
 
 ROOT_URLCONF = 'CW_Portal.urls'
@@ -88,6 +90,7 @@ WSGI_APPLICATION = 'CW_Portal.wsgi.application'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
+    'social_core.backends.google.GoogleOAuth2'
 )
 
 # TEMPLATE_CONTEXT_PROCESSORS = (
@@ -109,11 +112,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # "django.core.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
-                # "allauth.account.context_processors.account",
-                # "allauth.socialaccount.context_processors.socialaccount",
                 "django.contrib.messages.context_processors.messages",
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
+                # "allauth.socialaccount.context_processors.socialaccount",
+                # "allauth.account.context_processors.account",
+                # "django.core.context_processors.request",
             ],
         },
     },
@@ -121,6 +126,12 @@ TEMPLATES = [
 
 LOGIN_REDIRECT_URL = '/first_login/'
 LOGIN_URL = '/accounts/google/login/'
+LOGOUT_URL = '/logout/'
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '282183642413-plgs6la17cs0i9i3uu4kt8gjsvjc8irk.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'VxRxSQj8Wpy2nBslwQSJ9Mua'
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
 SOCIALACCOUNT_QUERY_EMAIL = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True

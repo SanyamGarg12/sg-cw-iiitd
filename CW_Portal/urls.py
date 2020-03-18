@@ -19,6 +19,7 @@ handler500 = 'studentportal.views.handle404_LnF'
 
 urlpatterns = [
     url(r'^$', index, name='index'),
+    url('', include('social_django.urls', namespace='social')),
     url(r'^first_login/$', first_login),
     url(r'^student/', include('studentportal.urls')),
     url(r'^supervisor/', include('supervisor.urls')),
