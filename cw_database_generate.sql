@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS socialaccount_socialaccount (
 	id	integer NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	provider	varchar(30) NOT NULL,
 	uid	varchar(255) NOT NULL,
-	last_login	datetime "1970-01-01 00:00:01",
+	last_login	datetime DEFAULT "1970-01-01 00:00:01",
 	date_joined	datetime NOT NULL,
 	extra_data	text NOT NULL,
 	user_id	integer NOT NULL,
