@@ -2,7 +2,7 @@ use cw_portal;
 CREATE TABLE IF NOT EXISTS auth_user (
 	id	integer NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	password	varchar(128) NOT NULL,
-	last_login	datetime NOT NULL,
+	last_login	datetime DEFAULT "1970-01-01 00:00:01",
 	is_superuser	bool NOT NULL,
 	username	varchar(30) NOT NULL UNIQUE,
 	first_name	varchar(30) NOT NULL,
@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS socialaccount_socialaccount (
 	id	integer NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	provider	varchar(30) NOT NULL,
 	uid	varchar(255) NOT NULL,
-	last_login	datetime NOT NULL,
+	last_login	datetime "1970-01-01 00:00:01",
 	date_joined	datetime NOT NULL,
 	extra_data	text NOT NULL,
 	user_id	integer NOT NULL,
