@@ -1,129 +1,144 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Supervisor - CW Portal</title>
     <!-- Bootstrap core CSS -->
-    <link href="{%static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-  <style type="text/css" id="holderjs-style"></style>
-  <style type="text/css">
-  .col-sm-offset-3 {
-    margin-left: 0%;
-  };
-  .ajaxify-btn{};
-  </style>
-  </head>
-  <body style="padding-top: 70px;">
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <style type="text/css" id="holderjs-style"></style>
+    <style type="text/css">
+        .col-sm-offset-3 {
+            margin-left: 0%;
+        }
+
+        ;
+        .ajaxify-btn {
+        }
+
+        ;
+    </style>
+</head>
+<body style="padding-top: 70px;">
 {% block core-header %}
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-{#            TODO: Portal Name here#}
-          <a class="navbar-brand" href="{% url 'index' %}">SG/CW Portal - IIITD</a>
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                {#            TODO: Portal Name here#}
+                <a class="navbar-brand" href="{% url 'index' %}">SG/CW Portal - IIITD</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{% url 'studenthome' %}">View as Student</a></li>
+                    <li><a class="btn-link ajaxify-btn" data-link="{% url 'advance_search' %}">Advanced Search</a></li>
+                    <li><a class="btn-link ajaxify-btn" data-link="{% url 'bugs' %}"> Report bug </a></li>
+                    <li><a href="{% url 'supervisor_logout' %}">Logout</a></li>
+                </ul>
+                <form class="navbar-form navbar-right" action="/supervisor/basic_search/" method="POST">
+                    {% csrf_token %}
+                    <input class="form-inline" placeholder="First name / Email / Roll No." type="text"
+                           name="search_query">
+                    <span class-"input-group-button">
+                    <input type='submit' value='Search' class="btn btn-default"/>
+                    </span>
+                </form>
+            </div>
         </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="{% url 'studenthome' %}">View as Student</a></li>
-            <li><a  class="btn-link ajaxify-btn" data-link="{% url 'advance_search' %}">Advanced Search</a></li>
-            <li><a class="btn-link ajaxify-btn" data-link="{% url 'bugs' %}"> Report bug </a></li>
-            <li><a href="{% url 'supervisor_logout' %}">Logout</a></li>
-          </ul>
-          <form class="navbar-form navbar-right" action="/supervisor/basic_search/" method="POST">
-            {% csrf_token %}
-            <input class="form-inline" placeholder="First name / Email / Roll No." type="text" name = "search_query" >
-            <span class-"input-group-button">
-            <input type='submit' value='Search' class="btn btn-default" />
-            </span>
-          </form>
-        </div>
-      </div>
     </div>
 
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
+    <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+        <ul class="nav nav-sidebar">
             <li class="active"><strong>Community Work</strong></li>
             <li><a href="{% url 'ongoing_projects' %}">Ongoing Projects</a></li>
             <li><a href="{% url 'example_projects' %}">Example Projects</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
+        </ul>
+        <ul class="nav nav-sidebar">
             <li class="active"><strong>Notifications</strong></li>
-            <li><a href="{% url 'unverified_projects' %}">New Proposals <span class="badge">{{ request.session.noti_count_proposal|add:"0" }}</span> </a></li>
-            <li><a href="{% url 'submitted_projects' %}">Pending Projects <span class="badge">{{ request.session.noti_count_submissions|add:"0" }}</span></a></li>
-            <li><a href="{% url 'super_suggested_ngos' %}">New NGOs <span class="badge">{{ request.session.noti_count_NGO|add:"0" }}</span></a></li>
-          </ul>
-          <ul></ul>
-          <ul class="nav nav-sidebar">
+            <li><a href="{% url 'unverified_projects' %}">New Proposals <span
+                    class="badge">{{ request.session.noti_count_proposal|add:"0" }}</span> </a></li>
+            <li><a href="{% url 'submitted_projects' %}">Pending Projects <span
+                    class="badge">{{ request.session.noti_count_submissions|add:"0" }}</span></a></li>
+            <li><a href="{% url 'super_suggested_ngos' %}">New NGOs <span
+                    class="badge">{{ request.session.noti_count_NGO|add:"0" }}</span></a></li>
+        </ul>
+        <ul></ul>
+        <ul class="nav nav-sidebar">
             <li><a href="{% url 'super_allprojects' %}">All Projects</a></li>
             <li><a href="{% url 'super_all_NGO' %}">All NGOs</a></li>
             <li><a href="{% url 'super_allcategories' %}">All Categories</a></li>
             <li><a href="{% url 'all_news' %}">All News</a></li>
             <li><a href="{% url 'TA' %}">Teaching Assistants</a></li>
-          </ul>
-        </div>
-        {% if messages %}
+        </ul>
+    </div>
+    {% if messages %}
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <span class="messages">
           {% for message in messages %}
-            <span {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</span>
+              <span {% if message.tags %}
+                  class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</span>
           {% endfor %}
-          </div>
-          </span>
-{% endif %}
-{% endblock %}
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-{% block content %}
-{% endblock %}
         </div>
-      </div>
-    </div>
+        </span>
+    {% endif %}
+{% endblock %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    {% block content %}
+    {% endblock %}
+</div>
+</div>
+</div>
 
-    <div class="modal fade" id="base-modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
+<div class="modal fade" id="base-modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content" id="base-modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-          </div>
-          <div class="modal-body">
-          </div>
-          <div class="modal-footer">
-          </div>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+            </div>
         </div>
-      </div>
     </div>
+</div>
 
 {% block core-footer %}
-<hr />
-<div class="container">
-<footer>
-    <p class="credit">Maintained by <a href="//www.github.com/chirag-jn/">Chirag Jain</a> and <a href="//www.github.com/reeshabhkumarranjan/">Reeshabh Kumar Ranjan</a> @ <a href="//www.iiitd.ac.in">IIIT-D</a>.</p>
-</footer>
-</div>
+    <hr/>
+    <div class="container">
+        <footer>
+            <p class="credit">Maintained by <a href="//www.github.com/chirag-jn/">Chirag Jain</a> and <a
+                    href="//www.github.com/reeshabhkumarranjan/">Reeshabh Kumar Ranjan</a> @ <a
+                    href="//www.iiitd.ac.in">IIIT-D</a>.</p>
+        </footer>
+    </div>
 {% endblock %}
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}" type="text/javascript"></script>
-    <!-- // <script src="Dashboard%20Template%20for%20Bootstrap_files/docs.js"></script> -->
-    <script type="text/javascript">
-    $(".ajaxify-btn").click(function(){
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}" type="text/javascript"></script>
+<!-- // <script src="Dashboard%20Template%20for%20Bootstrap_files/docs.js"></script> -->
+<script type="text/javascript">
+    $(".ajaxify-btn").click(function () {
         var link = this.dataset['link'];
-        $("#base-modal-content").load(link, function(){
-          $("#base-modal").modal('show');
+        $("#base-modal-content").load(link, function () {
+            $("#base-modal").modal('show');
         })
-      });
-    </script>
-</body></html>
+    });
+</script>
+</body>
+</html>

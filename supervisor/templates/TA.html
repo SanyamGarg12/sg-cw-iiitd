@@ -1,74 +1,78 @@
 {% extends 'supervisorcore.html' %}
 {% load bootstrap %}
 {% block content %}
-<h2 class="sub-header">Teaching Assistants</h2>
+    <h2 class="sub-header">Teaching Assistants</h2>
 
-<div class="panel panel-default">
-<div class="panel-heading">
-<h3 class="panel-title">
-Add a TA
-</h3>
-</div>
-<div class="panel-body">
-<form action="{% url 'TA' %}" method="POST"> {% csrf_token %}
-{{ form|bootstrap }}
-<div class="form-group">
-<div class="col-sm-12">
-<input type="submit" value="Add TA" class="btn btn-info btn-lg pull-right" style="margin-right:10px; margin-top:10px;" />
-</div>
-</div>
-</form>
-</div>
-</div>
-
-
-<hr />
-{% if tas %}
-<div class="table-responsive">
-  <table class="table table-striped table-hover">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Email</th>
-        <th></th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-    {% for t in tas %}
-      <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ t.email }}</td>
-        <td>
-          <button class="btn-link glyphicon glyphicon-remove" style="color:red;" data-toggle="modal" data-target="#confirm_delete_TA_{{ t.pk }}_modal"></button>
-        </td>
-        <td>
-          <a href="{% url 'super_TA_logs' t.pk %}">View logs</a>
-        </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-</div>
-{% for t in tas %}
-<div class="modal fade" id="confirm_delete_TA_{{ t.pk }}_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="ModalLabel">Delete TA</h4>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to remove {{ t.email }} as a TA ?
-      </div>
-      <div class="modal-footer">
-        <a class="btn btn-danger" href="{% url 'TA_delete' t.pk %}" role="button">Remove</a>
-      </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                Add a TA
+            </h3>
+        </div>
+        <div class="panel-body">
+            <form action="{% url 'TA' %}" method="POST"> {% csrf_token %}
+                {{ form|bootstrap }}
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <input type="submit" value="Add TA" class="btn btn-info btn-lg pull-right"
+                               style="margin-right:10px; margin-top:10px;"/>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
-</div>
-{% endfor %}
-{% else %}
-There aren't any TAs added yet
-{% endif %}
+
+
+    <hr/>
+    {% if tas %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Email</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for t in tas %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ t.email }}</td>
+                        <td>
+                            <button class="btn-link glyphicon glyphicon-remove" style="color:red;" data-toggle="modal"
+                                    data-target="#confirm_delete_TA_{{ t.pk }}_modal"></button>
+                        </td>
+                        <td>
+                            <a href="{% url 'super_TA_logs' t.pk %}">View logs</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% for t in tas %}
+            <div class="modal fade" id="confirm_delete_TA_{{ t.pk }}_modal" tabindex="-1" role="dialog"
+                 aria-labelledby="ModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span
+                                    aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="ModalLabel">Delete TA</h4>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to remove {{ t.email }} as a TA ?
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-danger" href="{% url 'TA_delete' t.pk %}" role="button">Remove</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        There aren't any TAs added yet
+    {% endif %}
 {% endblock %}

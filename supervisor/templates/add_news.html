@@ -1,13 +1,14 @@
 {% load bootstrap %}
 
 <div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	<h4 class="modal-title" id="ModalLabel"> <strong>Post an announcement</strong> </h4>
+    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+            class="sr-only">Close</span></button>
+    <h4 class="modal-title" id="ModalLabel"><strong>Post an announcement</strong></h4>
 </div>
 
 <div class="modal-body clearfix">
-	<form action="{% url 'add_news' %}" method="POST"> {% csrf_token %}
-		{{ form|bootstrap_horizontal }}
-		<input type='submit' value='Submit' class="btn btn-info btn-lg pull-right" style="margin-right:10px;" />
-	</form>
+    <form action="{% url 'add_news' %}" method="POST"> {% csrf_token %}
+        {{ form|bootstrap_horizontal }}
+        <input type='submit' value='Submit' class="btn btn-info btn-lg pull-right" style="margin-right:10px;"/>
+    </form>
 </div>

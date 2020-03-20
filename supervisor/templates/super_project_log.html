@@ -1,23 +1,23 @@
 {% extends 'supervisorcore.html' %}
 {% load humanize %}
 {% block content %}
-	<center>
-		<h1 class="page-header">{{ project.title }}</h1>
-	</center>
-		<h3>Student: {{ project.student.email }}</h3> 
+    <center>
+        <h1 class="page-header">{{ project.title }}</h1>
+    </center>
+    <h3>Student: {{ project.student.email }}</h3>
 
-		<ul>
-		{% for diff in diffs %}
-			<li>
-				<strong>{{ diff.get_clear_description }}</strong>
-				<blockquote style="font-size:14px;">
-					Who: {{ diff.person.email }} <br />
-					When: {{ diff.when|naturaltime }} <br>
-					Details: {{ diff.details }}
-				</blockquote>
-			</li>
-		{% endfor %}
-		</ul>
-<hr />
+    <ul>
+        {% for diff in diffs %}
+            <li>
+                <strong>{{ diff.get_clear_description }}</strong>
+                <blockquote style="font-size:14px;">
+                    Who: {{ diff.person.email }} <br/>
+                    When: {{ diff.when|naturaltime }} <br>
+                    Details: {{ diff.details }}
+                </blockquote>
+            </li>
+        {% endfor %}
+    </ul>
+    <hr/>
 
 {% endblock %}

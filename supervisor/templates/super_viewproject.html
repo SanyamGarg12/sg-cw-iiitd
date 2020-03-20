@@ -1,214 +1,240 @@
 {% extends 'supervisorcore.html' %}
 {% block content %}
-	<center>
-		<h2>{{ project.title }}{% if project.deleted %} <span class="glyphicon glyphicon-trash" style="color:red; margin-left:10px;" title="deleted"></span> {% endif %}</h2>
-	</center>
-		<h2>Student </h2>
-		<blockquote>
-			<a href="{% url 'super_viewuser' project.student.pk %}"> {{ project.student.first_name }} {{ project.student.last_name }}</a>
-		</blockquote>
-		<h2>Roll No. </h2>
-		<blockquote>
-			{{ project.get_rollno }}
-		</blockquote> 
-		<h2>Email</h2>
-		<blockquote>
-			{{ project.student.email }}
-		</blockquote>
-		<h2>Status</h2>
-		<blockquote>
-			{{ project.get_project_status }}
-			<a href="#" style="margin-left:10px;" data-toggle="modal" data-target="#progress_graph"> <span class="glyphicon glyphicon-question-sign"></span> </a>
-		</blockquote>
-		<h2>Credits</h2>
-		<blockquote>
-			{{ project.credits }}
-		</blockquote>
-		<h2>Proposed on</h2>
-		<blockquote>
-			{{ project.date_created }}
-		</blockquote>
-		<h2>NGO</h2>
-		<blockquote>
-			{% if project.NGO %}
-				<a href="{% url 'super_view_ngo' project.NGO.id %}">{{ project.NGO.name }}</a>.<br /> <strong>This is a verified NGO.</strong>
-			{% else %}
-				{{ project.NGO_name }}
-			{% endif %}
-		</blockquote>
-		<h2>Details of NGO</h2>
-		<blockquote>
-			{{ project.NGO_details }}
-		</blockquote>
-		<h2>Working under</h2>
-		<blockquote>
-			{{ project.NGO_super }}
-		</blockquote>
-		<h2>Supervisor Contact Information</h2>
-		<blockquote>
-			{{ project.NGO_super_contact }}
-		</blockquote>
-		<h2>Goals</h2>
-		<blockquote>
-			{{ project.goals|linebreaksbr }}
-		</blockquote>
-		<h2>Schedule</h2>
-		<blockquote>
-			{{ project.schedule_text|linebreaksbr }}
-		</blockquote>
-		<h2>Presented</h2>
-		<blockquote>
-			{% if project.presented %}
-				Yes
-				<a href="{% url 'toggle_presented' project.pk %}"> <span style="margin-left:25px;" class="glyphicon glyphicon-thumbs-down"></span></a>
-			{% else %}
-				No
-				<a href="{% url 'toggle_presented' project.pk %}"> <span style="margin-left:25px;" class="glyphicon glyphicon-thumbs-up"></span></a>
-			{% endif %}
-		</blockquote>
-		<h2>Documents</h2>
-		<blockquote>
-			{% if project.documents.all %}
-			{% for doc in project.documents.all %}
-				<strong>{{ doc.category }}: </strong>
-				<a href = "{% url 'super_download' doc.id %}">
-				{{ doc.name }}</a>
-				<br />
-			{% endfor %}
-			{% else %}
-				No logs uploaded till now.
-			{% endif %}
-		</blockquote>
-		<h2>View revision history:</h2>
-		<blockquote>
-			{% if project.edits.all %}
-				{% for edit in project.viewable_edits %}
+    <center>
+        <h2>{{ project.title }}{% if project.deleted %}
+            <span class="glyphicon glyphicon-trash" style="color:red; margin-left:10px;"
+                  title="deleted"></span> {% endif %}</h2>
+    </center>
+    <h2>Student </h2>
+    <blockquote>
+        <a href="{% url 'super_viewuser' project.student.pk %}"> {{ project.student.first_name }} {{ project.student.last_name }}</a>
+    </blockquote>
+    <h2>Roll No. </h2>
+    <blockquote>
+        {{ project.get_rollno }}
+    </blockquote>
+    <h2>Email</h2>
+    <blockquote>
+        {{ project.student.email }}
+    </blockquote>
+    <h2>Status</h2>
+    <blockquote>
+        {{ project.get_project_status }}
+        <a href="#" style="margin-left:10px;" data-toggle="modal" data-target="#progress_graph"> <span
+                class="glyphicon glyphicon-question-sign"></span> </a>
+    </blockquote>
+    <h2>Credits</h2>
+    <blockquote>
+        {{ project.credits }}
+    </blockquote>
+    <h2>Proposed on</h2>
+    <blockquote>
+        {{ project.date_created }}
+    </blockquote>
+    <h2>NGO</h2>
+    <blockquote>
+        {% if project.NGO %}
+            <a href="{% url 'super_view_ngo' project.NGO.id %}">{{ project.NGO.name }}</a>.<br/>
+            <strong>This is a verified NGO.</strong>
+        {% else %}
+            {{ project.NGO_name }}
+        {% endif %}
+    </blockquote>
+    <h2>Details of NGO</h2>
+    <blockquote>
+        {{ project.NGO_details }}
+    </blockquote>
+    <h2>Working under</h2>
+    <blockquote>
+        {{ project.NGO_super }}
+    </blockquote>
+    <h2>Supervisor Contact Information</h2>
+    <blockquote>
+        {{ project.NGO_super_contact }}
+    </blockquote>
+    <h2>Goals</h2>
+    <blockquote>
+        {{ project.goals|linebreaksbr }}
+    </blockquote>
+    <h2>Schedule</h2>
+    <blockquote>
+        {{ project.schedule_text|linebreaksbr }}
+    </blockquote>
+    <h2>Presented</h2>
+    <blockquote>
+        {% if project.presented %}
+            Yes
+            <a href="{% url 'toggle_presented' project.pk %}"> <span style="margin-left:25px;"
+                                                                     class="glyphicon glyphicon-thumbs-down"></span></a>
+        {% else %}
+            No
+            <a href="{% url 'toggle_presented' project.pk %}"> <span style="margin-left:25px;"
+                                                                     class="glyphicon glyphicon-thumbs-up"></span></a>
+        {% endif %}
+    </blockquote>
+    <h2>Documents</h2>
+    <blockquote>
+        {% if project.documents.all %}
+            {% for doc in project.documents.all %}
+                <strong>{{ doc.category }}: </strong>
+                <a href="{% url 'super_download' doc.id %}">
+                    {{ doc.name }}</a>
+                <br/>
+            {% endfor %}
+        {% else %}
+            No logs uploaded till now.
+        {% endif %}
+    </blockquote>
+    <h2>View revision history:</h2>
+    <blockquote>
+        {% if project.edits.all %}
+            {% for edit in project.viewable_edits %}
 
-					<div class="modal fade" id="project_edit_{{ forloop.counter }}_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-					  <div class="modal-dialog">
-					    <div class="modal-content">
-					      <div class="modal-header">
-					        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					        <h4 class="modal-title" id="ModalLabel">Edit history</h4>
-					      </div>
-					      <div class="modal-body">
-					      	{% for edit_part in edit.diff_html %}
-					      		<strong>{{ edit_part.label }}:</strong>
-					      		<div class="well">
-					      			{{edit_part.content|safe}}
-					      		</div>
-					      	{% endfor %}
-					      </div>
-					      <div class="modal-footer">
-						      Edited on {{ edit.when }}
-					      </div>
-					    </div>
-					  </div>
-					</div>
+                <div class="modal fade" id="project_edit_{{ forloop.counter }}_modal" tabindex="-1" role="dialog"
+                     aria-labelledby="ModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                                        class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="ModalLabel">Edit history</h4>
+                            </div>
+                            <div class="modal-body">
+                                {% for edit_part in edit.diff_html %}
+                                    <strong>{{ edit_part.label }}:</strong>
+                                    <div class="well">
+                                        {{ edit_part.content|safe }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="modal-footer">
+                                Edited on {{ edit.when }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-					<a href = "#" data-toggle="modal" data-target="#project_edit_{{ forloop.counter }}_modal">{{ edit.when }}</a> 
-					<br />
-				{% endfor %}
-			{% else %}
-				No edits made to the details until now.
-			{% endif %}
-		</blockquote>
-		<hr />
-{% ifequal project.stage project_stage.TO_BE_VERIFIED %}
-<a class="btn btn-warning" role="button"  href = "{% url 'verify_project' project.id %}">Verify Project</a>
-{% endifequal %}
+                <a href="#" data-toggle="modal"
+                   data-target="#project_edit_{{ forloop.counter }}_modal">{{ edit.when }}</a>
+                <br/>
+            {% endfor %}
+        {% else %}
+            No edits made to the details until now.
+        {% endif %}
+    </blockquote>
+    <hr/>
+    {% ifequal project.stage project_stage.TO_BE_VERIFIED %}
+        <a class="btn btn-warning" role="button" href="{% url 'verify_project' project.id %}">Verify Project</a>
+    {% endifequal %}
 
-{% ifequal project.stage project_stage.ONGOING %}
-<a class="btn btn-danger" role="button"  href = "{% url 'unverify_project' project.id %}">Unverify Project</a>
-{% endifequal %}
+    {% ifequal project.stage project_stage.ONGOING %}
+        <a class="btn btn-danger" role="button" href="{% url 'unverify_project' project.id %}">Unverify Project</a>
+    {% endifequal %}
 
-{% if project.example %}
-<a class="btn btn-danger" role="button"  href = "{% url 'removefromexamples' project.example.pk %}">Remove from examples</a>
-{% else %}
-<a class="btn btn-warning" role="button"  href = "{% url 'addtoexamples' project.pk %}">Add to examples</a>
-{% endif %}
+    {% if project.example %}
+        <a class="btn btn-danger" role="button" href="{% url 'removefromexamples' project.example.pk %}">Remove from
+            examples</a>
+    {% else %}
+        <a class="btn btn-warning" role="button" href="{% url 'addtoexamples' project.pk %}">Add to examples</a>
+    {% endif %}
 
-<a class="btn btn-info" role="button"  href = "{% url 'super_email_project' project.pk %}">Email student about project</a>
-<a class="btn btn-default" role="button"  href = "{% url 'super_project_logs' project.pk %}">Project logs</a>
+    <a class="btn btn-info" role="button" href="{% url 'super_email_project' project.pk %}">Email student about
+        project</a>
+    <a class="btn btn-default" role="button" href="{% url 'super_project_logs' project.pk %}">Project logs</a>
 
-{% ifequal project.stage project_stage.SUBMITTED %}
-<a class="btn btn-warning" role="button"  href = "{% url 'complete' project.pk %}" style="float:right;">Complete Project</a>
-{% endifequal %}
-<div class="modal fade" id="confirm_delete_project_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="ModalLabel">Delete Project</h4>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete this CW Project "{{ project.title }}"? This action is revertable.
-      </div>
-      <div class="modal-footer">
-	      <a class="btn btn-danger" href="{% url 'super_delete_project' project.id %}" role="button">Delete</a>
-      </div>
+    {% ifequal project.stage project_stage.SUBMITTED %}
+        <a class="btn btn-warning" role="button" href="{% url 'complete' project.pk %}" style="float:right;">Complete
+            Project</a>
+    {% endifequal %}
+    <div class="modal fade" id="confirm_delete_project_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="ModalLabel">Delete Project</h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this CW Project "{{ project.title }}"? This action is revertable.
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-danger" href="{% url 'super_delete_project' project.id %}"
+                       role="button">Delete</a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<div class="modal fade" id="confirm_force_delete_project_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="ModalLabel">Delete Project</h4>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete this ? All data would be lost. This action is irrevocable.
-      </div>
-      <div class="modal-footer">
-	      <a href="{% url 'super_force_delete_project' project.pk %}" class="btn btn-danger pull-right">Delete forever</a>
-      </div>
+    <div class="modal fade" id="confirm_force_delete_project_modal" tabindex="-1" role="dialog"
+         aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="ModalLabel">Delete Project</h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this ? All data would be lost. This action is irrevocable.
+                </div>
+                <div class="modal-footer">
+                    <a href="{% url 'super_force_delete_project' project.pk %}" class="btn btn-danger pull-right">Delete
+                        forever</a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<div class="modal fade" id="progress_graph" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="ModalLabel">Progress Graph [As seen by the student] </h4>
-      </div>
-      <div class="modal-body">
-      {% for stage in project_graph %}
-      	<h1><span class="glyphicon glyphicon-{{ stage.stage_glyphicon }}" style="margin-right:25px; color:{% if stage.stage_cleared %}green{% else %}red{% endif %};"></span>
-      	<span style="font-size:24px;">
+    <div class="modal fade" id="progress_graph" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="ModalLabel">Progress Graph [As seen by the student] </h4>
+                </div>
+                <div class="modal-body">
+                    {% for stage in project_graph %}
+                        <h1><span class="glyphicon glyphicon-{{ stage.stage_glyphicon }}"
+                                  style="margin-right:25px; color:{% if stage.stage_cleared %}green{% else %}red{% endif %};"></span>
+                            <span style="font-size:24px;">
       	{% ifequal project.get_project_status stage.stage_name %}
-      	<strong>
-      	{% endifequal %}
-      	{{ stage.stage_name }}
-      	{% ifequal project.get_project_status stage.stage_name %}
-      	</strong>
-      	{% endifequal %}
+            <strong>
+        {% endifequal %}
+                                {{ stage.stage_name }}
+                                {% ifequal project.get_project_status stage.stage_name %}
+                                    </strong>
+                                {% endifequal %}
       	</span></h1>
-      	{{ stage.info }}
-      	<br /><br />
-      {% endfor %}
-      <hr />
-	  	<h1><span class="glyphicon glyphicon-facetime-video" style="margin-right:25px; color:{% if project.presented %}green{% else %}red{% endif %};"></span>
-	      	<span style="font-size:24px;">
+                        {{ stage.info }}
+                        <br/><br/>
+                    {% endfor %}
+                    <hr/>
+                    <h1><span class="glyphicon glyphicon-facetime-video"
+                              style="margin-right:25px; color:{% if project.presented %}green{% else %}red{% endif %};"></span>
+                        <span style="font-size:24px;">
 	      		<strong>Presented</strong>
 	      	</span>
-	  	</h1>
-	  	{% if project.presented %} Yes {% else %} No {% endif %}
-      </div>
-      <div class="modal-footer" align="">
-	      In case of any queries, please mail at communitywork [magic-symbol] iiitd.ac.in.
-      </div>
+                    </h1>
+                    {% if project.presented %} Yes {% else %} No {% endif %}
+                </div>
+                <div class="modal-footer" align="">
+                    In case of any queries, please mail at communitywork [magic-symbol] iiitd.ac.in.
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-{% if project.deleted %}
-<a href="{% url 'super_revert_delete_project' project.pk %}" class="btn btn-info">Revert delete</a>
-<button class="btn btn-danger pull-right" data-toggle="modal" data-target="#confirm_force_delete_project_modal" >Delete forever</button>
-{% else %}
-<button class="btn btn-danger pull-right" data-toggle="modal" data-target="#confirm_delete_project_modal" >Delete project</button>
-{% endif %}
+    {% if project.deleted %}
+        <a href="{% url 'super_revert_delete_project' project.pk %}" class="btn btn-info">Revert delete</a>
+        <button class="btn btn-danger pull-right" data-toggle="modal" data-target="#confirm_force_delete_project_modal">
+            Delete forever
+        </button>
+    {% else %}
+        <button class="btn btn-danger pull-right" data-toggle="modal" data-target="#confirm_delete_project_modal">Delete
+            project
+        </button>
+    {% endif %}
 {% endblock %}

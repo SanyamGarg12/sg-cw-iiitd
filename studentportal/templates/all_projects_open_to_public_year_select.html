@@ -1,13 +1,13 @@
 {% extends 'core.html' %}
 {% block content %}
 
-<div class="container">
-<center>
-<h1 class="page-header">Select a year:</h1>
-<br />
-{% for year in years %}
-<a href="{% url 'all_projects_open_to_public' year %}"><h3>{{ year }}</h3></a>
-{% endfor %}
-</center>
-</div>
+    <div class="container">
+        <center>
+            <h1 class="page-header">Select a year:</h1>
+            <br/>
+            {% for year in years %}
+                <a href="{% url 'all_projects_open_to_public' year %}"><h3>{{ year }}</h3></a>
+            {% endfor %}
+        </center>
+    </div>
 {% endblock %}
