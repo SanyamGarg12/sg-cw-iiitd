@@ -1,33 +1,34 @@
 {% extends 'core.html' %}
 {% block content %}
-<div class="container">
-<a class="btn btn-default ajaxify-btn" style="float:right;" role="button" data-link="{% url 'suggest_ngo' %}">Suggest an NGO</a>
-{% if NGOs %}
-<h2 class="sub-header">Verified NGOs</h2>
-<div class="table-responsive">
-  <table class="table table-striped table-hover">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>NGO Name</th>
-        <th>Link</th>
-        <th>Details</th>
-      </tr>
-    </thead>
-    <tbody>
-    {% for n in NGOs %}
-      <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ n.name }}</td>
-        <td>{{ n.link|urlize }}</td>
-        <td>{{ n.details }}</td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-</div>
-{% else %}
-It seems we have not verified any NGOs up until now.
-{% endif %}
-</div>
+    <div class="container">
+        <a class="btn btn-default ajaxify-btn" style="float:right;" role="button" data-link="{% url 'suggest_ngo' %}">Suggest
+            an NGO</a>
+        {% if NGOs %}
+            <h2 class="sub-header">Verified NGOs</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>NGO Name</th>
+                        <th>Link</th>
+                        <th>Details</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for n in NGOs %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ n.name }}</td>
+                            <td>{{ n.link|urlize }}</td>
+                            <td>{{ n.details }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            It seems we have not verified any NGOs up until now.
+        {% endif %}
+    </div>
 {% endblock %}

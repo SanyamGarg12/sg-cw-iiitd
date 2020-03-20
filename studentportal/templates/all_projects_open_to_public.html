@@ -1,40 +1,41 @@
 {% extends 'core.html' %}
 {% block content %}
-<div class="container">
-{% if projects %}
-<h2 class="sub-header">Completed Projects</h2>
-<div class="table-responsive">
-  <table class="table table-striped table-hover">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Student Name</th>
-        <th>CW Project Title</th>
-        <th>NGO worked under</th>
-        <th>Final submission</th>
-      </tr>
-    </thead>
-    <tbody>
-    {% for p in projects %}
-      <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ p.student.first_name }} {{ p.student.last_name }}</td>
-        <td>{{ p.title }}</td>
-        <td>{{ p.get_NGO }}</td>
-        {% if p.final_submission_document is None %}
-        <span class="glyphicon glyphicon-file text-muted"></span>
-        <td><a href="{% url 'download_document' p.final_submission_document.pk %}"></td>
+    <div class="container">
+        {% if projects %}
+            <h2 class="sub-header">Completed Projects</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Student Name</th>
+                        <th>CW Project Title</th>
+                        <th>NGO worked under</th>
+                        <th>Final submission</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for p in projects %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ p.student.first_name }} {{ p.student.last_name }}</td>
+                            <td>{{ p.title }}</td>
+                            <td>{{ p.get_NGO }}</td>
+                            {% if p.final_submission_document is None %}
+                            <span class="glyphicon glyphicon-file text-muted"></span>
+                            <td><a href="{% url 'download_document' p.final_submission_document.pk %}"></td>
+                            {% else %}
+                            <a href="{% url 'download_document' p.final_submission_document.pk %}"><span
+                                    class="glyphicon glyphicon-file"></span></a>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% else %}
-        <a href="{% url 'download_document' p.final_submission_document.pk %}"><span class="glyphicon glyphicon-file"></span></a>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-</div>
-{% else %}
-There don't seem to be any <strong>completed</strong> projects in this year.
-{% endif %}
-</div>
+            There don't seem to be any <strong>completed</strong> projects in this year.
+        {% endif %}
+    </div>
 {% endblock %}
 #
 student

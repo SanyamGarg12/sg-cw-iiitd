@@ -1,19 +1,19 @@
 {% extends 'supervisorcore.html' %}
 {% block content %}
-<a class="btn btn-warning" style="float:right;" role="button" href = "{% url 'add_news' %}">Post another news</a>
-<a class="btn btn-danger" role="button" href = "{% url 'super_delete_news' news.pk %}">Delete this news post.</a>
-<br />
-<hr />
-<h2> News: </h2>
-<blockquote>
-{{ news.content }}
-</blockquote>
-<h3>Created on: </h3>
-<blockquote>
-{{ news.date_created|date:"D - d M Y [H:m:s]" }}
-</blockquote>
-<h3>Priority </h3>
-<blockquote>
-{{ news.get_priority }}
-</blockquote>
+    <a class="btn btn-warning" style="float:right;" role="button" href="{% url 'add_news' %}">Post another news</a>
+    <a class="btn btn-danger" role="button" href="{% url 'super_delete_news' news.pk %}">Delete this news post.</a>
+    <br/>
+    <hr/>
+    <h2> News: </h2>
+    <blockquote>
+        {{ news.content }}
+    </blockquote>
+    <h3>Created on: </h3>
+    <blockquote>
+        {{ news.date_created|date:"D - d M Y [H:m:s]" }}
+    </blockquote>
+    <h3>Priority </h3>
+    <blockquote>
+        {{ news.get_priority }}
+    </blockquote>
 {% endblock %}

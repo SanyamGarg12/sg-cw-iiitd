@@ -2,68 +2,76 @@
 {% load bootstrap %}
 {% block content %}
 
-<h2 class="sub-header">All NGOs</h2>
-<hr />
-<div class="panel panel-default">
-<div class="panel-heading">
-<h3 class="panel-title">
-Add an NGO
-</h3>
-</div>
-<div class="panel-body">
-<form action="/supervisor/addNGO/" method="POST"> {% csrf_token %}
-{{ form|bootstrap}}
-<input type="submit" value="Add NGO" class="btn btn-info btn-lg pull-right" style="margin-right:10px; margin-top:10px;" />
-</form>
-</div>
-</div>
-<hr />
-{% if NGOs %}
-Click on an NGO for a list of students who have worked under it.
-<div class="table-responsive">
-  <table class="table table-striped table-hover">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Link</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-    {% for n in NGOs %}
-      <tr>
-        <td>{{ forloop.counter }}</td>
-        <td> <a href="{% url 'super_view_ngo' n.id %}">{{n.name }}</a> </td>
-        <td>{{ n.link }}</td>
-        <td>{{ n.details|truncatechars:"100" }}</td>
-        <td><button class="btn-link glyphicon glyphicon-remove" style="color:red;" data-toggle="modal" data-target="#confirm_delete_ngo_{{ n.pk }}_modal"></button></td>
-        </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-</div>
-{% for n in NGOs %}
-
-<div class="modal fade" id="confirm_delete_ngo_{{ n.pk }}_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="ModalLabel">Delete NGO</h4>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete the NGO "{{ n.name }}"? You will lose all relationship between projects and this NGO, though not the projects themselves. This action is irrevocable.
-      </div>
-      <div class="modal-footer">
-        <a class="btn btn-danger" href="{% url 'remove_NGO' n.pk %}" role="button">Delete</a>
-      </div>
+    <h2 class="sub-header">All NGOs</h2>
+    <hr/>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                Add an NGO
+            </h3>
+        </div>
+        <div class="panel-body">
+            <form action="/supervisor/addNGO/" method="POST"> {% csrf_token %}
+                {{ form|bootstrap }}
+                <input type="submit" value="Add NGO" class="btn btn-info btn-lg pull-right"
+                       style="margin-right:10px; margin-top:10px;"/>
+            </form>
+        </div>
     </div>
-  </div>
-</div>
-{% endfor %}
-{% else %}
-We have not verified any NGO as of now it seems..!!
-{% endif %}
+    <hr/>
+    {% if NGOs %}
+        Click on an NGO for a list of students who have worked under it.
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Link</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for n in NGOs %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><a href="{% url 'super_view_ngo' n.id %}">{{ n.name }}</a></td>
+                        <td>{{ n.link }}</td>
+                        <td>{{ n.details|truncatechars:"100" }}</td>
+                        <td>
+                            <button class="btn-link glyphicon glyphicon-remove" style="color:red;" data-toggle="modal"
+                                    data-target="#confirm_delete_ngo_{{ n.pk }}_modal"></button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% for n in NGOs %}
+
+            <div class="modal fade" id="confirm_delete_ngo_{{ n.pk }}_modal" tabindex="-1" role="dialog"
+                 aria-labelledby="ModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span
+                                    aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="ModalLabel">Delete NGO</h4>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete the NGO "{{ n.name }}"? You will lose all relationship
+                            between projects and this NGO, though not the projects themselves. This action is
+                            irrevocable.
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-danger" href="{% url 'remove_NGO' n.pk %}" role="button">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        We have not verified any NGO as of now it seems..!!
+    {% endif %}
 {% endblock %}
 

@@ -1,29 +1,30 @@
 {% extends 'supervisorcore.html' %}
 {% block content %}
-	<center>
-		<h1 class="page-header">{{ student.first_name }} {{ student.last_name}}</h1>
-	</center>
-		<h3>Email: </h3> 
-		<blockquote>{{ student.email }}</blockquote>
-<h3>Projects</h3>
-	{% if projects %}
-	<blockquote>
-	<ul>
-	{% for p in projects %}
-		<li>
-			<a href = "{% url 'super_viewproject' p.pk %}">
-				<strong>{{ p.title|truncatechars:"200" }}</strong> 
-			</a>
-			 {% if p.deleted %}
-			 	<span class="glyphicon glyphicon-trash" style="color:red; margin-left:10px;" title="deleted"></span> 
-			 {% endif %}
-		</li>
-		<br />
-	{% endfor %}
-	</blockquote>
-	{% else %}
-		No projects started until now.
-	{% endif %}
-<hr />
+    <center>
+        <h1 class="page-header">{{ student.first_name }} {{ student.last_name }}</h1>
+    </center>
+    <h3>Email: </h3>
+    <blockquote>{{ student.email }}</blockquote>
+    <h3>Projects</h3>
+    {% if projects %}
+        <blockquote>
+            <ul>
+                {% for p in projects %}
+                    <li>
+                        <a href="{% url 'super_viewproject' p.pk %}">
+                            <strong>{{ p.title|truncatechars:"200" }}</strong>
+                        </a>
+                        {% if p.deleted %}
+                            <span class="glyphicon glyphicon-trash" style="color:red; margin-left:10px;"
+                                  title="deleted"></span>
+                        {% endif %}
+                    </li>
+                    <br/>
+                {% endfor %}
+        </blockquote>
+    {% else %}
+        No projects started until now.
+    {% endif %}
+    <hr/>
 
 {% endblock %}

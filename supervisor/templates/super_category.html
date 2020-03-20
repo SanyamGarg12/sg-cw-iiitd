@@ -1,73 +1,85 @@
 {% extends 'supervisorcore.html' %}
 {% load bootstrap %}
 {% block content %}
-<div class="modal fade" id="confirm_delete_category_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="ModalLabel">Delete Category</h4>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete the category "{{ category.name }}"? You will lose all relationship between projects and this category, though not the projects themselves. This action is irrevocable.
-      </div>
-      <div class="modal-footer">
-        <a class="btn btn-danger" href="{% url 'super_delete_category' category.id %}" role="button">Delete</a>
-      </div>
+    <div class="modal fade" id="confirm_delete_category_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="ModalLabel">Delete Category</h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete the category "{{ category.name }}"? You will lose all relationship
+                    between projects and this category, though not the projects themselves. This action is irrevocable.
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-danger" href="{% url 'super_delete_category' category.id %}"
+                       role="button">Delete</a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<div class="modal fade" id="edit_category_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="ModalLabel">Edit category details</h4>
-      </div>
-      <div class="modal-body">
-        <form action="{% url 'super_update_category' category.id %}" method="post">{% csrf_token %}
-          {{ form|bootstrap }}
-          <input type="submit" value="Update details" class="btn btn-info btn-lg" style="margin-right:10px; margin-top:10px;" />
-        </form>
-      </div>
+    <div class="modal fade" id="edit_category_modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="ModalLabel">Edit category details</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'super_update_category' category.id %}" method="post">{% csrf_token %}
+                        {{ form|bootstrap }}
+                        <input type="submit" value="Update details" class="btn btn-info btn-lg"
+                               style="margin-right:10px; margin-top:10px;"/>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-<button class="btn btn-info" data-toggle="modal" data-target="#edit_category_modal" >Edit details</button>
-<button class="btn btn-danger pull-right" data-toggle="modal" data-target="#confirm_delete_category_modal" >Delete this category</button>
+    <button class="btn btn-info" data-toggle="modal" data-target="#edit_category_modal">Edit details</button>
+    <button class="btn btn-danger pull-right" data-toggle="modal" data-target="#confirm_delete_category_modal">Delete
+        this category
+    </button>
 
-<h2 class="sub-header"><strong>{{category.name}}</strong></h2>
-<h3> {{ category.description }}</h3>
-{% if category.projects.all %}
-<center><h3>Projects</h3></center>
-<div class="table-responsive">
-  <table class="table table-striped table-hover">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Project Title</th>
-        <th>Student</th>
-        <th>NGO</th>
-      </tr>
-    </thead>
-    <tbody>
-    {% for p in category.projects.all %}
-      <tr>
-        <td>{{ forloop.counter }}</td>
-        <td><a href="{% url 'super_viewproject' p.pk %}">{{ p.title|truncatechars:"100" }}</a></td>
-        <td><a href="{% url 'super_viewuser' p.student.pk %}">{{ p.student.first_name}} {{p.student.last_name}}</a></td>
-        {% if p.NGO %}
-        <td><a href="{% url 'super_view_ngo' p.NGO.pk %}">{{ p.NGO.name|truncatechars:"100" }}</a></td>
-        {% else %}
-        <td>{{ p.NGO_name|truncatechars:"100" }}</td>
-        {% endif %}
-        </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-</div>
-{% else %}
-There are no projects under this category as of now.
-{% endif %}
+    <h2 class="sub-header"><strong>{{ category.name }}</strong></h2>
+    <h3> {{ category.description }}</h3>
+    {% if category.projects.all %}
+        <center><h3>Projects</h3></center>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Project Title</th>
+                    <th>Student</th>
+                    <th>NGO</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for p in category.projects.all %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><a href="{% url 'super_viewproject' p.pk %}">{{ p.title|truncatechars:"100" }}</a></td>
+                        <td>
+                            <a href="{% url 'super_viewuser' p.student.pk %}">{{ p.student.first_name }} {{ p.student.last_name }}</a>
+                        </td>
+                        {% if p.NGO %}
+                            <td><a href="{% url 'super_view_ngo' p.NGO.pk %}">{{ p.NGO.name|truncatechars:"100" }}</a>
+                            </td>
+                        {% else %}
+                            <td>{{ p.NGO_name|truncatechars:"100" }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        There are no projects under this category as of now.
+    {% endif %}
 {% endblock %}
