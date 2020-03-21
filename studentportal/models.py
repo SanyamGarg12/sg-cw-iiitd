@@ -41,8 +41,8 @@ class document_type(object):
 
 
 class Category(models.Model):
-	name = models.CharField(max_length=300)
-	description = models.CharField(max_length=1000, blank=True)
+	name = models.CharField(max_length=300, default="")
+	description = models.CharField(max_length=1000, blank=True, default="")
 
 	def __unicode__(self):
 		return self.name
@@ -53,7 +53,7 @@ def _get_other_category():
 
 
 class NGO(models.Model):
-	name = models.CharField(max_length=1000)
+	name = models.CharField(max_length=1000, default="")
 	link = models.URLField(blank=True)
 	details = models.TextField(blank=True)
 	category = models.ForeignKey(Category, related_name='NGOs', null=True, on_delete=models.SET(_get_other_category))
@@ -160,7 +160,7 @@ class Project(models.Model):
 
 class Document(models.Model):
 	document = models.FileField(upload_to=path_and_rename)
-	name = models.CharField(max_length=100)
+	name = models.CharField(max_length=100, default="")
 	date_added = models.DateTimeField(default=timezone.now)
 	category = models.IntegerField()
 	project = models.ForeignKey(Project, related_name='documents', on_delete=models.CASCADE)
@@ -184,7 +184,7 @@ class Document(models.Model):
 class Feedback(models.Model):
 	# The feedback that has to filled by the students at the end of
 	# their project.
-	project = models.ForeignKey(Project, primary_key=True, related_name='feedback', on_delete=models.CASCADE)
+	project = models.OneToOneField(Project, primary_key=True, related_name='feedback', on_delete=models.CASCADE)
 	hours = models.IntegerField(validators=[validate_feedback_hours])
 	achievements = models.TextField(max_length=2000)
 	experience = models.IntegerField(choices=(

@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS auth_user (
 );
 CREATE TABLE IF NOT EXISTS studentportal_category (
 	id	integer NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	name	varchar(300) NOT NULL,
-	description	varchar(1000) NOT NULL
+	name	varchar(300) NOT NULL DEFAULT "",
+	description	varchar(1000) NOT NULL DEFAULT ""
 );
 CREATE TABLE IF NOT EXISTS studentportal_ngo (
 	id	integer NOT NULL PRIMARY KEY AUTO_INCREMENT,
