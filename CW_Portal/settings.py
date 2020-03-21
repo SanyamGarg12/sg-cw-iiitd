@@ -61,6 +61,7 @@ INSTALLED_APPS = (
 	# lead to the pages of these apps, which have the options
 	# of resetting passwords.
 	# ---
+	'social_django',
 	'allauth',
 	'social.apps.django_app.default',
 	'allauth.account',
