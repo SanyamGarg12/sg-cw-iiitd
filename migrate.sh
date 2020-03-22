@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "deleting migration files..."
-rm */migrations/000*.py
+rm */migrations/00*.py
 
 echo "making migrations..."
 python manage.py makemigrations
