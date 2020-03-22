@@ -1,7 +1,8 @@
-create table studentportal_bug
+use cw_portal;
+
+create table if not exists studentportal_bug
 (
-  id          int auto_increment
-    primary key,
+  id          int auto_increment primary key,
   suggestions text not null,
   rating      int  not null,
   user_id     int  null
@@ -10,18 +11,16 @@ create table studentportal_bug
 create index user_id
   on studentportal_bug (user_id);
 
-create table studentportal_category
+create table if not exists studentportal_category
 (
-  id          int auto_increment
-    primary key,
+  id          int auto_increment primary key,
   name        varchar(300) default ''  not null,
   description varchar(1000) default '' not null
 );
 
-create table studentportal_ngo
+create table if not exists studentportal_ngo
 (
-  id          int auto_increment
-    primary key,
+  id          int auto_increment primary key,
   name        varchar(1000) not null,
   link        varchar(200)  not null,
   details     text          not null,
@@ -33,10 +32,9 @@ create table studentportal_ngo
 create index category_id
   on studentportal_ngo (category_id);
 
-create table studentportal_project
+create table if not exists studentportal_project
 (
-  id                int auto_increment
-    primary key,
+  id                int auto_increment primary key,
   title             varchar(1000) not null,
   date_created      datetime      not null,
   credits           int           not null,
@@ -58,10 +56,9 @@ create table studentportal_project
   foreign key (category_id) references studentportal_category (id)
 );
 
-create table studentportal_document
+create table if not exists studentportal_document
 (
-  id         int auto_increment
-    primary key,
+  id         int auto_increment primary key,
   document   varchar(100) not null,
   name       varchar(100) not null,
   date_added datetime     not null,
@@ -74,10 +71,9 @@ create table studentportal_document
 create index project_id
   on studentportal_document (project_id);
 
-create table studentportal_feedback
+create table if not exists studentportal_feedback
 (
-  project_id   int  not null
-    primary key,
+  project_id   int  not null primary key,
   hours        int  not null,
   achievements text not null,
   experience   int  not null,
@@ -94,10 +90,9 @@ create index category_id
 create index student_id
   on studentportal_project (student_id);
 
-create table supervisor_diff
+create table if not exists supervisor_diff
 (
-  id         int auto_increment
-    primary key,
+  id         int auto_increment primary key,
   diff_type  int      not null,
   details    text     null,
   `when`     datetime not null,
@@ -113,10 +108,9 @@ create index person_id
 create index project_id
   on supervisor_diff (project_id);
 
-create table supervisor_example
+create table if not exists supervisor_example
 (
-  project_id     int      not null
-    primary key,
+  project_id     int      not null primary key,
   date_created   datetime not null,
   likes_count    int      not null,
   comments_count int      not null,
@@ -124,10 +118,9 @@ create table supervisor_example
   foreign key (project_id) references studentportal_project (id)
 );
 
-create table supervisor_comment
+create table if not exists supervisor_comment
 (
-  id           int auto_increment
-    primary key,
+  id           int auto_increment primary key,
   text         varchar(200) not null,
   commentor_id int          not null,
   project_id   int          not null,
@@ -141,10 +134,9 @@ create index commentor_id
 create index project_id
   on supervisor_comment (project_id);
 
-create table supervisor_like
+create table if not exists supervisor_like
 (
-  id          int auto_increment
-    primary key,
+  id          int auto_increment primary key,
   liked_by_id int not null,
   project_id  int not null,
   constraint supervisor_like_ibfk_1
@@ -157,19 +149,17 @@ create index liked_by_id
 create index project_id
   on supervisor_like (project_id);
 
-create table supervisor_news
+create table if not exists supervisor_news
 (
-  id           int auto_increment
-    primary key,
+  id           int auto_increment primary key,
   content      text       not null,
   date_created datetime   not null,
   priority     tinyint(1) not null
 );
 
-create table supervisor_notification
+create table if not exists supervisor_notification
 (
-  id             int auto_increment
-    primary key,
+  id             int auto_increment primary key,
   noti_type      int          null,
   NGO_name       varchar(200) not null,
   NGO_link       varchar(200) not null,
@@ -186,7 +176,7 @@ create index NGO_sugg_by_id
 create index project_id
   on supervisor_notification (project_id);
 
-create table supervisor_ta
+create table if not exists supervisor_ta
 (
   id         int auto_increment
     primary key,
