@@ -531,6 +531,8 @@ def change_TA(request, TA_id='-1'):
 			ta.delete()
 			add_diff(diff_type.REMOVE_TA, person=request.user, details=ta.email)
 			messages.success(request, "TA deleted successfully.")
+			if request.user.email == ta.email:
+				return HttpResponseRedirect(reverse('logout'))
 		return HttpResponseRedirect(reverse('TA'))
 	tas = TA.objects.all()
 	form = TAForm()
