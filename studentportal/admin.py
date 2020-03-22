@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from studentportal.models import Category, NGO, Project, Document, Feedback, Bug
 
 admin.site.register(Category)
