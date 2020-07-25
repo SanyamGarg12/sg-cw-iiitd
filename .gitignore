@@ -9,4 +9,4 @@ uwsgi_params
 env
 venv
 credentials.py
-.idea/workspace.xml
+.idea/
