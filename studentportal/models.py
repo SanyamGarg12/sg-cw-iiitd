@@ -45,7 +45,10 @@ class Category(models.Model):
     description = models.CharField(max_length=1000, blank=True, default="")
 
     def __unicode__(self):
-        return self.name
+        return self.description
+
+    def __str__(self):
+        return self.description
 
 
 def _get_other_category():

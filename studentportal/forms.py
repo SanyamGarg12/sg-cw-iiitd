@@ -9,9 +9,7 @@ class ProjectForm(forms.ModelForm):
         super(ProjectForm, self).__init__(*args, **kwargs)
 
     NGO_super = forms.CharField(label="Supervisor at NGO")
-    NGO_super_contact = forms.CharField(
-        label="Supervisor contact information",
-        help_text="Complete and submit the rest of the form in the next tab")
+    NGO_super_contact = forms.CharField(label="Supervisor contact information")
     category = forms.ModelChoiceField(
         queryset=Category.objects.all())
     schedule_text = forms.CharField(widget=forms.Textarea,
