@@ -64,6 +64,9 @@ class NGO(models.Model):
     def __unicode__(self):
         return self.name
 
+    def __str__(self):
+        return self.name
+
 
 class UndeletedProjects(models.Manager):
     use_for_related_fields = True
@@ -103,6 +106,9 @@ class Project(models.Model):
     # override `objects` with custom manager to prevent showing deleted objects.
 
     def __unicode__(self):
+        return self.title
+
+    def __str__(self):
         return self.title
 
     def get_rollno(self):
@@ -171,6 +177,9 @@ class Document(models.Model):
     def __unicode__(self):
         return ': '.join([self.project.title, self.document.name])
 
+    def __str__(self):
+        return ': '.join([self.project.title, self.document.name])
+
     def delete(self, *args, **kwargs):
         import os
         os.remove(os.path.join(settings.MEDIA_ROOT, self.document.name))
@@ -195,6 +204,9 @@ class Feedback(models.Model):
         (4, "Good"), (5, "Very Good")), default=1)
 
     def __unicode__(self):
+        return ': '.join([self.project.title, str(self.experience)])
+
+    def __str__(self):
         return ': '.join([self.project.title, str(self.experience)])
 
 
