@@ -296,3 +296,18 @@ DEFAULT CHARACTER SET = latin1;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- Adding options
+INSERT INTO `cw_portal`.`studentportal_category`
+(`name`,
+`description`)
+VALUES
+("SG",
+"Self Growth");
+
+INSERT INTO `cw_portal`.`studentportal_category`
+(`name`,
+`description`)
+VALUES
+("CW",
+"Community Work");
