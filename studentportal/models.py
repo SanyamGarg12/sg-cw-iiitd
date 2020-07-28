@@ -98,7 +98,7 @@ class Project(models.Model):
     category = models.ForeignKey(Category, related_name='projects', null=False, blank=False,
                                  on_delete=models.SET(_get_other_category))
     deleted = models.BooleanField(default=False)
-    # presented           = models.BooleanField(default = False)
+    presented = models.BooleanField(default=False)
 
     all_projects = AllProjects()
     objects = UndeletedProjects()
