@@ -14,6 +14,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema cw_portal
 -- -----------------------------------------------------
+DROP DATABASE IF EXISTS `cw_portal`;
 CREATE SCHEMA IF NOT EXISTS `cw_portal` DEFAULT CHARACTER SET latin1 ;
 USE `cw_portal` ;
 
@@ -88,6 +89,7 @@ CREATE TABLE IF NOT EXISTS `cw_portal`.`studentportal_project` (
   `category_id` INT(11) NOT NULL,
   `deleted` TINYINT(1) NOT NULL,
   `presented` TINYINT(1) NOT NULL,
+  `semester` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `studentportal_project_94741166` (`student_id` ASC) VISIBLE,
   INDEX `studentportal_project_0f7bcd35` (`NGO_id` ASC) VISIBLE,

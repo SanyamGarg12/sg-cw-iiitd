@@ -545,7 +545,7 @@ def change_TA(request, TA_id='-1'):
         messages.error(request, "There was something wrong in the email provided.")
     return render(request, 'TA.html', {'form': form, 'tas': tas})
 
-
+# TODO fix this
 @supervisor_logged_in
 def generateReport(request):
     BASE_DIR = getattr(settings, "BASE_DIR")
@@ -600,10 +600,10 @@ def generateReport(request):
         ]):
             sheet.write(row, col, x)
 
-    report.save(os.path.join(BASE_DIR, 'report.xls'))
-    report = open(os.path.join(BASE_DIR, 'report.xls'), 'r')
+    report.save(os.path.join(BASE_DIR, 'report.csv'))
+    report = open(os.path.join(BASE_DIR, 'report.csv'), 'r')
     response = StreamingHttpResponse(report)
-    response['Content-Disposition'] = 'download; filename=Report.xls'
+    response['Content-Disposition'] = 'download; filename=Report.csv'
     return response
 
 

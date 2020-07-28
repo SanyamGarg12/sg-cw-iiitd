@@ -15,12 +15,14 @@ class ProjectForm(forms.ModelForm):
     schedule_text = forms.CharField(widget=forms.Textarea,
                                     label="Schedule")
     credits = forms.ChoiceField(choices=((1, 1), (2, 2)))
+    semester = forms.ChoiceField(label="Semester Number",
+                                 choices=((1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7), (8, 8)))
 
     class Meta:
         model = Project
         fields = ['title', 'credits', 'NGO_name', 'NGO_details',
                   'NGO_super', 'NGO_super_contact', 'goals',
-                  'schedule_text', 'category']
+                  'schedule_text', 'category', 'semester']
 
         labels = {
             'title': 'Title',
@@ -28,7 +30,8 @@ class ProjectForm(forms.ModelForm):
             'NGO_name': 'Organisation Name',
             'NGO_details': 'Organisation Details',
             'NGO_super': 'Supervisor Name',
-            'NGO_super_contact': 'Supervisor contact info'
+            'NGO_super_contact': 'Supervisor contact info',
+            'semester' : 'Semester Number'
         }
 
     # injecting student in the save method itself.
