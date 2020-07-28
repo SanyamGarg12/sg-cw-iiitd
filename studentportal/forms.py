@@ -8,7 +8,7 @@ class ProjectForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProjectForm, self).__init__(*args, **kwargs)
 
-    NGO_super = forms.CharField(label="Supervisor at NGO")
+    NGO_super = forms.CharField(label="Supervisor at Organisation")
     NGO_super_contact = forms.CharField(label="Supervisor contact information")
     category = forms.ModelChoiceField(
         queryset=Category.objects.all())
@@ -21,6 +21,15 @@ class ProjectForm(forms.ModelForm):
         fields = ['title', 'credits', 'NGO_name', 'NGO_details',
                   'NGO_super', 'NGO_super_contact', 'goals',
                   'schedule_text', 'category']
+
+        labels = {
+            'title': 'Title',
+            'credits': 'Credits',
+            'NGO_name': 'Organisation Name',
+            'NGO_details': 'Organisation Details',
+            'NGO_super': 'Supervisor Name',
+            'NGO_super_contact': 'Supervisor contact info'
+        }
 
     # injecting student in the save method itself.
     def save(self, force_insert=False, force_update=False, commit=True, student=None):
