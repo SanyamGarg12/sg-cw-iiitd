@@ -9,6 +9,8 @@
                 <tr>
                     <th>#</th>
                     <th>Student</th>
+                    <th>Project Title</th>
+                    <th>Category</th>
                     <th>Email</th>
                     <th>Roll number</th>
                     <th>Title</th>
@@ -22,6 +24,8 @@
                         <td>
                             <a href="{% url 'super_viewuser' p.student.pk %}">{{ p.student.first_name }} {{ p.student.last_name }}
                         </td>
+                        <td>{{ p.title }}</td>
+                        <td>{{ p.category }}</td>
                         <td>{{ p.student.email }}</td>
                         <td>{{ p.get_rollno }}</td>
                         <td><a href="{% url 'super_viewproject' p.id %}">{{ p.title|truncatechars:60 }}</a></td>
