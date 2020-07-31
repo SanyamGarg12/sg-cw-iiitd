@@ -215,10 +215,17 @@ ALLOWED_DOMAINS = ['iiitd.ac.in']
 SOCIALACCOUNT_ADAPTER = 'studentportal.adapters.DomainLoginAdapter'
 ACCOUNT_ADAPTER = 'studentportal.adapters.NoMessagesLoginAdapter'
 MAXIMUM_UPLOAD_SIZE_ALLOWED = 10
-EMAIL_HOST_USER = credentials.EMAIL_HOST_USER
 
-EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
-MANDRILL_API_KEY = credentials.MANDRILL_API_KEY
+# Please enable "Allow Less Secure Apps" in your Gmail account to enable mailing
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = credentials.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = credentials.EMAIL_HOST_PASSWORD
+
+# EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+# MANDRILL_API_KEY = credentials.MANDRILL_API_KEY
 LnF404_url = credentials.LnF404_url
 LnF404_SiteID = credentials.LnF404_SiteID
 LnF404_token = credentials.LnF404_token

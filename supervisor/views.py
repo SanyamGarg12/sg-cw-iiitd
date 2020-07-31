@@ -22,6 +22,7 @@ from supervisor.forms import AdvanceSearchForm, NewsForm, NewCategoryForm, NewNG
 from supervisor.models import Example, News, Notification, TA, diff_type, add_diff, add_notification
 from supervisor.models import notification_type as nt
 from supervisor.validators import is_int
+from django.core.mail import send_mail
 
 
 @supervisor_logged_in
@@ -437,8 +438,9 @@ def email_project(request, project_id):
         form = EmailProjectForm(request.POST)
         if form.is_valid():
             text = '\n\n'.join([form.cleaned_data['body'],
-                                "P.S. This mail is generated via the CW-portal. So for any further communication regarding the above mentioned issue(s), please reply to this mail, unless explicitly asked to create a new email thread, for proper redressal."])
-            send_email("CW Project '%s' " % project.title, text, to=[form.cleaned_data['to']])
+                                "Please Note: This mail is generated via the SG-CW-portal. For any further communication regarding the above mentioned issue(s), please reply to this mail, unless explicitly asked to create a new email thread, for proper redressal."])
+            send_mail("CW Project '%s' " % project.title, text, "sgcw@iiitd.ac.in", [form.cleaned_data['to']])
+            # send_email("CW Project '%s' " % project.title, text, to=[form.cleaned_data['to']])
             messages.success(request, "E-mail sent.")
             add_diff(diff_type.EMAIL_SENT, person=request.user, project=project, details=form.cleaned_data['body'])
             return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project.id}))
