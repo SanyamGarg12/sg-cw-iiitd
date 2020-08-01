@@ -228,3 +228,4 @@ LnF404_SiteID = credentials.LnF404_SiteID
 LnF404_token = credentials.LnF404_token
 
 ALLOWED_HOSTS = ['*']
+AUTH_USER_MODEL = 'studentportal.CustomUser'

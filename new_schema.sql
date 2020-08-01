@@ -21,6 +21,24 @@ USE `cw_portal` ;
 -- -----------------------------------------------------
 -- Table `cw_portal`.`studentportal_bug`
 -- -----------------------------------------------------
+
+CREATE TABLE `studentportal_customuser` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `password` varchar(128) NOT NULL,
+  `last_login` datetime(6) DEFAULT NULL,
+  `is_superuser` tinyint(1) NOT NULL,
+  `username` varchar(150) NOT NULL,
+  `first_name` varchar(30) NOT NULL,
+  `last_name` varchar(150) NOT NULL,
+  `email` varchar(254) NOT NULL,
+  `is_staff` tinyint(1) NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `date_joined` datetime(6) NOT NULL,
+  `batch_number` int,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
 CREATE TABLE IF NOT EXISTS `cw_portal`.`studentportal_bug` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `user_id` INT(11) NULL DEFAULT NULL,
