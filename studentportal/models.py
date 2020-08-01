@@ -1,5 +1,8 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -302,3 +305,12 @@ class ProgressAnalyser(object):
 
 class CustomUser(AbstractUser):
     batch_number = models.IntegerField(blank=True)
+
+@receiver(post_save, sender=get_user_model())
+def update_batch(sender, instance: CustomUser, created, **kwargs):
+    if created:
+        roll_number = 2000 + int(instance.email.split('@')[0][-5:-3])
+         # ''.join(['20', first])
+        instance.batch_number = roll_number
+        instance.save()
+
