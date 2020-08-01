@@ -1,5 +1,8 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -81,7 +84,7 @@ class AllProjects(models.Manager):
 
 
 class Project(models.Model):
-    student = models.ForeignKey(User, related_name='projects', on_delete=models.CASCADE)
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='projects', on_delete=models.CASCADE)
     title = models.CharField(max_length=1000)
     date_created = models.DateTimeField(default=timezone.now)
     credits = models.IntegerField(default=2,
@@ -215,7 +218,7 @@ class Feedback(models.Model):
 
 
 class Bug(models.Model):
-    user = models.ForeignKey(User, related_name='bugs', null=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='bugs', null=True, on_delete=models.CASCADE)
     suggestions = models.TextField(max_length=2000, blank=True)
     rating = models.IntegerField()
 
@@ -302,3 +305,15 @@ class ProgressAnalyser(object):
         project_stage.SUBMITTED: _analyse_submitted_stage,
         project_stage.COMPLETED: _analyse_completed_stage
     }
+
+class CustomUser(AbstractUser):
+    batch_number = models.IntegerField(blank=True)
+
+@receiver(post_save, sender=get_user_model())
+def update_batch(sender, instance: CustomUser, created, **kwargs):
+    if created:
+        roll_number = 2000 + int(instance.email.split('@')[0][-5:-3])
+         # ''.join(['20', first])
+        instance.batch_number = roll_number
+        instance.save()
+
