@@ -334,7 +334,7 @@ def accept_NGO(request, noti_id):
 
     send_cw_sg_email(request, noti.NGO_name + " Accepted",
                      "We have added the Organization you suggested as a trusted Organization",
-                     recipients=[str(noti.NGO_sugg_by)], notif_id=noti_id)
+                     recipients=[str(noti.NGO_sugg_by.email)], notif_id=noti_id)
 
     messages.success(request, "%s is now a trusted Organization." % noti.NGO_name)
     noti.delete()
@@ -348,7 +348,7 @@ def reject_NGO(request, noti_id):
 
     send_cw_sg_email(request, noti.NGO_name + " Rejected :(",
                      "We have reviewed your suggestion for the Organization but as of now have to reject it. " +
-                     "But thank you for your suggestion", recipients=[str(noti.NGO_sugg_by)], notif_id=noti_id)
+                     "But thank you for your suggestion", recipients=[str(noti.NGO_sugg_by.email)], notif_id=noti_id)
 
     noti.delete()
 
@@ -678,16 +678,12 @@ def send_cw_sg_email(request, subject, text, recipients, project_id=None, notif_
         notification = get_object_or_404(Notification, pk=notif_id)
         project = notification.project
 
-    if project.get_category() == "SG":
+    if project is not None and project.get_category() == "SG":
         ta_email = credentials.EMAIL_SG_USER
         ta_pass = credentials.EMAIL_SG_PASSWORD
 
-    elif project.get_category() == "CW":
+    else:
         ta_email = credentials.EMAIL_CW_USER
         ta_pass = credentials.EMAIL_CW_PASSWORD
-
-    else:
-        messages.warning(request, "Incorrect Project Category. Please contact administrator.")
-        pass
 
     send_mail(subject, text, ta_email, recipients, auth_user=ta_email, auth_password=ta_pass)
