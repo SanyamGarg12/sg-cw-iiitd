@@ -121,7 +121,7 @@
                     </div>
 
                     <strong>{{ doc.get_current_document_type }}: </strong>
-                    <a href="{% url 'download_document' doc.pk %}">
+                    <a href="{% url 'download_document' doc.pk %}" target="_blank">
                         {{ doc.name }}</a>
                     &nbsp;
                     <button class="btn-link glyphicon glyphicon-remove" style="color:red" data-toggle="modal"
