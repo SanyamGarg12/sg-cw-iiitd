@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `cw_portal`.`studentportal_bug` (
   INDEX `studentportal_bug_6340c63c` (`user_id` ASC) VISIBLE,
   CONSTRAINT `user_id_refs_id_7dfbec6d`
     FOREIGN KEY (`user_id`)
-    REFERENCES `cw_portal`.`auth_user` (`id`))
+    REFERENCES `cw_portal`.`studentportal_customuser` (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 19
 DEFAULT CHARACTER SET = latin1;
@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `cw_portal`.`studentportal_project` (
     REFERENCES `cw_portal`.`studentportal_ngo` (`id`),
   CONSTRAINT `student_id_refs_id_f6ab59ff`
     FOREIGN KEY (`student_id`)
-    REFERENCES `cw_portal`.`auth_user` (`id`))
+    REFERENCES `cw_portal`.`studentportal_customuser` (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1560
 DEFAULT CHARACTER SET = latin1;
@@ -209,7 +209,7 @@ CREATE TABLE IF NOT EXISTS `cw_portal`.`supervisor_comment` (
   INDEX `supervisor_comment_eb03c25c` (`commentor_id` ASC) VISIBLE,
   CONSTRAINT `commentor_id_refs_id_99b9dc4e`
     FOREIGN KEY (`commentor_id`)
-    REFERENCES `cw_portal`.`auth_user` (`id`),
+    REFERENCES `cw_portal`.`studentportal_customuser` (`id`),
   CONSTRAINT `project_id_refs_project_id_75bd14ab`
     FOREIGN KEY (`project_id`)
     REFERENCES `cw_portal`.`supervisor_example` (`project_id`))
@@ -232,7 +232,7 @@ CREATE TABLE IF NOT EXISTS `cw_portal`.`supervisor_diff` (
   INDEX `supervisor_diff_37952554` (`project_id` ASC) VISIBLE,
   CONSTRAINT `person_id_refs_id_e6c3c67a`
     FOREIGN KEY (`person_id`)
-    REFERENCES `cw_portal`.`auth_user` (`id`),
+    REFERENCES `cw_portal`.`studentportal_customuser` (`id`),
   CONSTRAINT `project_id_refs_id_678190fe`
     FOREIGN KEY (`project_id`)
     REFERENCES `cw_portal`.`studentportal_project` (`id`))
@@ -253,7 +253,7 @@ CREATE TABLE IF NOT EXISTS `cw_portal`.`supervisor_like` (
   INDEX `supervisor_like_751d22e6` (`liked_by_id` ASC) VISIBLE,
   CONSTRAINT `liked_by_id_refs_id_4cda879d`
     FOREIGN KEY (`liked_by_id`)
-    REFERENCES `cw_portal`.`auth_user` (`id`),
+    REFERENCES `cw_portal`.`studentportal_customuser` (`id`),
   CONSTRAINT `project_id_refs_project_id_6c855ad4`
     FOREIGN KEY (`project_id`)
     REFERENCES `cw_portal`.`supervisor_example` (`project_id`))
@@ -291,7 +291,7 @@ CREATE TABLE IF NOT EXISTS `cw_portal`.`supervisor_notification` (
   INDEX `supervisor_notification_29fe79c7` (`NGO_sugg_by_id` ASC) VISIBLE,
   CONSTRAINT `NGO_sugg_by_id_refs_id_ddc22b7d`
     FOREIGN KEY (`NGO_sugg_by_id`)
-    REFERENCES `cw_portal`.`auth_user` (`id`),
+    REFERENCES `cw_portal`.`studentportal_customuser` (`id`),
   CONSTRAINT `project_id_refs_id_4dedc7c1`
     FOREIGN KEY (`project_id`)
     REFERENCES `cw_portal`.`studentportal_project` (`id`))
