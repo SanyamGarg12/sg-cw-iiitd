@@ -165,6 +165,9 @@ class Project(models.Model):
         }
             for x in project_stage._all_stages_]
 
+    def get_category(self):
+        return self.category.name
+
     def delete(self, *args, **kwargs):
         for doc in self.documents.all(): doc.delete()
         for noti in self.notification_set.all(): noti.delete()

@@ -15,14 +15,16 @@ from django.utils import timezone
 
 from CW_Portal import settings, access_cache
 from studentportal.models import Project, NGO, Category, Document, project_stage
-from supervisor.communication import send_email, send_email_to_all
+from supervisor.communication import send_email_to_all
 from supervisor.decorators import supervisor_logged_in
 from supervisor.forms import AdvanceSearchForm, NewsForm, NewCategoryForm, NewNGOForm, EmailProjectForm, TAForm, \
-	ReportForm
+    ReportForm
 from supervisor.models import Example, News, Notification, TA, diff_type, add_diff, add_notification
 from supervisor.models import notification_type as nt
 from supervisor.validators import is_int
 from django.core.mail import send_mail
+
+import credentials
 
 
 @supervisor_logged_in
@@ -54,9 +56,12 @@ def verify_project(request, project_id):
     project.save()
     add_diff(diff_type.PROJECT_VERIFIED, person=request.user, project=project)
     messages.success(request, "You have verified the project %s." % project.title)
-    send_email("Congrats.. now get to work :)",
-               "Congratulations, your project has has been verified. Now start working and making a difference",
-               to=[str(project.student.email)])
+
+    send_cw_sg_email(request, "Congrats.. " + project.title + " Approved :)",
+                     "Congratulations, your project has has been verified. Now start working and make a difference. " +
+                     "Please reply to this mail for any assistance.", recipients=[str(project.student.email)],
+                     project_id=project_id)
+
     return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project.id}))
 
 
@@ -68,9 +73,12 @@ def unverify_project(request, project_id):
     project.save()
     add_diff(diff_type.PROJECT_UNVERIFIED, person=request.user, project=project)
     messages.warning(request, "You have unverified the project %s." % project.title)
-    send_email("I got bad news :(",
-               "It seems that the supervisor has un-approved your project. Contact him to find out the issue",
-               to=[str(project.student.email)])
+
+    send_cw_sg_email(request, project.title + " Unapproved :(",
+                     "It seems that the supervisor has unapproved your project. " +
+                     "Reply to this email for assistance.", recipients=[str(project.student.email)],
+                     project_id=project_id)
+
     return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project.id}))
 
 
@@ -115,9 +123,12 @@ def add_to_examples(request, project_id):
     Example.objects.create(project=project)
     add_diff(diff_type.ADDED_AS_EXAMPLE, person=request.user, project=project)
     messages.success(request, "You have marked the project '%s' as an example project." % project.title)
-    send_email("Congrats.. You deserve this :)",
-               "Congratulations, your project has has been selected by the admin as an example project. You must have done a mighty fine job. Keep it up.",
-               to=[str(project.student.email)])
+
+    send_cw_sg_email(request, "Congrats.. " + project.title + " Added to Examples :)",
+                     "Congratulations, your project has has been selected by the supervisor as an example project. " +
+                     "You must have done a mighty fine job. Keep it up.",
+                     recipients=[str(project.student.email)], project_id=project_id)
+
     return HttpResponseRedirect(reverse('super_viewproject',
                                         kwargs={'project_id': project_id}))
 
@@ -139,12 +150,16 @@ def toggle_presented_project(request, project_id):
 def remove_from_examples(request, example_project_id):
     example_project = Example.objects.get(pk=example_project_id)
     p_id = example_project.project.id
+
+    send_cw_sg_email(request, example_project.project.title + " removed from Examples",
+                     "Your project has has been removed by the admin from the example project. " +
+                     "Thank you for contributing to the community. Keep it up.",
+                     recipients=[str(Project.objects.get(pk=p_id).student.email)], project_id=p_id)
+
     example_project.delete()
     add_diff(diff_type.REMOVED_AS_EXAMPLE, person=request.user, project=get_object_or_404(Project, pk=p_id))
     messages.warning(request, "You have unmarked the project as an example project.")
-    send_email("Thank you :)",
-               "Your project has has been removed by the admin from the example project. Thank you for contributing to the community. Keep it up.",
-               to=[str(Project.objects.get(pk=p_id).student.email)])
+
     return HttpResponseRedirect(reverse('super_viewproject',
                                         kwargs={'project_id': p_id}))
 
@@ -198,12 +213,15 @@ def complete(request, project_id):
     project.save()
     add_diff(diff_type.PROJECT_COMPLETED, person=request.user, project=project)
     messages.success(request, "You have marked the Community Work project as completed and finished.")
-    send_email("Congrats.. you did it :)",
-               "Congratulations, your completed project has has been accepted by the admin.Please fill the feedback at %(feedback_link)s. \n\nThanks for giving back to the community. Keep it up." % {
-                   'feedback_link': request.build_absolute_uri(reverse('feedback', kwargs={'project_id': project.pk}))
-               },
-               to=[str(project.student.email)])
-    # send link for feedback form
+
+    send_cw_sg_email(request, "Congrats.. " + project.title + " Completed :)",
+                     "Congratulations, your completed project has has been accepted by the admin. " +
+                     " Please fill the feedback at %(feedback_link)s. \n\n " +
+                     "Thanks for giving back to the community. Keep it up." % {
+                         'feedback_link': request.build_absolute_uri(
+                             reverse('feedback', kwargs={'project_id': project.pk}))
+                     }, recipients=[str(project.student.email)], project_id=project_id)
+
     return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project_id}))
 
 
@@ -313,9 +331,12 @@ def accept_NGO(request, noti_id):
                        link=noti.NGO_link,
                        details=noti.NGO_details,
                        category=Category.objects.last())
-    send_email("Thank you :)", "We have added the NGO you suggested as a trusted NGO..",
-               to=[str(noti.NGO_sugg_by)])
-    messages.success(request, "%s is now a trusted NGO." % noti.NGO_name)
+
+    send_cw_sg_email(request, noti.NGO_name + " Accepted",
+                     "We have added the Organization you suggested as a trusted Organization",
+                     recipients=[str(noti.NGO_sugg_by)], notif_id=noti_id)
+
+    messages.success(request, "%s is now a trusted Organization." % noti.NGO_name)
     noti.delete()
     return HttpResponseRedirect(reverse('super_suggested_ngos'))
 
@@ -324,10 +345,13 @@ def accept_NGO(request, noti_id):
 def reject_NGO(request, noti_id):
     noti = get_object_or_404(Notification, pk=noti_id)
     messages.info(request, "You have rejected the suggestion of adding %s as a trusted NGO." % noti.NGO_name)
+
+    send_cw_sg_email(request, noti.NGO_name + " Rejected :(",
+                     "We have reviewed your suggestion for the Organization but as of now have to reject it. " +
+                     "But thank you for your suggestion", recipients=[str(noti.NGO_sugg_by)], notif_id=noti_id)
+
     noti.delete()
-    send_email("Thank you but sorry :|",
-               "We have reviewed your suggestion for the NGO but as of now have to reject it. But thank you for your suggestion",
-               to=[str(noti.NGO_sugg_by)])
+
     return HttpResponseRedirect(reverse('super_suggested_ngos'))
 
 
@@ -438,9 +462,14 @@ def email_project(request, project_id):
         form = EmailProjectForm(request.POST)
         if form.is_valid():
             text = '\n\n'.join([form.cleaned_data['body'],
-                                "Please Note: This mail is generated via the SG-CW-portal. For any further communication regarding the above mentioned issue(s), please reply to this mail, unless explicitly asked to create a new email thread, for proper redressal."])
-            send_mail("CW Project '%s' " % project.title, text, "sgcw@iiitd.ac.in", [form.cleaned_data['to']])
-            # send_email("CW Project '%s' " % project.title, text, to=[form.cleaned_data['to']])
+                                "Please Note: This mail is generated via the SG-CW-portal. " +
+                                "For any further communication regarding the above mentioned issue(s), " +
+                                "please reply to this mail, unless explicitly asked to create a new email thread, " +
+                                "for proper redressal."])
+
+            send_cw_sg_email(request, project.get_category() + " Project '%s' " % project.title, text,
+                             recipients=[form.cleaned_data['to']], project_id=project_id)
+
             messages.success(request, "E-mail sent.")
             add_diff(diff_type.EMAIL_SENT, person=request.user, project=project, details=form.cleaned_data['body'])
             return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project.id}))
@@ -547,6 +576,7 @@ def change_TA(request, TA_id='-1'):
         messages.error(request, "There was something wrong in the email provided.")
     return render(request, 'TA.html', {'form': form, 'tas': tas})
 
+
 # TODO fix this
 @supervisor_logged_in
 def generateReport(request):
@@ -633,3 +663,31 @@ def get_TA_logs(request, ta_id):
     diffs = ta.diff.all()
     return render(request, 'super_ta_log.html', {
         'ta': ta, 'diffs': diffs})
+
+
+def send_cw_sg_email(request, subject, text, recipients, project_id=None, notif_id=None):
+    ta_email = None
+    ta_pass = None
+
+    project = None
+
+    if project_id is not None:
+        project = get_object_or_404(Project, pk=project_id)
+
+    elif notif_id is not None:
+        notification = get_object_or_404(Notification, pk=notif_id)
+        project = notification.project
+
+    if project.get_category() == "SG":
+        ta_email = credentials.EMAIL_SG_USER
+        ta_pass = credentials.EMAIL_SG_PASSWORD
+
+    elif project.get_category() == "CW":
+        ta_email = credentials.EMAIL_CW_USER
+        ta_pass = credentials.EMAIL_CW_PASSWORD
+
+    else:
+        messages.warning(request, "Incorrect Project Category. Please contact administrator.")
+        pass
+
+    send_mail(subject, text, ta_email, recipients, auth_user=ta_email, auth_password=ta_pass)
