@@ -4,7 +4,7 @@ import os
 
 import xlwt
 from django.contrib import messages
-from django.contrib.auth import logout
+from django.contrib.auth import logout, get_user_model
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
@@ -379,7 +379,7 @@ def download(request, doc_id):
 
 @supervisor_logged_in
 def view_student(request, user_id):
-    student = get_object_or_404(User, pk=user_id)
+    student = get_object_or_404(get_user_model(), pk=user_id)
     return render(request, 'super_viewuser.html',
                   {'student': student, 'projects': Project.all_projects.filter(student=student)})
 
@@ -650,7 +650,7 @@ def get_project_logs(request, project_id):
 @supervisor_logged_in
 def get_TA_logs(request, ta_id):
     email = get_object_or_404(TA, pk=ta_id).email
-    ta = User.objects.filter(email=email)
+    ta = get_user_model().objects.filter(email=email)
     if ta:
         ta = ta[0]
     else:
