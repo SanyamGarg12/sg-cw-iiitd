@@ -158,7 +158,7 @@ def _upload(request, project_id):
                     messages.warning(request,
                                      "You can't submit the final submission until the supervisor has verified your project.")
                     return HttpResponseRedirect(reverse('viewproject', kwargs={'project_id': project_id}))
-                if request.FILES['document']._size > max_size:
+                if request.FILES['document'].size > max_size:
                     messages.warning(request, "File size limit exceeded.")
                     return HttpResponseRedirect(reverse('viewproject', kwargs={'project_id': project_id}))
                 Document.objects.create(document=request.FILES['document'],
