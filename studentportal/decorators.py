@@ -15,7 +15,7 @@ class _PathAndRename(object):
 
     def __call__(self, instance, filename):
         extension = filename.split('.')[-1]
-        a = string.letters + string.digits
+        a = string.ascii_letters + string.digits
         while True:
             filename = ''.join(choice(a) for _ in range(10))
             filename = '.'.join([filename, extension])
