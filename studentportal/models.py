@@ -312,8 +312,10 @@ class CustomUser(AbstractUser):
 @receiver(post_save, sender=get_user_model())
 def update_batch(sender, instance: CustomUser, created, **kwargs):
     if created:
-        roll_number = 2000 + int(instance.email.split('@')[0][-5:-3])
-         # ''.join(['20', first])
-        instance.batch_number = roll_number
+        try:
+            batch_number = 2000 + int(instance.email.split('@')[0][-5:-3])
+        except ValueError as ve:
+            batch_number = 0
+        instance.batch_number = batch_number
         instance.save()
 
