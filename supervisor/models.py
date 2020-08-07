@@ -127,3 +127,8 @@ class Diff(models.Model):
 
     def get_clear_description(self):
         return diff_mapping[self.diff_type]
+
+
+class Flag(models.Model):
+    key = models.CharField(max_length=100)
+    value = models.BooleanField(default=True)
