@@ -4,10 +4,12 @@
     <h3 class="page-header">
         <center> {{ user.first_name }} {{ user.last_name }}  </center>
     </h3>
+    {% if allow_project_flag %}
     <div align="center">
         <a class="btn btn-info btn-lg " role="button" href="{% url 'addproject' %}" style="margin-bottom:10px;">Add new
             project</a><br/><br/>
     </div>
+    {% endif %}
     {% if projects %}
         <div class="container">
             <div class="row">

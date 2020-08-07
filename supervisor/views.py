@@ -20,7 +20,7 @@ from supervisor.communication import send_email_to_all
 from supervisor.decorators import supervisor_logged_in
 from supervisor.forms import AdvanceSearchForm, NewsForm, NewCategoryForm, NewNGOForm, EmailProjectForm, TAForm, \
     ReportForm
-from supervisor.models import Example, News, Notification, TA, diff_type, add_diff, add_notification
+from supervisor.models import Example, News, Notification, TA, diff_type, add_diff, add_notification, Flag
 from supervisor.models import notification_type as nt
 from supervisor.validators import is_int
 from django.core.mail import send_mail
@@ -696,3 +696,18 @@ def send_cw_sg_email(request, subject, text, recipients, project_id=None, notif_
         ta_pass = credentials.EMAIL_CW_PASSWORD
 
     send_mail(subject, text, ta_email, recipients, auth_user=ta_email, auth_password=ta_pass)
+
+
+def toggle_allow_project(request):
+    allow_project_flag = Flag.objects.get(key='add_project')
+    allow_project_flag.value = not allow_project_flag.value
+    allow_project_flag.save()
+    context = {'value': allow_project_flag.value}
+    return render(request, 'allow_project.html', context=context)
+
+
+def allow_project(request):
+    allow_project_flag = Flag.objects.get(key='add_project')
+    context = {'value' : allow_project_flag.value}
+    print(allow_project_flag)
+    return render(request, 'allow_project.html', context=context)

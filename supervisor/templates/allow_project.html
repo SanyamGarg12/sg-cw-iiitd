@@ -1,0 +1,10 @@
+{% extends 'supervisorcore.html' %}
+{% load bootstrap %}
+{% block content %}
+
+    {% if value == 1 %}
+        <button onclick="location.href='{% url 'toggle_allow_project' %}'">Disallow</button>
+    {% else %}
+        <button onclick="location.href='{% url 'toggle_allow_project' %}'">Allow</button>
+    {% endif %}
+{% endblock %}

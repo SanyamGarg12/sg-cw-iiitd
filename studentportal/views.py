@@ -16,7 +16,7 @@ from studentportal.forms import ProjectForm, FeedbackForm, UploadDocumentForm, B
 from studentportal.models import Project, Document, NGO, document_type, project_stage, Edit
 from supervisor.forms import NewCommentForm
 from supervisor.models import Example, News, Like, Comment, add_notification, notification_type, \
-	diff_type, add_diff
+    diff_type, add_diff, Flag
 
 diff_worker = diff_match_patch.diff_match_patch()
 
@@ -48,15 +48,19 @@ def home(request):
 
 @login_required
 def addproject(request):
+    allow_project_flag = Flag.objects.get(key='add_project')
     if request.method == 'POST':
         form = ProjectForm(request.POST)
         if form.is_valid():
-            project = form.save(student=request.user)
-            add_notification(notification_type.NEW_PROJECT, project=project)
-            add_diff(diff_type.PROJECT_ADDED, person=request.user, project=project)
-            messages.success(request, 'Your project was added successfully.')
-            return HttpResponseRedirect(reverse('view_project_NGO', kwargs={
-                'project_id': project.pk}))
+            if not allow_project_flag.value:
+                messages.warning(request, "You can't add new project at the moment")
+            else:
+                project = form.save(student=request.user)
+                add_notification(notification_type.NEW_PROJECT, project=project)
+                add_diff(diff_type.PROJECT_ADDED, person=request.user, project=project)
+                messages.success(request, 'Your project was added successfully.')
+                return HttpResponseRedirect(reverse('view_project_NGO', kwargs={
+                    'project_id': project.pk}))
         else:
             messages.warning(request, 'There was something wrong in the provided details.')
     else:
@@ -226,8 +230,9 @@ def unlink_NGO_project(request, project_id):
 @login_required
 def profile(request):
     projects = request.user.projects.filter(deleted=False)
+    allow_project_flag = Flag.objects.get(key='add_project')
     return render(request, 'studentprofile.html', {
-        'projects': projects, 'stages': project_stage})
+        'projects': projects, 'stages': project_stage, 'allow_project_flag' : allow_project_flag.value})
 
 
 @login_required
