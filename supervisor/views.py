@@ -1,6 +1,7 @@
 import datetime
 import mimetypes
 import os
+import sys
 
 import xlwt
 from django.contrib import messages
@@ -174,7 +175,7 @@ def submitted_projects(request):
 @supervisor_logged_in
 def allprojects(request):
     form = ReportForm()
-    paginator = Paginator(Project.all_projects.all(), 10, orphans=5)
+    paginator = Paginator(Project.objects.get_queryset().order_by('id'), 10, orphans=5)
 
     page = request.GET.get('page', None)
     try:
@@ -577,7 +578,7 @@ def change_TA(request, TA_id='-1'):
     return render(request, 'TA.html', {'form': form, 'tas': tas})
 
 
-# TODO fix this
+# TODO test this on Ubuntu
 @supervisor_logged_in
 def generateReport(request):
     BASE_DIR = getattr(settings, "BASE_DIR")
@@ -632,10 +633,18 @@ def generateReport(request):
         ]):
             sheet.write(row, col, x)
 
-    report.save(os.path.join(BASE_DIR, 'report.csv'))
-    report = open(os.path.join(BASE_DIR, 'report.csv'), 'r')
+    report.save(os.path.join(BASE_DIR, 'report.xls'))
+
+    encoding = ""
+    if sys.platform == "linux":
+        encoding = "utf8"
+    else:
+        encoding = "ISO-8859-1"
+
+    report = open(os.path.join(BASE_DIR, 'report.xls'), 'r', encoding=encoding)
     response = StreamingHttpResponse(report)
-    response['Content-Disposition'] = 'download; filename=Report.csv'
+    response['Content-Disposition'] = 'download; filename=report.xls'
+    # response['Content-Disposition'] = 'inline; filename=' + os.path.basename('Report.xls')
     return response
 
 
