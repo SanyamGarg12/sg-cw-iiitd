@@ -339,3 +339,10 @@ INSERT INTO `cw_portal`.`studentportal_category`
 VALUES
 ("CW",
 "Community Work");
+
+INSERT INTO `cw_portal`.`supervisor_flag`
+(`key`,
+`value`)
+VALUES
+("add_project",
+1);
