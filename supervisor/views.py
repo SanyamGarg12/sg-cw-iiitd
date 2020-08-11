@@ -618,7 +618,8 @@ def generateReport(request):
         "NGO",
         "Title",
         "Started on",
-        "Presented"
+        "Presented",
+        "Semester"
     ]
     for (index, h) in enumerate(headings):
         ongoing_sheet.write(0, index, h)
@@ -644,7 +645,8 @@ def generateReport(request):
             project.get_NGO(),
             project.title,
             project.date_created.strftime('%d-%m-%Y'),
-            "%s" % project.presented
+            "%s" % project.presented,
+            project.semester
         ]):
             sheet.write(row, col, x)
 
