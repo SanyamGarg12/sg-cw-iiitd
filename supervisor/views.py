@@ -737,5 +737,6 @@ def update_batch(request):
     student.batch_number = new_batch
     student.save()
 
+    messages.info(request, "Batch updated!")
     return render(request, 'super_viewuser.html',
                   {'student': student, 'projects': Project.all_projects.filter(student=student)})
