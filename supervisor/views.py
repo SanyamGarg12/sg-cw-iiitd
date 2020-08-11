@@ -728,3 +728,14 @@ def allow_project(request):
     context = {'value': allow_project_flag.value}
     print(allow_project_flag)
     return render(request, 'allow_project.html', context=context)
+
+
+def update_batch(request):
+    user_id = int(request.POST['user_id'])
+    new_batch = int(request.POST['new_batch'])
+    student = get_object_or_404(get_user_model(), pk=user_id)
+    student.batch_number = new_batch
+    student.save()
+
+    return render(request, 'super_viewuser.html',
+                  {'student': student, 'projects': Project.all_projects.filter(student=student)})

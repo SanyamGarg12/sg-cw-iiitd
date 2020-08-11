@@ -5,6 +5,17 @@
     </center>
     <h3>Email: </h3>
     <blockquote>{{ student.email }}</blockquote>
+
+    <h3>Batch: </h3>
+    <form action="{% url 'update_batch' %}" method="post">
+        {% csrf_token %}
+        <input type="number" name="new_batch" value="{{ student.batch_number }}">
+        <input type="hidden" name="user_id" value="{{ student.id }}">
+        <button type="submit">
+            Update batch
+        </button>
+    </form>
+
     <h3>Projects</h3>
     {% if projects %}
         <blockquote>

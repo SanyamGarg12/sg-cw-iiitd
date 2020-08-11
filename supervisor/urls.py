@@ -63,4 +63,6 @@ urlpatterns = (
 
     url(r'^logs/project/(?P<project_id>[0-9]+)/$', views.get_project_logs, name='super_project_logs'),
     url(r'^logs/TA/(?P<ta_id>[0-9]+)/$', views.get_TA_logs, name='super_TA_logs'),
+    url(r'^update_batch/$', views.update_batch, name="update_batch"),
+
 )
