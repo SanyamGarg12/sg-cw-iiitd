@@ -9,8 +9,8 @@
                     <tr>
                         <th>#</th>
                         <th>Student Name</th>
-                        <th>CW Project Title</th>
-                        <th>NGO worked under</th>
+                        <th>Project Title</th>
+                        <th>Organization worked under</th>
                         <th>Final submission</th>
                     </tr>
                     </thead>
@@ -23,10 +23,11 @@
                             <td>{{ p.get_NGO }}</td>
                             {% if p.final_submission_document is None %}
                             <span class="glyphicon glyphicon-file text-muted"></span>
-                            <td><a href="{% url 'download_document' p.final_submission_document.pk %}"></td>
+                                <td><a href="{% url 'download_document' p.final_submission_document.pk %}"></a></td>
                             {% else %}
                             <a href="{% url 'download_document' p.final_submission_document.pk %}"><span
                                     class="glyphicon glyphicon-file"></span></a>
+                            {%  endif %}
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -38,6 +39,3 @@
     </div>
 {% endblock %}
 #
-student
-CW title
-NGO

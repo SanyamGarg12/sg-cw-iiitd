@@ -1,4 +1,4 @@
-This is the web portal for managing the mandatory Community Work done by the students of IIIT-Delhi, India
+This is the web portal for managing the mandatory Self Growth & Community Work done by the students of IIIT-Delhi, India
 
 # Setup
 1. sudo apt-get install python-dev  \

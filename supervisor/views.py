@@ -213,7 +213,7 @@ def complete(request, project_id):
     project.finish_date = timezone.now()
     project.save()
     add_diff(diff_type.PROJECT_COMPLETED, person=request.user, project=project)
-    messages.success(request, "You have marked the Community Work project as completed and finished.")
+    messages.success(request, "You have marked the Project as completed and finished.")
 
     send_cw_sg_email(request, "Congrats.. " + project.title + " Completed :)",
                      "Congratulations, your completed project has has been accepted by the admin. " +
@@ -463,7 +463,7 @@ def email_project(request, project_id):
         form = EmailProjectForm(request.POST)
         if form.is_valid():
             text = '\n\n'.join([form.cleaned_data['body'],
-                                "Please Note: This mail is generated via the SG-CW-portal. " +
+                                "Please Note: This mail is generated via the SG/CW-portal. " +
                                 "For any further communication regarding the above mentioned issue(s), " +
                                 "please reply to this mail, unless explicitly asked to create a new email thread, " +
                                 "for proper redressal."])
@@ -607,8 +607,8 @@ def generateReport(request):
 
     report = xlwt.Workbook(encoding="utf-8")
 
-    completed_sheet = report.add_sheet("Completed CW Projects")
-    ongoing_sheet = report.add_sheet("Ongoing CW Projects")
+    completed_sheet = report.add_sheet("Completed Projects")
+    ongoing_sheet = report.add_sheet("Ongoing Projects")
 
     headings = [
         "Name",

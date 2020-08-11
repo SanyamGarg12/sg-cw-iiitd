@@ -94,7 +94,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
                                     class="glyphicon glyphicon-user"></span> {{ user.first_name }} <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{% url 'studentprofile' %}">My CW-Projects</a></li>
+                                <li><a href="{% url 'studentprofile' %}">My Projects</a></li>
                                 <li class="divider"></li>
                                 <li><a href="{% url 'logout' %}">Logout</a></li>
                             </ul>
@@ -102,7 +102,7 @@
 
                     {% else %}
                         <li class="dropdown">
-                            <a href="{% url 'social:begin' 'google-oauth2' %}" class="dropdown-toggle">Login2</a>
+                            <a href="{% url 'social:begin' 'google-oauth2' %}" class="dropdown-toggle">IIITD Login</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -145,8 +145,9 @@
     <hr/>
     <div class="container">
         <footer>
-            <p class="credit">Maintained by <a href="//www.github.com/chirag-jn/">Chirag Jain</a> and <a
-                    href="//www.github.com/reeshabhkumarranjan/">Reeshabh Kumar Ranjan</a>. Originally developed by <a href="//github.com/darkryder/">Sambhav Satija</a></p>
+            <p class="credit">Developed by <a href="//www.github.com/chirag-jn/">Chirag Jain</a>, <a
+                    href="//www.github.com/reeshabhkumarranjan/">Reeshabh Kumar Ranjan</a> and <a href="//github.com/darkryder/">Sambhav Satija</a> @ <a
+                    href="//www.iiitd.ac.in">IIIT-D</a>.</p></p>
         </footer>
     </div>
 {% endblock %}

@@ -21,7 +21,7 @@ class AdvanceSearchForm(forms.Form):
     NGO_name = forms.CharField(required=False, label="Name of the NGO")
     year_choices = ((x, str(x)) for x in range(2014, timezone.now().year + 1))
     proposal_year = forms.ChoiceField(choices=year_choices,
-                                      label="Year of proposal of CW project")
+                                      label="Year of proposal of the project")
     category = forms.ModelChoiceField(queryset=Category.objects.all(),
                                       empty_label='All', required=False,
                                       label="Category of the project")

@@ -231,13 +231,19 @@ class Edit(models.Model):
 
 
 class ProgressAnalyser(object):
-    _unverified = "Your proposal has been sent to the TA for approval. You may receive a mail asking for clarifications about your proposal before accepting. If this takes more than a couple of days, please drop a mail at communitywork <magic> iiitd.ac.in."
-    _ongoing = "Continue working on your project. Also keep uploading regular log reports for faster review. Click on 'Submit Project' on completion of the project."
+    _unverified = "Your proposal has been sent to the TA for approval. " \
+                  "You may receive a mail asking for clarifications about your proposal before accepting. " \
+                  "If this takes more than a couple of days, please reply to the mail received."
+    _ongoing = "Continue working on your project. " \
+               "Also keep uploading regular log reports for faster review. " \
+               "Click on 'Submit Project' on completion of the project."
     _submit_final_report = "Also, it seems you haven't submitted the final report as of now."
-    _submitted = "Your project details has been sent to the TA for final acceptance. You may receive a mail asking for your project details or logs. If this takes more than a couple of days, please drop a mail at communitywork <magic> iiitd.ac.in."
+    _submitted = "Your project details has been sent to the TA for final acceptance. " \
+                 "You may receive a mail asking for your project details or logs. " \
+                 "If this takes more than a couple of days, please reply to the mail received."
 
     _all_unverified = "Your project has not been verified until now."
-    _all_completed = "You have completed your CW project! :)"
+    _all_completed = "You have completed your project! :)"
 
     _ongoing_submitted = "You submitted your project for final approval on %s."
 
