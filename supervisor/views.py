@@ -584,11 +584,26 @@ def generateReport(request):
     BASE_DIR = getattr(settings, "BASE_DIR")
 
     months = int(request.POST['date'])
+    semester = int(request.POST['semester'])
+    batch = int(request.POST['batch'])
 
     projects = Project.objects.filter(~Q(stage=project_stage.TO_BE_VERIFIED))
     projects = projects.filter(
         Q(finish_date__gte=datetime.datetime.now() - datetime.timedelta(months * 31)) |
         Q(finish_date=None))  # for incomplete projects
+
+    if semester != 0:
+        projects = projects.filter(
+            Q(semester__exact=semester))
+
+    if batch != 0:
+        new_projects = []
+
+        for project in projects:
+            if project.student.batch_number == batch:
+                new_projects.append(project)
+
+        projects = new_projects
 
     report = xlwt.Workbook(encoding="utf-8")
 
@@ -708,6 +723,6 @@ def toggle_allow_project(request):
 
 def allow_project(request):
     allow_project_flag = Flag.objects.get(key='add_project')
-    context = {'value' : allow_project_flag.value}
+    context = {'value': allow_project_flag.value}
     print(allow_project_flag)
     return render(request, 'allow_project.html', context=context)

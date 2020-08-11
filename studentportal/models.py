@@ -306,8 +306,10 @@ class ProgressAnalyser(object):
         project_stage.COMPLETED: _analyse_completed_stage
     }
 
+
 class CustomUser(AbstractUser):
-    batch_number = models.IntegerField(blank=True)
+    batch_number = models.IntegerField(blank=True, name="batch_number")
+
 
 @receiver(post_save, sender=get_user_model())
 def update_batch(sender, instance: CustomUser, created, **kwargs):
@@ -318,4 +320,3 @@ def update_batch(sender, instance: CustomUser, created, **kwargs):
             batch_number = 0
         instance.batch_number = batch_number
         instance.save()
-

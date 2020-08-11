@@ -25,6 +25,8 @@ class AdvanceSearchForm(forms.Form):
     category = forms.ModelChoiceField(queryset=Category.objects.all(),
                                       empty_label='All', required=False,
                                       label="Category of the project")
+
+
 # time_completed_before
 # time_completed_after
 
@@ -68,6 +70,10 @@ class NewCommentForm(forms.ModelForm):
 class ReportForm(forms.Form):
     date = forms.ChoiceField(label="Projects which were marked as complete within these past months : ",
                              choices=tuple([(x, x) for x in range(1, 13)]))
+    semester = forms.ChoiceField(label="Semester Number:",
+                                 choices=tuple([(0, 0)] + [(x, x) for x in range(1, 9)]))
+    batch = forms.ChoiceField(label="Batch: ",
+                             choices=tuple([(0, 0)] + [(x, x) for x in range(2016, 2026)]))
 
 
 class TAForm(forms.ModelForm):
