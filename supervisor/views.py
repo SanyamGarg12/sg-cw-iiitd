@@ -658,10 +658,15 @@ def generateReport(request):
     else:
         encoding = "ISO-8859-1"
 
-    report = open(os.path.join(BASE_DIR, 'report.xls'), 'r', encoding=encoding)
-    response = StreamingHttpResponse(report)
-    response['Content-Disposition'] = 'download; filename=report.xls'
+    # report = open(os.path.join(BASE_DIR, 'report.xls'), 'r', encoding=encoding)
+    # response = StreamingHttpResponse(report)
+    # response['Content-Disposition'] = 'download; filename=report.xls'
     # response['Content-Disposition'] = 'inline; filename=' + os.path.basename('Report.xls')
+
+    report_path = os.path.join(BASE_DIR, 'report.xls')
+    with open(report_path, 'rb') as file:
+        response = HttpResponse(file.read(), content_type="application/vnd.ms-excel")
+        response['Content-Disposition'] = 'inline; filename=' + os.path.basename(report_path)
     return response
 
 
