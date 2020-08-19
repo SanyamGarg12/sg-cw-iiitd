@@ -665,8 +665,8 @@ def generateReport(request):
 
     report_path = os.path.join(BASE_DIR, 'report.xls')
     with open(report_path, 'rb') as file:
-        response = HttpResponse(file.read(), content_type="application/vnd.ms-excel")
-        response['Content-Disposition'] = 'inline; filename=' + os.path.basename(report_path)
+        response = HttpResponse(file.read())
+        response['Content-Disposition'] = 'download; filename=' + os.path.basename(report_path)
     return response
 
 
