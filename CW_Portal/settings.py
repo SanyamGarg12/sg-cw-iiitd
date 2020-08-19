@@ -207,7 +207,6 @@ CACHES = {
     }
 }
 
-EMAIL_USE_TLS = True
 
 ALLOWED_DOMAINS = ['iiitd.ac.in']
 
