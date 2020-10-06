@@ -221,8 +221,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
-EMAIL_HOST_USER = credentials.EMAIL_CW_USER
-EMAIL_HOST_PASSWORD = credentials.EMAIL_CW_PASSWORD
+EMAIL_HOST_USER = credentials.EMAIL_SG_USER
+EMAIL_HOST_PASSWORD = credentials.EMAIL_SG_PASSWORD
 
 LnF404_url = credentials.LnF404_url
 LnF404_SiteID = credentials.LnF404_SiteID

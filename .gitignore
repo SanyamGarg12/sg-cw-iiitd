@@ -10,3 +10,4 @@ env
 venv
 credentials.py
 .idea/
+sg-cw-portal-iiitd-key.json
