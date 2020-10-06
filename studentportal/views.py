@@ -27,7 +27,7 @@ def index(request):
             return HttpResponseRedirect(reverse('supervisor_home'))
     return HttpResponseRedirect(reverse('studenthome'))
 
-
+@login_required
 def first_login(request):
     if request.user.email in access_cache.get_TA():
         return HttpResponseRedirect(reverse('supervisor_home'))
