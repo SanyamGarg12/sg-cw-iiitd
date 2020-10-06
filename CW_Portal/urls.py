@@ -11,6 +11,8 @@ admin.autodiscover()
 from studentportal.views import index, first_login
 from studentportal import startup
 
+import credentials
+
 startup.work()
 handler404 = 'studentportal.views.handle404_LnF'
 handler500 = 'studentportal.views.handle404_LnF'
@@ -27,3 +29,5 @@ urlpatterns = [
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()
+
+credentials.init_firebase_keys()
