@@ -752,6 +752,8 @@ def toggle_allow_project(request):
     allow_project_flag.value = not allow_project_flag.value
     allow_project_flag.save()
     context = {'value': allow_project_flag.value}
+    popup_message = "Projects allowed." if allow_project_flag.value else "Projects disallowed."
+    messages.success(request, popup_message)
     return render(request, 'allow_project.html', context=context)
 
 
