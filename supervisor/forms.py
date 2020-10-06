@@ -76,7 +76,7 @@ class ReportForm(forms.Form):
                                  (7, "Seventh"), (8, "Eighth"), (9, "Summer Semester 1"),
                                  (10, "Summer Semester 2"), (11, "Summer Semester 3"), (12, "Summer Semester 4")))
     batch = forms.ChoiceField(label="Batch: ",
-                             choices=tuple([(0, 0)] + [(x, x) for x in range(2016, 2026)]))
+                             choices=tuple([(0, "Any")] + [(x, x) for x in range(2016, timezone.now().year + 1)]))
 
 
 class TAForm(forms.ModelForm):
