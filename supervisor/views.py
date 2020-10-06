@@ -658,10 +658,15 @@ def generateReport(request):
     else:
         encoding = "ISO-8859-1"
 
-    report = open(os.path.join(BASE_DIR, 'report.xls'), 'r', encoding=encoding)
-    response = StreamingHttpResponse(report)
-    response['Content-Disposition'] = 'download; filename=report.xls'
+    # report = open(os.path.join(BASE_DIR, 'report.xls'), 'r', encoding=encoding)
+    # response = StreamingHttpResponse(report)
+    # response['Content-Disposition'] = 'download; filename=report.xls'
     # response['Content-Disposition'] = 'inline; filename=' + os.path.basename('Report.xls')
+
+    report_path = os.path.join(BASE_DIR, 'report.xls')
+    with open(report_path, 'rb') as file:
+        response = HttpResponse(file.read())
+        response['Content-Disposition'] = 'download; filename=' + os.path.basename(report_path)
     return response
 
 
@@ -737,5 +742,6 @@ def update_batch(request):
     student.batch_number = new_batch
     student.save()
 
+    messages.info(request, "Batch updated!")
     return render(request, 'super_viewuser.html',
                   {'student': student, 'projects': Project.all_projects.filter(student=student)})
