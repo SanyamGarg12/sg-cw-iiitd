@@ -4,7 +4,6 @@
 *.ini
 *.log
 media
-static
 uwsgi_params
 env
 venv
