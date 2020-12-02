@@ -190,6 +190,7 @@ APPEND_SLASH = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 STATISTICS_FOLDER_NAME = credentials.STATISTICS_FOLDER_NAME
 UPLOAD_PATH = 'uploads/%Y/'
@@ -227,5 +228,5 @@ LnF404_url = credentials.LnF404_url
 LnF404_SiteID = credentials.LnF404_SiteID
 LnF404_token = credentials.LnF404_token
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['192.168.1.69']
 AUTH_USER_MODEL = 'studentportal.CustomUser'
