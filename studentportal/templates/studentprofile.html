@@ -5,42 +5,39 @@
         <center> {{ user.first_name }} {{ user.last_name }}  </center>
     </h3>
     {% if allow_project_flag %}
-        <div align="center">
-            <a class="btn btn-info btn-lg " role="button" href="{% url 'addproject' %}" style="margin-bottom:10px;">Add
-                new
-                project</a><br/><br/>
-        </div>
+    <div align="center">
+        <a class="btn btn-info btn-lg " role="button" href="{% url 'addproject' %}" style="margin-bottom:10px;">Add new
+            project</a><br/><br/>
+    </div>
     {% endif %}
     {% if projects %}
         <div class="container">
             <div class="row">
                 {% for p in projects.all %}
-                    {% ifequal p.category "Self Growth" %}
-                        <div class="col-6 col-sm-6 col-lg-4">
-                            <blockquote>
-                                {% ifequal p.stage stages.TO_BE_VERIFIED %}
-                                    <span class="glyphicon glyphicon-flag" title="Unverified" style="color:red;"></span>
-                                {% endifequal %}
-                                {% ifequal p.stage stages.ONGOING %}
-                                    <span class="glyphicon glyphicon-cog" title="Ongoing" style="color:blue;"></span>
-                                {% endifequal %}
-                                {% ifequal p.stage stages.SUBMITTED %}
-                                    <span class="glyphicon glyphicon-cog" title="Submitted" style="color:green;"></span>
-                                {% endifequal %}
-                                {% ifequal p.stage stages.COMPLETED %}
-                                    <span class="glyphicon glyphicon-ok" title="Completed" style="color:green;"></span>
-                                {% endifequal %}
-                                <p>
-                                    {{ p.title|truncatechars:50 }} <a class="btn btn-link"
-                                                                      href="{% url 'viewproject' p.id %}" role="button">View
-                                    »</a>
-                                    {% ifequal p.stage stages.COMPLETED %}{% if p.feedback.all %}{% else %}
-                                        <a class="btn btn-link" href="{% url 'feedback' p.id %}">Give feedback »</a>
-                                    {% endif %}{% endifequal %}
-                                </p>
-                            </blockquote>
-                        </div>
-                    {% endifequal %}
+                    <div class="col-6 col-sm-6 col-lg-4">
+                        <blockquote>
+                            {% ifequal p.stage stages.TO_BE_VERIFIED %}
+                                <span class="glyphicon glyphicon-flag" title="Unverified" style="color:red;"></span>
+                            {% endifequal %}
+                            {% ifequal p.stage stages.ONGOING %}
+                                <span class="glyphicon glyphicon-cog" title="Ongoing" style="color:blue;"></span>
+                            {% endifequal %}
+                            {% ifequal p.stage stages.SUBMITTED %}
+                                <span class="glyphicon glyphicon-cog" title="Submitted" style="color:green;"></span>
+                            {% endifequal %}
+                            {% ifequal p.stage stages.COMPLETED %}
+                                <span class="glyphicon glyphicon-ok" title="Completed" style="color:green;"></span>
+                            {% endifequal %}
+                            <p>
+                                {{ p.title|truncatechars:50 }} <a class="btn btn-link"
+                                                                  href="{% url 'viewproject' p.id %}" role="button">View
+                                »</a>
+                                {% ifequal p.stage stages.COMPLETED %}{% if p.feedback.all %}{% else %}
+                                    <a class="btn btn-link" href="{% url 'feedback' p.id %}">Give feedback »</a>
+                                {% endif %}{% endifequal %}
+                            </p>
+                        </blockquote>
+                    </div>
                 {% endfor %}
             </div>
         </div>
