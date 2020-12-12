@@ -1178,10 +1178,10 @@ a.text-danger:hover {
 }
 .bg-primary {
   color: #fff;
-  background-color: #3fada8;
+  background-color: #2780e3;
 }
 a.bg-primary:hover {
-  background-color: #3fada8;
+  background-color: #1967be;
 }
 .bg-success {
   background-color: #3fb618;
@@ -4221,7 +4221,7 @@ fieldset[disabled] .navbar-default .btn-link:focus {
 }
 .navbar-inverse .navbar-collapse,
 .navbar-inverse .navbar-form {
-  border-color: #1a6ecc;
+  border-color: #3fada8;
 }
 .navbar-inverse .navbar-nav > .open > a,
 .navbar-inverse .navbar-nav > .open > a:hover,
