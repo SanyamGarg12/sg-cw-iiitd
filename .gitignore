@@ -11,3 +11,4 @@ credentials.py
 .idea/
 sg-cw-portal-iiitd-key.json
 static/
+*.xls

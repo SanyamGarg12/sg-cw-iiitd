@@ -228,5 +228,24 @@ LnF404_url = credentials.LnF404_url
 LnF404_SiteID = credentials.LnF404_SiteID
 LnF404_token = credentials.LnF404_token
 
-ALLOWED_HOSTS = ['192.168.1.69']
+ALLOWED_HOSTS = ['192.168.1.69', 'localhost', 'sgcw.iiitd.edu.in']
 AUTH_USER_MODEL = 'studentportal.CustomUser'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'django.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
