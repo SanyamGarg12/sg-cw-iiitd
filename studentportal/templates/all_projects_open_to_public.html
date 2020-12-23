@@ -21,13 +21,15 @@
                             <td>{{ p.student.first_name }} {{ p.student.last_name }}</td>
                             <td>{{ p.title }}</td>
                             <td>{{ p.get_NGO }}</td>
-                            {% if p.final_submission_document is None %}
-                            <span class="glyphicon glyphicon-file text-muted"></span>
-                                <td><a href="{% url 'download_document' p.final_submission_document.pk %}"></a></td>
-                            {% else %}
-                            <a href="{% url 'download_document' p.final_submission_document.pk %}"><span
-                                    class="glyphicon glyphicon-file"></span></a>
-                            {%  endif %}
+                            <td>
+                                {% if p.final_submission_document is None %}
+                                <span class="glyphicon glyphicon-file text-muted"></span>
+                                    <td><a href="{% url 'download_document' p.final_submission_document.pk %}"></a></td>
+                                {% else %}
+                                <a href="{% url 'download_document' p.final_submission_document.pk %}"><span
+                                        class="glyphicon glyphicon-file"></span></a>
+                                {%  endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
