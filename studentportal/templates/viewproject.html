@@ -22,20 +22,12 @@
 
         <div class="row">
             <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                <h2>Credits: </h2>
+                <h2>Credits Details</h2>
                 <blockquote>
                     {{ project.credits }} Credit for {{ project.category.name }}
                     <br>
                     Presented: {% if project.presented %} Yes {% else %} No {% endif %}
                 </blockquote>
-{#                        <h2>Presented</h2>#}
-{#        <blockquote>#}
-{#            {% if project.presented %} Yes {% else %} No {% endif %}#}
-{#        </blockquote>#}
-{#                <h2>Category</h2>#}
-{#                <blockquote>#}
-{#                    {{ project.category.name }}#}
-{#                </blockquote>#}
                 <h2>Status</h2>
                 <blockquote>
                     {{ project.get_project_status }}
@@ -51,20 +43,12 @@
                     {{ project.NGO_details }}
                     <p><a href="{% url 'view_project_NGO' project.id %}">Change NGO details</a></p>
                 </blockquote>
-{#                <h2>NGO details: </h2>#}
-{#                <blockquote>#}
-{#                    {{ project.NGO_details }}#}
-{#                </blockquote>#}
                 <h2>Supervisor </h2>
                 <blockquote>
                     {{ project.NGO_super }}
                     <br>
                     {{ project.NGO_super_contact }}
                 </blockquote>
-{#                <h2>Supervisor contact information: </h2>#}
-{#                <blockquote>#}
-{#                    {{ project.NGO_super_contact }}#}
-{#                </blockquote>#}
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-radius:25px; border: 3px solid #F0F0F0; padding: 20px;">
                 {% for stage in project_graph %}
@@ -101,10 +85,6 @@
         <blockquote>
             {{ project.schedule_text|linebreaksbr }}
         </blockquote>
-{#        <h2>Presented</h2>#}
-{#        <blockquote>#}
-{#            {% if project.presented %} Yes {% else %} No {% endif %}#}
-{#        </blockquote>#}
         <h2>Documents</h2>
         <blockquote>
             {% if project.documents.all %}
