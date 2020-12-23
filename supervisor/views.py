@@ -388,7 +388,7 @@ def download(request, doc_id):
 def view_student(request, user_id):
     student = get_object_or_404(get_user_model(), pk=user_id)
     return render(request, 'super_viewuser.html',
-                  {'student': student, 'projects': Project.all_projects.filter(student=student)})
+                  {'student': student, 'projects': filtered_projects(request, student=student)})
 
 
 @supervisor_logged_in
