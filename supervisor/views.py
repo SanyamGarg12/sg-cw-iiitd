@@ -283,7 +283,7 @@ def add_news(request):
     if not (request.method == "POST" or request.is_ajax()):
         messages.warning(request, "There was something funny about the request the server received.")
         return HttpResponseRedirect(reverse('all_news'))
-    if (request.method == "POST"):
+    if request.method == "POST":
         form = NewsForm(request.POST)
         if form.is_valid():
             form.save()

@@ -11,8 +11,9 @@
                     <th>Student</th>
                     <th>Email</th>
                     <th>Roll number</th>
-                    <th>Title</th>
+                    <th>Project</th>
                     <th>Credits</th>
+                    <th>Category</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -20,7 +21,7 @@
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>
-                            <a href="{% url 'super_viewuser' p.student.pk %}">{{ p.student.first_name }} {{ p.student.last_name }}
+                            <a href="{% url 'super_viewuser' p.student.pk %}">{{ p.student.first_name }} {{ p.student.last_name }}</a>
                         </td>
                         <td>{{ p.student.email }}</td>
                         <td>{{ p.get_rollno }}</td>
@@ -31,6 +32,7 @@
                                 <span class="glyphicon glyphicon-trash" style="color:red; margin-left:10px;"
                                       title="deleted"></span> {% endif %}
                         </td>
+                        <td>{{ p.category }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
