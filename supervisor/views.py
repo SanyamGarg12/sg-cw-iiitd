@@ -45,7 +45,8 @@ def _logout(request):
 
 @supervisor_logged_in
 def unverified_projects(request):
-    projects = Project.objects.filter(stage=project_stage.TO_BE_VERIFIED)
+    projects = filtered_projects(request, stage=project_stage.TO_BE_VERIFIED)
+    # projects = Project.objects.filter(stage=project_stage.TO_BE_VERIFIED)
     return render(request, 'unverified_projects.html',
                   {'projects': projects})
 
