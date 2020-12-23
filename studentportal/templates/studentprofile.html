@@ -5,10 +5,11 @@
         <center> {{ user.first_name }} {{ user.last_name }}  </center>
     </h3>
     {% if allow_project_flag %}
-    <div align="center">
-        <a class="btn btn-info btn-lg " role="button" href="{% url 'addproject' %}" style="margin-bottom:10px;">Add new
-            project</a><br/><br/>
-    </div>
+        <div align="center">
+            <a class="btn btn-info btn-lg " role="button" href="{% url 'addproject' %}" style="margin-bottom:10px;">Add
+                new
+                project</a><br/><br/>
+        </div>
     {% endif %}
     {% if projects %}
         <div class="container">
@@ -32,9 +33,13 @@
                                 {{ p.title|truncatechars:50 }} <a class="btn btn-link"
                                                                   href="{% url 'viewproject' p.id %}" role="button">View
                                 »</a>
-                                {% ifequal p.stage stages.COMPLETED %}{% if p.feedback.all %}{% else %}
+                                {% ifequal p.stage stages.COMPLETED %}
+                                    {% if p.feedback.all %}
+                                        
+                                    {% else %}
                                     <a class="btn btn-link" href="{% url 'feedback' p.id %}">Give feedback »</a>
-                                {% endif %}{% endifequal %}
+                                {% endif %}
+                                {% endifequal %}
                             </p>
                         </blockquote>
                     </div>
