@@ -66,12 +66,15 @@
         </ul>
         <ul class="nav nav-sidebar">
             <li class="active"><strong>Notifications</strong></li>
-            <li><a href="{% url 'unverified_projects' %}">New Proposals <span
-                    class="badge">{{ request.session.noti_count_proposal|add:"0" }}</span> </a></li>
-            <li><a href="{% url 'submitted_projects' %}">Pending Projects <span
-                    class="badge">{{ request.session.noti_count_submissions|add:"0" }}</span></a></li>
-            <li><a href="{% url 'super_suggested_ngos' %}">New NGOs <span
-                    class="badge">{{ request.session.noti_count_NGO|add:"0" }}</span></a></li>
+            <li><a href="{% url 'unverified_projects' %}">New Proposals
+{#                <span class="badge">{{ request.session.noti_count_proposal|add:"0" }}</span> #}
+            </a></li>
+            <li><a href="{% url 'submitted_projects' %}">Pending Projects
+{#                <span class="badge">{{ request.session.noti_count_submissions|add:"0" }}</span>#}
+            </a></li>
+            <li><a href="{% url 'super_suggested_ngos' %}">New NGOs
+{#                <span class="badge">{{ request.session.noti_count_NGO|add:"0" }}</span>#}
+            </a></li>
         </ul>
         <ul></ul>
         <ul class="nav nav-sidebar">
