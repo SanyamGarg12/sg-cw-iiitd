@@ -35,11 +35,12 @@ _project_stage_glyphicon_mapping = {
 
 # Type of the uploaded document
 class document_type(object):
-    PROPOSAL, LOG, FINAL_REPORT = range(1, 4)
+    PROPOSAL, LOG, FINAL_REPORT, POSTER = range(1, 5)
     mapping = {
         PROPOSAL: "Proposal",
         LOG: "Log",
-        FINAL_REPORT: "Final Submission",
+        FINAL_REPORT: "Final Report",
+        POSTER: "Presentation/Poster"
     }
 
 
