@@ -60,7 +60,8 @@ def verify_project(request, project_id):
 
     send_cw_sg_email(request, "Congrats.. " + project.title + " Approved :)",
                      "Congratulations, your project has has been verified. Now start working and make a difference. " +
-                     "Please reply to this mail for any assistance.", recipients=[str(project.student.email)],
+                     "Please reply to this mail for any assistance. \n\n" +
+                     "Please register for SG/CW on the ERP Portal too. ", recipients=[str(project.student.email)],
                      project_id=project_id)
 
     return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project.id}))
