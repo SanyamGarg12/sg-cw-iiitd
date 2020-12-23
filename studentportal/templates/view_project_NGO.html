@@ -2,7 +2,7 @@
 {% block content %}
     <div class="container">
         {% if project.NGO %}
-            You have linked your community work with this recognised organizations: <strong>{{ project.NGO.name }}</strong>
+            You have linked your project with this recognised organizations: <strong>{{ project.NGO.name }}</strong>
             <br/>
             <strong>In case its incorrect, select one of the recognized organizations. If an organizations is not listed, simply let it
                 be unassigned and <a href="{% url 'viewproject' project.pk %}">go back to your project.</a></strong>
