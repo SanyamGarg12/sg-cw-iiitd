@@ -20,6 +20,7 @@ from supervisor.communication import send_email_to_all
 from supervisor.decorators import supervisor_logged_in
 from supervisor.forms import AdvanceSearchForm, NewsForm, NewCategoryForm, NewNGOForm, EmailProjectForm, TAForm, \
     ReportForm
+from supervisor.methods import filtered_projects
 from supervisor.models import Example, News, Notification, TA, diff_type, add_diff, add_notification, Flag
 from supervisor.models import notification_type as nt
 from supervisor.validators import is_int
@@ -86,7 +87,8 @@ def unverify_project(request, project_id):
 
 @supervisor_logged_in
 def ongoing_projects(request):
-    projects = Project.objects.filter(stage=project_stage.ONGOING)
+    projects_filtered = filtered_projects(request)
+    projects = projects_filtered.filter(stage=project_stage.ONGOING)
     return render(request, 'ongoing_projects.html',
                   {'projects': projects})
 
@@ -168,7 +170,8 @@ def remove_from_examples(request, example_project_id):
 
 @supervisor_logged_in
 def submitted_projects(request):
-    projects = Project.objects.filter(stage=project_stage.SUBMITTED)
+    projects_filtered = filtered_projects(request)
+    projects = projects_filtered.filter(stage=project_stage.SUBMITTED)
     return render(request, 'super_submittedprojects.html',
                   {'projects': projects})
 
@@ -176,7 +179,7 @@ def submitted_projects(request):
 @supervisor_logged_in
 def allprojects(request):
     form = ReportForm()
-    paginator = Paginator(Project.objects.get_queryset().order_by('id'), 10, orphans=5)
+    paginator = Paginator(filtered_projects(request).order_by('id'), 10, orphans=5)
 
     page = request.GET.get('page', None)
     try:
@@ -200,7 +203,7 @@ def basic_search(request):
             if len(query) == 7 and is_int(query):
                 # full roll number
                 query = str(query)[2:]
-            projects = Project.all_projects.filter(student__email__icontains=query)
+            projects = filtered_projects(request).filter(student__email__icontains=query)
             return render(request, 'search_results.html',
                           {'projects': projects, 'query': query})
     return HttpResponseRedirect(reverse('index'))
@@ -237,9 +240,10 @@ def advance_search(request):
         if form.is_valid():
             # this will speed up querying a lot
             if form.cleaned_data['category']:
-                projects = form.cleaned_data['category'].projects.all()
+                projects = filtered_projects(request, category=form.cleaned_data['category'])
+                # projects = form.cleaned_data['category'].projects.all()
             else:
-                projects = Project.all_projects.all()
+                projects = filtered_projects(request)
             if form.cleaned_data['stage'] != '0':
                 projects = projects.filter(stage=form.cleaned_data['stage'])
             if form.cleaned_data['project_title']:
@@ -615,7 +619,7 @@ def generateReport(request):
     semester = int(request.POST['semester'])
     batch = int(request.POST['batch'])
 
-    projects = Project.objects.filter(~Q(stage=project_stage.TO_BE_VERIFIED))
+    projects = filtered_projects(request).filter(~Q(stage=project_stage.TO_BE_VERIFIED))
     projects = projects.filter(
         Q(finish_date__gte=datetime.datetime.now() - datetime.timedelta(months * 31)) |
         Q(finish_date=None))  # for incomplete projects
