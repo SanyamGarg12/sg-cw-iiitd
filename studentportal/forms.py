@@ -49,7 +49,7 @@ class UploadDocumentForm(forms.Form):
                                help_text='max. 10 Mb.')
     CHOICES = tuple([(i, Document.get_document_type(i)) for i in [
         document_type.PROPOSAL, document_type.LOG,
-        document_type.FINAL_REPORT]])
+        document_type.FINAL_REPORT, document_type.POSTER]])
     category = forms.ChoiceField(choices=CHOICES,
                                  help_text='Type of Document')
 
