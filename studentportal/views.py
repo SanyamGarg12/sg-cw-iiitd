@@ -321,7 +321,7 @@ def feedback(request, project_id):
 
 
 def all_projects_open_to_public_year_select(request):
-    years = range(2014, date.today().year + 1)
+    years = range(2020, date.today().year + 1)
     return render(request, 'all_projects_open_to_public_year_select.html',
                   {'years': years})
 
