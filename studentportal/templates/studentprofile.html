@@ -30,16 +30,11 @@
                                 <span class="glyphicon glyphicon-ok" title="Completed" style="color:green;"></span>
                             {% endifequal %}
                             <p>
-                                {{ p.title|truncatechars:50 }} <a class="btn btn-link"
-                                                                  href="{% url 'viewproject' p.id %}" role="button">View
-                                »</a>
-                                {% ifequal p.stage stages.COMPLETED %}
-                                    {% if p.feedback.all %}
-                                        
-                                    {% else %}
-                                    <a class="btn btn-link" href="{% url 'feedback' p.id %}">Give feedback »</a>
-                                {% endif %}
-                                {% endifequal %}
+                                {{ p.title|truncatechars:50 }}
+                            </p>
+                                <p style="color: gray; font-style: italic;">{{ p.category }}</p>
+                            <p>
+                                <a class="btn btn-link" href="{% url 'viewproject' p.id %}" role="button">View »</a>
                             </p>
                         </blockquote>
                     </div>
