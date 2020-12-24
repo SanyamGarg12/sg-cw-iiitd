@@ -793,4 +793,19 @@ def update_batch(request):
 
 @supervisor_logged_in
 def create_new_semester(request):
+    if not (request.method == "POST" or request.is_ajax()):
+        messages.warning(request, "There was an error in the request received.")
+        return HttpResponseRedirect(reverse('index'))
+    if request.method == "POST":
+        # form = BugsForm(request.POST)
+        # if form.is_valid():
+        #     temp = form.save(commit=False)
+        #     temp.user = request.user
+        #     temp.save()
+        #     messages.success(request, "Thank you for your suggestions.")
+        # else:
+        #     messages.warning("There was some error in the data submitted.")
+        messages.success(request, "Thank you for your suggestions.")
+        return HttpResponseRedirect(reverse('index'))
+    # form = BugsForm()
     return render(request, 'create_new_semester.html')
