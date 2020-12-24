@@ -733,6 +733,7 @@ def get_TA_logs(request, ta_id):
     return render(request, 'super_ta_log.html', {
         'ta': ta, 'diffs': diffs})
 
+
 @supervisor_logged_in
 def send_cw_sg_email(request, subject, text, recipients, project_id=None, notif_id=None):
     ta_email = None
@@ -757,6 +758,7 @@ def send_cw_sg_email(request, subject, text, recipients, project_id=None, notif_
 
         send_mail(subject, text, ta_email, recipients, auth_user=ta_email, auth_password=ta_pass)
 
+
 @supervisor_logged_in
 def toggle_allow_project(request):
     allow_project_flag = Flag.objects.get(key='add_project')
@@ -767,12 +769,14 @@ def toggle_allow_project(request):
     messages.success(request, popup_message)
     return render(request, 'allow_project.html', context=context)
 
+
 @supervisor_logged_in
 def allow_project(request):
     allow_project_flag = Flag.objects.get(key='add_project')
     context = {'value': allow_project_flag.value}
     print(allow_project_flag)
     return render(request, 'allow_project.html', context=context)
+
 
 @supervisor_logged_in
 def update_batch(request):
@@ -790,4 +794,3 @@ def update_batch(request):
 @supervisor_logged_in
 def create_new_semester(request):
     return render(request, 'create_new_semester.html')
-
