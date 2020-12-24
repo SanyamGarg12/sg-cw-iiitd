@@ -500,5 +500,13 @@ def update_batch(request):
         messages.warning(request, "There was an error in the request received.")
         return HttpResponseRedirect(reverse('index'))
     if request.method == "POST":
+        form = BatchUpdateForm(request.POST)
+        if form.is_valid():
+            request.user.batch_number = form.cleaned_data.get('year')
+            request.user.save()
+            messages.success(request, 'Batch number updated successfully!')
+        else:
+            messages.error(request, 'Batch number update failed!')
         return HttpResponseRedirect(reverse('index'))
-    return render(request, "update_batch.html")
+    form = BatchUpdateForm()
+    return render(request, "update_batch.html", {'form': form})

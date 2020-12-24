@@ -88,5 +88,5 @@ class BatchUpdateForm(forms.Form):
         year_low = 2010
         year_high = datetime.datetime.now().year
         if year < year_low or year > year_high:
-            raise ValidationError("Your batch yea must lie between {year_low} and {year_high} (inclusive)")
+            raise ValidationError("Your batch year must lie between {year_low} and {year_high} (inclusive)")
         return cleaned_data
