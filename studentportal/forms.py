@@ -3,7 +3,7 @@ import datetime
 from django import forms
 from django.core.exceptions import ValidationError
 
-from studentportal.models import Project, Feedback, Bug, Category
+from studentportal.models import Project, Feedback, Bug, Category, Semester
 from studentportal.models import document_type, Document
 
 
@@ -19,9 +19,7 @@ class ProjectForm(forms.ModelForm):
                                     label="Schedule")
     credits = forms.ChoiceField(choices=((1, 1), (2, 2)))
     semester = forms.ModelChoiceField(
-        queryset=Category.objects.all(),
-        widget=forms.RadioSelect
-    )
+        queryset=Semester.objects.all())
 
     class Meta:
         model = Project
