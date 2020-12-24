@@ -3,17 +3,15 @@
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
             class="sr-only">Close</span></button>
-    <h4 class="modal-title" id="ModalLabel"><strong>Report a bug / Request a feature</strong></h4>
+    <h4 class="modal-title" id="ModalLabel"><strong>Update Batch</strong></h4>
 </div>
 
 <div class="modal-body clearfix">
-    <form action="{% url 'bugs' %}" method="post"> {% csrf_token %}
+    <form action="{% url 'update_batch' %}" method="post"> {% csrf_token %}
         {{ form|bootstrap_horizontal }}
         <br/>
         <input type="submit" value="Submit" class="btn btn-warning btn-sm"
                style="margin-top:10px; margin-left:45%; padding-left:5%; padding-right:5%"/>
     </form>
     <hr/>
-    <strong>You can also send your feedback / suggestions directly to <p> <a href="mailto:selfgrowth@iiitd.ac.in"> Self Growth </a> /
-        <a href="mailto:communitywork@iiitd.ac.in"> Community Work </a> </strong>
 </div>
