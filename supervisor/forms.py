@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 
-from studentportal.models import Category
+from studentportal.models import Category, Semester
 from studentportal.models import project_stage as ps
 from supervisor.models import News, Comment, TA
 
@@ -70,11 +70,7 @@ class NewCommentForm(forms.ModelForm):
 class ReportForm(forms.Form):
     date = forms.ChoiceField(label="Projects which were marked as complete within these past months : ",
                              choices=tuple([(x, x) for x in range(1, 13)]))
-    semester = forms.ChoiceField(label="Semester:",
-                                 choices=((0, "Any"),
-                                 (1, "First"), (2, "Second"), (3, "Third"), (4, "Fourth"), (5, "Fifth"), (6, "Sixth"),
-                                 (7, "Seventh"), (8, "Eighth"), (9, "Summer Semester 1"),
-                                 (10, "Summer Semester 2"), (11, "Summer Semester 3"), (12, "Summer Semester 4")))
+    semester = forms.ModelChoiceField(queryset=Semester.objects.all())
     batch = forms.ChoiceField(label="Batch: ",
                              choices=tuple([(0, "Any")] + [(x, x) for x in range(2016, timezone.now().year + 1)]))
 
@@ -85,3 +81,9 @@ class TAForm(forms.ModelForm):
         model = TA
 
     email = forms.CharField(label="IIIT-D Email of the TA", required=True)
+
+
+class SemesterForm(forms.ModelForm):
+    class Meta:
+        model = Semester
+        fields = '__all__'

@@ -18,9 +18,6 @@ class ProjectForm(forms.ModelForm):
     schedule_text = forms.CharField(widget=forms.Textarea,
                                     label="Schedule")
     credits = forms.ChoiceField(choices=((1, 1), (2, 2)))
-    semester = forms.ChoiceField(label="Semester Number",
-                                 choices=((1, "First"), (2, "Second"), (3, "Third"), (4, "Fourth"), (5, "Fifth"), (6, "Sixth"), (7, "Seventh"), (8, "Eighth"), (9, "Summer Semester 1"),
-                                          (10, "Summer Semester 2"), (11, "Summer Semester 3"), (12, "Summer Semester 4")))
 
     class Meta:
         model = Project

@@ -84,6 +84,13 @@ class AllProjects(models.Manager):
         return super(AllProjects, self).get_queryset()
 
 
+class Semester(models.Model):
+    label = models.CharField(max_length=200, unique=True)
+
+    def __str__(self):
+        return self.label
+
+
 class Project(models.Model):
     student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='projects', on_delete=models.CASCADE)
     title = models.CharField(max_length=1000)
@@ -101,7 +108,8 @@ class Project(models.Model):
     stage = models.IntegerField(default=project_stage.TO_BE_VERIFIED)
     category = models.ForeignKey(Category, related_name='projects', null=False, blank=False,
                                  on_delete=models.SET(_get_other_category))
-    semester = models.IntegerField()
+    # semester = models.IntegerField()
+    semester = models.ManyToManyField('studentportal.Semester')
     deleted = models.BooleanField(default=False)
     presented = models.BooleanField(default=False)
 

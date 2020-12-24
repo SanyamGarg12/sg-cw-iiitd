@@ -19,7 +19,7 @@ from studentportal.models import Project, NGO, Category, Document, project_stage
 from supervisor.communication import send_email_to_all
 from supervisor.decorators import supervisor_logged_in
 from supervisor.forms import AdvanceSearchForm, NewsForm, NewCategoryForm, NewNGOForm, EmailProjectForm, TAForm, \
-    ReportForm
+    ReportForm, SemesterForm
 from supervisor.methods import filtered_projects
 from supervisor.models import Example, News, Notification, TA, diff_type, add_diff, add_notification, Flag
 from supervisor.models import notification_type as nt
@@ -622,7 +622,7 @@ def generateReport(request):
     BASE_DIR = getattr(settings, "BASE_DIR")
 
     months = int(request.POST['date'])
-    semester = int(request.POST['semester'])
+    semester = request.POST['semester']
     batch = int(request.POST['batch'])
 
     projects = filtered_projects(request).filter(~Q(stage=project_stage.TO_BE_VERIFIED))
@@ -632,7 +632,7 @@ def generateReport(request):
 
     if semester != 0:
         projects = projects.filter(
-            Q(semester__exact=semester))
+            Q(semester__label=semester))
 
     if batch != 0:
         new_projects = []
@@ -684,7 +684,7 @@ def generateReport(request):
             project.title,
             project.date_created.strftime('%d-%m-%Y'),
             "%s" % project.presented,
-            semnumberToString(project.semester)
+            project.semester
         ]):
             sheet.write(row, col, x)
 
@@ -790,6 +790,7 @@ def update_batch(request):
     return render(request, 'super_viewuser.html',
                   {'student': student, 'projects': Project.all_projects.filter(student=student)})
 
+
 @supervisor_logged_in
 def new_sem_page(request):
     return render(request, 'create_new_semester.html')
@@ -800,16 +801,13 @@ def create_new_semester(request):
     if not (request.method == "POST" or request.is_ajax()):
         messages.warning(request, "There was an error in the request received.")
         return HttpResponseRedirect(reverse('index'))
+    form = SemesterForm()
     if request.method == "POST":
-        # form = BugsForm(request.POST)
-        # if form.is_valid():
-        #     temp = form.save(commit=False)
-        #     temp.user = request.user
-        #     temp.save()
-        #     messages.success(request, "Thank you for your suggestions.")
-        # else:
-        #     messages.warning("There was some error in the data submitted.")
-        messages.success(request, "New Semester Created")
+        form = SemesterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "New semester created")
+        else:
+            messages.warning("There was some error in the data submitted.")
         return HttpResponseRedirect(reverse('index'))
-    # form = BugsForm()
-    return render(request, 'create_new_semester.html')
+    return render(request, 'create_new_semester.html', context={'form': form})
