@@ -40,6 +40,7 @@
                     <th>Roll number</th>
                     <th>Title</th>
                     <th>Credits</th>
+                    <th>Stage</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -55,6 +56,21 @@
                         <td>{{ p.get_rollno }}</td>
                         <td><a href="{% url 'super_viewproject' p.id %}">{{ p.title|truncatechars:60 }}</a></td>
                         <td>{{ p.credits }}</td>
+                        <td>
+                            {% ifequal p.stage stages.TO_BE_VERIFIED %}
+                                Unverified
+                            {% endifequal %}
+                            {% ifequal p.stage stages.ONGOING %}
+                                Ongoing
+                            {% endifequal %}
+                            {% ifequal p.stage stages.SUBMITTED %}
+                                Submitted
+                            {% endifequal %}
+                            {% ifequal p.stage stages.COMPLETED %}
+                                Completed
+                            {% endifequal %}
+{#                        <td>{{ stage_int }}</td>#}
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

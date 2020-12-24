@@ -190,9 +190,12 @@ def allprojects(request):
     except EmptyPage:
         projects = paginator.page(paginator.num_pages)
 
+    stages = project_stage
+
     return render(request, 'super_allprojects.html',
                   {'projects': projects,
                    'form': form,
+                   'stages': stages
                    })
 
 
