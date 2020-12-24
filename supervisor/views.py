@@ -790,6 +790,10 @@ def update_batch(request):
     return render(request, 'super_viewuser.html',
                   {'student': student, 'projects': Project.all_projects.filter(student=student)})
 
+@supervisor_logged_in
+def new_sem_page(request):
+    return render(request, 'create_new_semester.html')
+
 
 @supervisor_logged_in
 def create_new_semester(request):
