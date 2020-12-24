@@ -14,6 +14,7 @@
                     <th>Project</th>
                     <th>Credits</th>
                     <th>Category</th>
+                    <th>Stage</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -28,6 +29,9 @@
                         <td><a href="{% url 'super_viewproject' p.id %}">{{ p.title|truncatechars:60 }}</a></td>
                         <td>{{ p.credits }}</td>
                         <td>{{ p.category }}</td>
+                        {% with stage_int=p.stage %}
+                        <td>{{ mapping.stage_int }}</td>
+                        {% endwith %}
                         <td>
                             {% if p.deleted %}
                                 <span class="glyphicon glyphicon-trash" style="color:red; margin-left:10px;"

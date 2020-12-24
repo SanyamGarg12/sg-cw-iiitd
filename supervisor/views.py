@@ -15,7 +15,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from CW_Portal import settings, access_cache
-from studentportal.models import Project, NGO, Category, Document, project_stage
+from studentportal.models import Project, NGO, Category, Document, project_stage, _project_stage_mapping
 from supervisor.communication import send_email_to_all
 from supervisor.decorators import supervisor_logged_in
 from supervisor.forms import AdvanceSearchForm, NewsForm, NewCategoryForm, NewNGOForm, EmailProjectForm, TAForm, \
@@ -205,8 +205,9 @@ def basic_search(request):
                 # full roll number
                 query = str(query)[2:]
             projects = filtered_projects(request).filter(student__email__icontains=query)
+            project_stage_mapping = _project_stage_mapping
             return render(request, 'search_results.html',
-                          {'projects': projects, 'query': query})
+                          {'projects': projects, 'query': query, 'mapping': project_stage_mapping})
     return HttpResponseRedirect(reverse('index'))
 
 
