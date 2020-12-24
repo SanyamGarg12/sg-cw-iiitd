@@ -785,3 +785,8 @@ def update_batch(request):
     messages.info(request, "Batch updated!")
     return render(request, 'super_viewuser.html',
                   {'student': student, 'projects': Project.all_projects.filter(student=student)})
+
+
+@supervisor_logged_in
+def create_new_semester(request):
+    return render(request, 'create_new_semester.html.html')

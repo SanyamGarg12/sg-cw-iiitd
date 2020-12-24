@@ -29,6 +29,8 @@ urlpatterns = (
     url(r'^allow_project/$', views.allow_project, name='allow_project'),
     url(r'^toggle_allow_project/$', views.toggle_allow_project, name='toggle_allow_project'),
 
+    url(r'^create_new_semester/$', views.create_new_semester, name='create_new_semester'),
+
     url(r'^example/$', views.example_projects, name='example_projects'),
     url(r'^addtoexamples/(?P<project_id>[0-9]+)/$', views.add_to_examples, name='addtoexamples'),
     url(r'^removefromexamples/(?P<example_project_id>[0-9]+)/$', views.remove_from_examples, name='removefromexamples'),
