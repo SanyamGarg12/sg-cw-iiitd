@@ -494,11 +494,6 @@ def handle404_LnF(request, *args, **kwargs):
         'items': items})
 
 
-# @login_required
-# def update_batch_page(request):
-#     return render(request, "update_batch.html")
-
-
 @login_required
 def update_batch(request):
     if not (request.method == "POST" or request.is_ajax()):
