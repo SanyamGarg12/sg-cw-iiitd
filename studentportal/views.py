@@ -230,7 +230,7 @@ def unlink_NGO_project(request, project_id):
 
 @login_required
 def profile(request):
-    form = BatchUpdateForm()
+    form = BatchUpdateForm(initial={'year': request.user.batch_number})
     if request.method == 'POST':
         form = BatchUpdateForm(request.POST)
         if form.is_valid():
