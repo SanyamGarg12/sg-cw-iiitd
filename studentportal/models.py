@@ -109,7 +109,7 @@ class Project(models.Model):
     category = models.ForeignKey(Category, related_name='projects', null=False, blank=False,
                                  on_delete=models.SET(_get_other_category))
     # semester = models.IntegerField()
-    semester = models.ManyToManyField('studentportal.Semester')
+    semester = models.ForeignKey('studentportal.Semester', on_delete=models.PROTECT, related_name='projects')
     deleted = models.BooleanField(default=False)
     presented = models.BooleanField(default=False)
 
