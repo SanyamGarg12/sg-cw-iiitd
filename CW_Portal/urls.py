@@ -30,5 +30,5 @@ urlpatterns = [
 
 urlpatterns += staticfiles_urlpatterns()
 
-# startup.work()
-# credentials.init_firebase_keys()
+startup.work()
+credentials.init_firebase_keys()
