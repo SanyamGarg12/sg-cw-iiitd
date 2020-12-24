@@ -18,6 +18,10 @@ class ProjectForm(forms.ModelForm):
     schedule_text = forms.CharField(widget=forms.Textarea,
                                     label="Schedule")
     credits = forms.ChoiceField(choices=((1, 1), (2, 2)))
+    semester = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        widget=forms.RadioSelect
+    )
 
     class Meta:
         model = Project
