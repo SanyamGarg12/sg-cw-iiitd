@@ -1,11 +1,11 @@
 {% extends 'supervisorcore.html' %}
 {% block content %}
-    <p style="text-align: center">
-        <h2>{{ project.title }}{% if project.deleted %}
+    <h2 class="page-header" style="text-align: center; font-weight: bold">
+        {{ project.title }}{% if project.deleted %}
             <span class="glyphicon glyphicon-trash" style="color:red; margin-left:10px;"
-                  title="deleted"></span> {% endif %}</h2>
-    </p>
-    <h2>Student </h2>
+                  title="deleted"></span> {% endif %}
+    </h2>
+    <h3>Student </h3>
     <blockquote>
         <a href="{% url 'super_viewuser' project.student.pk %}"> {{ project.student.first_name }} {{ project.student.last_name }}</a>
         <br>
@@ -13,21 +13,21 @@
         <br>
         {{ project.student.email }}
     </blockquote>
-    <h2>Credits Details</h2>
+    <h3>Credits Details</h3>
     <blockquote>
         {{ project.credits }} Credit for {{ project.category.name }}
     </blockquote>
-    <h2>Status</h2>
+    <h3>Status</h3>
     <blockquote>
         {{ project.get_project_status }}
         <a href="#" style="margin-left:10px;" data-toggle="modal" data-target="#progress_graph"> <span
                 class="glyphicon glyphicon-question-sign"></span> </a>
     </blockquote>
-    <h2>Proposed on</h2>
+    <h3>Proposed on</h3>
     <blockquote>
         {{ project.date_created }}
     </blockquote>
-    <h2>NGO</h2>
+    <h3>NGO</h3>
     <blockquote>
         {% if project.NGO %}
             <a href="{% url 'super_view_ngo' project.NGO.id %}">{{ project.NGO.name }}</a>.<br/>
@@ -38,21 +38,21 @@
         <br>
         {{ project.NGO_details }}
     </blockquote>
-    <h2>Supervisor</h2>
+    <h3>Supervisor</h3>
     <blockquote>
         {{ project.NGO_super }}
         <br>
         {{ project.NGO_super_contact }}
     </blockquote>
-    <h2>Goals</h2>
+    <h3>Goals</h3>
     <blockquote>
         {{ project.goals|linebreaksbr }}
     </blockquote>
-    <h2>Schedule</h2>
+    <h3>Schedule</h3>
     <blockquote>
         {{ project.schedule_text|linebreaksbr }}
     </blockquote>
-    <h2>Presented</h2>
+    <h3>Presented</h3>
     <blockquote>
         {% if project.presented %}
             Yes
@@ -64,7 +64,7 @@
                                                                      class="glyphicon glyphicon-thumbs-up"></span></a>
         {% endif %}
     </blockquote>
-    <h2>Documents</h2>
+    <h3>Documents</h3>
     <blockquote>
         {% if project.documents.all %}
             {% for doc in project.documents.all %}
@@ -77,7 +77,7 @@
             No logs uploaded till now.
         {% endif %}
     </blockquote>
-    <h2>View revision history:</h2>
+    <h3>View revision history:</h3>
     <blockquote>
         {% if project.edits.all %}
             {% for edit in project.viewable_edits %}
