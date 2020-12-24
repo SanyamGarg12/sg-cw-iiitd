@@ -26,6 +26,8 @@
                 <blockquote>
                     {{ project.credits }} Credit for {{ project.category.name }}
                     <br>
+                    Semester: {{ project.semester.label }}
+                    <br>
                     Presented: {% if project.presented %} Yes {% else %} No {% endif %}
                 </blockquote>
                 <h2>Status</h2>
