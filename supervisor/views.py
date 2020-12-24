@@ -808,6 +808,6 @@ def create_new_semester(request):
             form.save()
             messages.success(request, "New semester created")
         else:
-            messages.warning("There was some error in the data submitted.")
+            messages.warning(request, "There was some error in the data submitted.")
         return HttpResponseRedirect(reverse('index'))
     return render(request, 'create_new_semester.html', context={'form': form})
