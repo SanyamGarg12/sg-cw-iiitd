@@ -205,9 +205,10 @@ def basic_search(request):
                 # full roll number
                 query = str(query)[2:]
             projects = filtered_projects(request).filter(student__email__icontains=query)
-            project_stage_mapping = _project_stage_mapping
+            # project_stage_mapping = _project_stage_mapping
+            stage = project_stage
             return render(request, 'search_results.html',
-                          {'projects': projects, 'query': query, 'mapping': project_stage_mapping})
+                          {'projects': projects, 'query': query, 'stages': stage})
     return HttpResponseRedirect(reverse('index'))
 
 
