@@ -7,11 +7,11 @@
 </div>
 
 <div class="modal-body clearfix">
-    <form action="{% url 'update_batch' %}" method="post">
+    <form action="{% url 'update_batch_student' %}" method="post">
         {% csrf_token %}
 
         {{ form|bootstrap_horizontal }}
-        
+
         <br/>
         <input type="submit" value="Submit" class="btn btn-warning btn-sm"
                style="margin-top:10px; margin-left:45%; padding-left:5%; padding-right:5%"/>
