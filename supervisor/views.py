@@ -1,4 +1,5 @@
 import datetime
+import logging
 import mimetypes
 import os
 import sys
@@ -620,7 +621,8 @@ def semnumberToString(semNumber: int) -> str:
 @supervisor_logged_in
 def generateReport(request):
     BASE_DIR = getattr(settings, "BASE_DIR")
-    print(request.POST)
+    logger = logging.getLogger("generate-report")
+    logger.warning(f"{request.POST}")
     months = int(request.POST['date'])
     semester = request.POST['semester']
     batch = int(request.POST['batch'])
