@@ -323,7 +323,7 @@ class ProgressAnalyser(object):
 
 
 class CustomUser(AbstractUser):
-    batch_number = models.IntegerField(blank=True, name="batch_number")
+    batch_number = models.IntegerField(blank=True, name="batch_number", null=True)
 
 
 @receiver(post_save, sender=get_user_model())
