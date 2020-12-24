@@ -30,7 +30,7 @@
                         <td>{{ p.credits }}</td>
                         <td>{{ p.category }}</td>
                         {% with stage_int=p.stage %}
-                        <td>{{ mapping.stage_int }}</td>
+                        <td>{{ stage_int }}</td>
                         {% endwith %}
                         <td>
                             {% if p.deleted %}
