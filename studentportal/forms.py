@@ -79,7 +79,7 @@ class BugsForm(forms.ModelForm):
         fields = ['suggestions', 'rating']
 
 
-class BatchUpdateForm(forms.ModelForm):
+class BatchUpdateForm(forms.Form):
     year = forms.IntegerField(required=True)
 
     def clean(self):
