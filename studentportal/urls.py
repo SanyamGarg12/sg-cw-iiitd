@@ -2,8 +2,6 @@ from django.conf.urls import url
 
 from . import views
 
-# fixing width at 78/79 messes up with code readability.
-
 urlpatterns = (
     # basic
     url(r'^home/', views.home, name='studenthome'),

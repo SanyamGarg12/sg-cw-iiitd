@@ -28,6 +28,7 @@ def index(request):
             return HttpResponseRedirect(reverse('supervisor_home'))
     return HttpResponseRedirect(reverse('studenthome'))
 
+
 @login_required
 def first_login(request):
     if request.user.email in access_cache.get_TA():
@@ -245,7 +246,7 @@ def profile(request):
     return render(request, 'studentprofile.html', {
         'projects': projects,
         'stages': project_stage,
-        'allow_project_flag' : allow_project_flag.value,
+        'allow_project_flag': allow_project_flag.value,
         'batch_form': form})
 
 
@@ -495,4 +496,9 @@ def handle404_LnF(request, *args, **kwargs):
 
 @login_required
 def update_batch(request):
+    if not (request.method == "POST" or request.is_ajax()):
+        messages.warning(request, "There was an error in the request received.")
+        return HttpResponseRedirect(reverse('index'))
+    if request.method == "POST":
+        return HttpResponseRedirect(reverse('index'))
     return render(request, "update_batch.html")
