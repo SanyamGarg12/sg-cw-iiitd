@@ -624,7 +624,7 @@ def generateReport(request):
     logger = logging.getLogger("generate-report")
     logger.warning(f"{request.POST}")
     months = int(request.POST['date'])
-    semester = request.POST['semester']
+    semester = int(request.POST['semester'])
     batch = int(request.POST['batch'])
 
     projects = filtered_projects(request).filter(~Q(stage=project_stage.TO_BE_VERIFIED))
@@ -632,9 +632,9 @@ def generateReport(request):
         Q(finish_date__gte=datetime.datetime.now() - datetime.timedelta(months * 31)) |
         Q(finish_date=None))  # for incomplete projects
 
-    if semester != 0:
-        projects = projects.filter(
-            Q(semester__label=semester))
+    # if semester != 0:
+    projects = projects.filter(
+        Q(semester_id=semester))
 
     if batch != 0:
         new_projects = []
