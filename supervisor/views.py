@@ -793,7 +793,8 @@ def update_batch(request):
 
 @supervisor_logged_in
 def new_sem_page(request):
-    return render(request, 'create_new_semester.html')
+    form = SemesterForm()
+    return render(request, 'create_new_semester.html', context={'form': form})
 
 
 @supervisor_logged_in
