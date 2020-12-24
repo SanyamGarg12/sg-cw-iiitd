@@ -12,7 +12,11 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import json
 import os
 
+import django
+
 import credentials
+SECRET_KEY = credentials.SECRET_KEY
+# django.setup()
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -20,7 +24,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = credentials.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -47,8 +50,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'studentportal',
-    'supervisor',
+    'studentportal.apps.StudentportalConfig',
+    'supervisor.apps.SupervisorConfig',
 
     # There's a reason for why these following apps
     # have been commented out.

@@ -13,7 +13,7 @@ from studentportal import startup
 
 import credentials
 
-startup.work()
+
 handler404 = 'studentportal.views.handle404_LnF'
 handler500 = 'studentportal.views.handle404_LnF'
 
@@ -30,4 +30,5 @@ urlpatterns = [
 
 urlpatterns += staticfiles_urlpatterns()
 
-credentials.init_firebase_keys()
+# startup.work()
+# credentials.init_firebase_keys()
