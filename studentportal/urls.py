@@ -30,7 +30,7 @@ urlpatterns = (
     url(r'^guidelines/$', views.guidelines, name='guidelines'),
     url(r'^bugs/$', views.bugs, name='bugs'),
 
-    url(r'^update_batch_student/$', views.update_batch, name='update_batch_student'),
+    url(r'^update_batch_student/$', views.update_batch_student, name='update_batch_student'),
 
     url(r'^all_ngo/$', views.all_NGOs, name='all_NGO'),
     url(r'^suggest_ngo/$', views.suggest_NGO, name='suggest_ngo'),

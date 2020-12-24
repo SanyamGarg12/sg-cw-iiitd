@@ -495,7 +495,7 @@ def handle404_LnF(request, *args, **kwargs):
 
 
 @login_required
-def update_batch(request):
+def update_batch_student(request):
     if not (request.method == "POST" or request.is_ajax()):
         messages.warning(request, "There was an error in the request received.")
         return HttpResponseRedirect(reverse('index'))
@@ -509,4 +509,4 @@ def update_batch(request):
             messages.error(request, 'Batch number update failed!')
         return HttpResponseRedirect(reverse('index'))
     form = BatchUpdateForm()
-    return render(request, "update_batch.html", {'form': form})
+    return render(request, "update_batch_student.html", {'form': form})
