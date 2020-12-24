@@ -789,4 +789,4 @@ def update_batch(request):
 
 @supervisor_logged_in
 def create_new_semester(request):
-    return render(request, 'create_new_semester.html.html')
+    return render(request, 'create_new_semester.html')
