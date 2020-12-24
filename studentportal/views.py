@@ -231,23 +231,12 @@ def unlink_NGO_project(request, project_id):
 
 @login_required
 def profile(request):
-    form = BatchUpdateForm(initial={'year': request.user.batch_number})
-    if request.method == 'POST':
-        form = BatchUpdateForm(request.POST)
-        if form.is_valid():
-            request.user.batch_number = form.cleaned_data.get('year')
-            request.user.save()
-            form = BatchUpdateForm()
-            messages.success(request, 'Batch number updated successfully!')
-        else:
-            messages.error(request, 'Batch number updation failed!')
     projects = request.user.projects.filter(deleted=False)
     allow_project_flag = Flag.objects.get(key='add_project')
     return render(request, 'studentprofile.html', {
         'projects': projects,
         'stages': project_stage,
-        'allow_project_flag': allow_project_flag.value,
-        'batch_form': form})
+        'allow_project_flag': allow_project_flag.value})
 
 
 @login_required
@@ -508,5 +497,5 @@ def update_batch_student(request):
         else:
             messages.error(request, 'Batch number update failed!')
         return HttpResponseRedirect(reverse('index'))
-    form = BatchUpdateForm()
+    form = BatchUpdateForm(initial={'year': request.user.batch_number})
     return render(request, "update_batch_student.html", {'form': form})
