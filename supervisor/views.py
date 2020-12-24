@@ -686,7 +686,7 @@ def generateReport(request):
             project.title,
             project.date_created.strftime('%d-%m-%Y'),
             "%s" % project.presented,
-            project.semester
+            project.semester.label
         ]):
             sheet.write(row, col, x)
 
