@@ -491,8 +491,8 @@ def handle404_LnF(request, *args, **kwargs):
             ))
     return render(request, 'LnF404.html', {
         'items': items})
-# render LnF404.html. Also check if items is empty
+
 
 @login_required
 def update_batch(request):
-    pass
+    return render(request, "update_batch.html")
