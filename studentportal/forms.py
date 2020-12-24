@@ -1,4 +1,7 @@
+import datetime
+
 from django import forms
+from django.core.exceptions import ValidationError
 
 from studentportal.models import Project, Feedback, Bug, Category
 from studentportal.models import document_type, Document
@@ -74,3 +77,16 @@ class BugsForm(forms.ModelForm):
     class Meta:
         model = Bug
         fields = ['suggestions', 'rating']
+
+
+class BatchUpdateForm(forms.ModelForm):
+    year = forms.IntegerField(required=True)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        year = cleaned_data.get('year')
+        year_low = 2010
+        year_high = datetime.datetime.now().year
+        if year < year_low or year > year_high:
+            raise ValidationError("Your batch yea must lie between {year_low} and {year_high} (inclusive)")
+        return cleaned_data

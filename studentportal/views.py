@@ -12,7 +12,8 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.urls import reverse
 
 from CW_Portal import access_cache, settings, diff_match_patch
-from studentportal.forms import ProjectForm, FeedbackForm, UploadDocumentForm, BugsForm, suggest_NGOForm
+from studentportal.forms import ProjectForm, FeedbackForm, UploadDocumentForm, BugsForm, suggest_NGOForm, \
+    BatchUpdateForm
 from studentportal.models import Project, Document, NGO, document_type, project_stage, Edit
 from supervisor.forms import NewCommentForm
 from supervisor.models import Example, News, Like, Comment, add_notification, notification_type, \
@@ -229,10 +230,23 @@ def unlink_NGO_project(request, project_id):
 
 @login_required
 def profile(request):
+    form = BatchUpdateForm()
+    if request.method == 'POST':
+        form = BatchUpdateForm(request.POST)
+        if form.is_valid():
+            request.user.batch_number = form.cleaned_data.get('year')
+            request.user.save()
+            form = BatchUpdateForm()
+            messages.success(request, 'Batch number updated successfully!')
+        else:
+            messages.error(request, 'Batch number updation failed!')
     projects = request.user.projects.filter(deleted=False)
     allow_project_flag = Flag.objects.get(key='add_project')
     return render(request, 'studentprofile.html', {
-        'projects': projects, 'stages': project_stage, 'allow_project_flag' : allow_project_flag.value})
+        'projects': projects,
+        'stages': project_stage,
+        'allow_project_flag' : allow_project_flag.value,
+        'batch_form': form})
 
 
 @login_required
@@ -478,3 +492,7 @@ def handle404_LnF(request, *args, **kwargs):
     return render(request, 'LnF404.html', {
         'items': items})
 # render LnF404.html. Also check if items is empty
+
+@login_required
+def update_batch(request):
+    pass
