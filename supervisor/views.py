@@ -809,7 +809,7 @@ def create_new_semester(request):
         #     messages.success(request, "Thank you for your suggestions.")
         # else:
         #     messages.warning("There was some error in the data submitted.")
-        messages.success(request, "Thank you for your suggestions.")
+        messages.success(request, "New Semester Created")
         return HttpResponseRedirect(reverse('index'))
     # form = BugsForm()
     return render(request, 'create_new_semester.html')

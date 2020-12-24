@@ -30,6 +30,7 @@ urlpatterns = (
     url(r'^guidelines/$', views.guidelines, name='guidelines'),
     url(r'^bugs/$', views.bugs, name='bugs'),
 
+    url(r'^update_batch_page/$', views.update_batch_page, name='update_batch_page'),
     url(r'^update_batch/$', views.update_batch, name='update_batch'),
 
     url(r'^all_ngo/$', views.all_NGOs, name='all_NGO'),
