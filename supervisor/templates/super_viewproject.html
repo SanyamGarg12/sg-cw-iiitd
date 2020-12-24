@@ -1,15 +1,19 @@
 {% extends 'supervisorcore.html' %}
 {% block content %}
     <h2 class="page-header" style="text-align: center; font-weight: bold">
-        {{ project.title }}{% if project.deleted %}
+        {{ project.title }} for {{ project.student.first_name }} {{ project.student.last_name }}
+        {% if project.deleted %}
             <span class="glyphicon glyphicon-trash" style="color:red; margin-left:10px;"
-                  title="deleted"></span> {% endif %}
+                  title="deleted"></span>
+        {% endif %}
     </h2>
     <h3>Student </h3>
     <blockquote>
         <a href="{% url 'super_viewuser' project.student.pk %}"> {{ project.student.first_name }} {{ project.student.last_name }}</a>
         <br>
         {{ project.get_rollno }}
+        <br>
+        Batch: {{ project.student.batch_number }}
         <br>
         {{ project.student.email }}
     </blockquote>
