@@ -19,6 +19,9 @@ from supervisor.forms import NewCommentForm
 from supervisor.models import Example, News, Like, Comment, add_notification, notification_type, \
     diff_type, add_diff, Flag
 
+from studentportal.quotes import quotes
+from random import randint
+
 diff_worker = diff_match_patch.diff_match_patch()
 
 
@@ -454,34 +457,12 @@ def delete_comment(request, comment_id):
 
 
 def handle404_LnF(request, *args, **kwargs):
-    return render(request, 'LnF404.html')
-    # class Item(object):
-    #     def __init__(self, name, location, info):
-    #         self.name = name
-    #         self.location = location
-    #         self.info = info
-    #
-    # url = settings.LnF404_url
-    # site_id = settings.LnF404_SiteID
-    # token = settings.LnF404_token
-    # q = 6
-    #
-    # data = urlencode({
-    #     'id': site_id, 'token': token, 'quantity': q
-    # })
-    # request = urlopen(url, data)
-    # resp = json.loads(request.read())
-    #
-    # items = []
-    # if resp['success'] == 'true' and resp['quantity'] != 0:
-    #     for i in range(int(resp['quantity'])):
-    #         items.append(Item(
-    #             resp[str(i)]['item-name'],
-    #             resp[str(i)]['location'],
-    #             resp[str(i)]['info'],
-    #         ))
-    # return render(request, 'LnF404.html', {
-    #     'items': items})
+
+    quote_id = randint(0, len(quotes)-1)
+    quote = quotes[quote_id][0]
+    author = quotes[quote_id][1]
+
+    return render(request, 'LnF404.html', {'quote': quote, 'author': author})
 
 
 @login_required

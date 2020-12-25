@@ -1,32 +1,11 @@
 {% extends 'core.html' %}
 
 {% block content %}
-{#    <div class="container">#}
-{#        <h1 style="font-size:10em;">#}
-{#            <center>#}
-{#                <span class="glyphicon glyphicon-search" style="color:red;"></span>#}
-{#            </center>#}
-{#        </h1>#}
-{#        <h1 class="page-header">#}
-{#            <center>#}
-{#                Naah.. sorry we couldn't find this page.{% if items %} But while on the topic of lost things, keep your#}
-{#                eyes peeled for these{% endif %}#}
-{#            </center>#}
-{#        </h1>#}
-{#        <div class="row">#}
-{#            {% for item in items %}#}
-{#                <div class="col-6 col-sm-6 col-lg-4">#}
-{#                    <blockquote>#}
-{#                        <p>{{ item.name }} {% if item.location %}in or near {{ item.location }} {% endif %}</p>#}
-{#                        {% if item.info %}<p>{{ item.info|truncatechars:60 }}</p>{% endif %}#}
-{#                    </blockquote>#}
-{#                </div>#}
-{#            {% endfor %}#}
-{#        </div>#}
-{#        <br/>#}
-{#        Visit the <a href="http://findmystuff.iiitd.edu.in/">FindMyStuff portal</a> if you have any information#}
-{#        regarding these items.#}
-{#        <br/>#}
-{#        404 Easter Egg API opened and maintained by <a href="https://github.com/darkryder/">darkryder</a>.#}
-{#    </div>#}
+    <div class="container">
+
+        <h2 style="text-align: center">{{ quote }}</h2>
+        <br>
+        <h3 style="text-align: right">{{ author }}</h3>
+    </div>
+
 {% endblock %}
