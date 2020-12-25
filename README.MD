@@ -35,7 +35,7 @@ python3 manage.py migrate
 
 5. Setup SQL database variables as follows
 ```sql
-USE cw_portal
+USE cw_portal;
 
 INSERT INTO `cw_portal`.`supervisor_flags`
 (`name`, `value`)
