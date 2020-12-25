@@ -454,33 +454,34 @@ def delete_comment(request, comment_id):
 
 
 def handle404_LnF(request, *args, **kwargs):
-    class Item(object):
-        def __init__(self, name, location, info):
-            self.name = name
-            self.location = location
-            self.info = info
-
-    url = settings.LnF404_url
-    site_id = settings.LnF404_SiteID
-    token = settings.LnF404_token
-    q = 6
-
-    data = urlencode({
-        'id': site_id, 'token': token, 'quantity': q
-    })
-    request = urlopen(url, data)
-    resp = json.loads(request.read())
-
-    items = []
-    if resp['success'] == 'true' and resp['quantity'] != 0:
-        for i in range(int(resp['quantity'])):
-            items.append(Item(
-                resp[str(i)]['item-name'],
-                resp[str(i)]['location'],
-                resp[str(i)]['info'],
-            ))
-    return render(request, 'LnF404.html', {
-        'items': items})
+    return render(request, 'LnF404.html')
+    # class Item(object):
+    #     def __init__(self, name, location, info):
+    #         self.name = name
+    #         self.location = location
+    #         self.info = info
+    #
+    # url = settings.LnF404_url
+    # site_id = settings.LnF404_SiteID
+    # token = settings.LnF404_token
+    # q = 6
+    #
+    # data = urlencode({
+    #     'id': site_id, 'token': token, 'quantity': q
+    # })
+    # request = urlopen(url, data)
+    # resp = json.loads(request.read())
+    #
+    # items = []
+    # if resp['success'] == 'true' and resp['quantity'] != 0:
+    #     for i in range(int(resp['quantity'])):
+    #         items.append(Item(
+    #             resp[str(i)]['item-name'],
+    #             resp[str(i)]['location'],
+    #             resp[str(i)]['info'],
+    #         ))
+    # return render(request, 'LnF404.html', {
+    #     'items': items})
 
 
 @login_required
