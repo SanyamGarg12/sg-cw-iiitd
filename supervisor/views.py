@@ -590,34 +590,6 @@ def change_TA(request, TA_id='-1'):
     return render(request, 'TA.html', {'form': form, 'tas': tas})
 
 
-def semnumberToString(semNumber: int) -> str:
-    if semNumber == 1:
-        return "First"
-    elif semNumber == 2:
-        return "Second"
-    elif semNumber == 3:
-        return "Third"
-    elif semNumber == 4:
-        return "Fourth"
-    elif semNumber == 5:
-        return "Fifth"
-    elif semNumber == 6:
-        return "Sixth"
-    elif semNumber == 7:
-        return "Seventh"
-    elif semNumber == 8:
-        return "Eighth"
-    elif semNumber == 9:
-        return "Summer Semester 1"
-    elif semNumber == 10:
-        return "Summer Semester 2"
-    elif semNumber == 11:
-        return "Summer Semester 3"
-    else:
-        return "Summer Semester 4"
-
-
-# TODO test this on Ubuntu
 @supervisor_logged_in
 def generateReport(request):
     BASE_DIR = getattr(settings, "BASE_DIR")
