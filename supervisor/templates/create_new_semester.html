@@ -17,7 +17,12 @@
 
     </form>
 
+    <br>
+
     {% for semester in semesters %}
+
+        <p>1</p>
+
         <form action="{% url 'update-semester' id=semester.id%}" method="post">
             {% csrf_token %}
             <input type="hidden" name="id" value="{{ semester.id }}">
