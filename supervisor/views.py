@@ -794,9 +794,9 @@ def new_sem_page(request):
 
 @supervisor_logged_in
 def all_semesters(request):
-    if not request.method == "POST":
-        messages.warning(request, "There was an error in the request received.")
-        return HttpResponseRedirect(reverse('index'))
+    # if not request.method == "POST":
+        # messages.warning(request, "There was an error in the request received.")
+        # return HttpResponseRedirect(reverse('index'))
     form = SemesterForm()
     if request.method == "POST":
         form = SemesterForm(request.POST)
@@ -818,9 +818,9 @@ def update_semester(request, id):
         updation_form = SemesterForm(request.POST, instance=semester)
         if updation_form.is_valid():
             updation_form.save()
-            messages.success(request, 'Updation successful!')
+            messages.success(request, 'Update successful!')
         else:
-            messages.error(request, 'Updation failed.')
+            messages.error(request, 'Update failed.')
     return redirect('create_new_semester')
 
 
