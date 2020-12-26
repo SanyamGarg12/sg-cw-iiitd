@@ -61,7 +61,7 @@ def verify_project(request, project_id):
     add_diff(diff_type.PROJECT_VERIFIED, person=request.user, project=project)
     messages.success(request, "You have verified the project %s." % project.title)
 
-    send_cw_sg_email(request, "Congrats.. " + project.category + ": " + project.title + " Approved :)",
+    send_cw_sg_email(request, "Congrats.. " + project.category.name + ": " + project.title + " Approved :)",
                      "Congratulations, your project has has been verified. " +
                      "Please reply to this mail for any assistance. \n\n" +
                      "Title: " + project.title + "\n" +
