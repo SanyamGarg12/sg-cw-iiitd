@@ -65,6 +65,7 @@ def verify_project(request, project_id):
                      "Congratulations, your project has has been verified. " +
                      "Please reply to this mail for any assistance. \n\n" +
                      "Title: " + str(project.title) + "\n" +
+                     "Category: " + str(project.category.description) + "\n"
                      "Credits: " + str(project.credits) + "\n" +
                      "Semester: " + str(project.semester) + "\n" +
                      "Created: " + str(project.date_created) + "\n" +
