@@ -31,8 +31,8 @@ urlpatterns = (
 
     url(r'^new_sem_page/$', views.new_sem_page, name='new_sem_page'),
     url(r'^create_new_semester/$', views.all_semesters, name='create_new_semester'),
-    url('update_semester/<int:id>', views.update_semester, name='update-semester'),
-    url('delete_semester/', views.delete_semester, name='delete-semester'),
+    url(r'^update_semester/(?P<id>[0-9]+)/$', views.update_semester, name='update-semester'),
+    url(r'^delete_semester/$', views.delete_semester, name='delete-semester'),
 
     url(r'^example/$', views.example_projects, name='example_projects'),
     url(r'^addtoexamples/(?P<project_id>[0-9]+)/$', views.add_to_examples, name='addtoexamples'),
