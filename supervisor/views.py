@@ -61,23 +61,23 @@ def verify_project(request, project_id):
     add_diff(diff_type.PROJECT_VERIFIED, person=request.user, project=project)
     messages.success(request, "You have verified the project %s." % project.title)
 
-    send_cw_sg_email(request, "Congrats.. " + project.category.name + ": " + project.title + " Approved :)",
+    send_cw_sg_email(request, "Congrats.. " + str(project.category.name) + ": " + str(project.title) + " Approved :)",
                      "Congratulations, your project has has been verified. " +
                      "Please reply to this mail for any assistance. \n\n" +
-                     "Title: " + project.title + "\n" +
-                     "Credits: " + project.credits + "\n" +
-                     "Semester: " + project.semester + "\n" +
-                     "Created: " + project.date_created + "\n" +
+                     "Title: " + str(project.title) + "\n" +
+                     "Credits: " + str(project.credits) + "\n" +
+                     "Semester: " + str(project.semester) + "\n" +
+                     "Created: " + str(project.date_created) + "\n" +
                      "\n" +
-                     "Name: " + project.student.first_name + " " + project.student.last_name + "\n" +
-                     "Roll Number: " + project.get_rollno() + "\n" +
-                     "Email: " + project.student.email + "\n" +
-                     "Batch: " + project.student.batch_number + "\n" +
+                     "Name: " + str(project.student.first_name) + " " + str(project.student.last_name) + "\n" +
+                     "Roll Number: " + str(project.get_rollno()) + "\n" +
+                     "Email: " + str(project.student.email) + "\n" +
+                     "Batch: " + str(project.student.batch_number) + "\n" +
                      "\n" +
-                     "Organization: " + project.NGO_name + "\n" +
-                     "Organization Details: " + project.NGO_details + "\n" +
-                     "Supervisor: " + project.NGO_super + "\n" +
-                     "Supervisor Contact: " + project.NGO_super_contact + "\n" +
+                     "Organization: " + str(project.NGO_name) + "\n" +
+                     "Organization Details: " + str(project.NGO_details) + "\n" +
+                     "Supervisor: " + str(project.NGO_super) + "\n" +
+                     "Supervisor Contact: " + str(project.NGO_super_contact) + "\n" +
                      "\n" +
                      "Please follow the next steps as described in the guidelines" + "\n" +
                      "Please register the SG/CW credits on the ERP Portal too. ", recipients=[str(project.student.email)],
