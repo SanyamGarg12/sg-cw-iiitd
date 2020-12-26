@@ -86,6 +86,7 @@ class AllProjects(models.Manager):
 
 class Semester(models.Model):
     label = models.CharField(max_length=200, unique=True)
+    show_to_students = models.BooleanField(default=True)
 
     def __str__(self):
         return self.label

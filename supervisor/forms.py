@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 from studentportal.models import Category, Semester
@@ -87,3 +88,16 @@ class SemesterForm(forms.ModelForm):
     class Meta:
         model = Semester
         fields = '__all__'
+
+
+class SemesterDeletionForm(forms.Form):
+    id = forms.IntegerField(required=True)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        id = cleaned_data.get('id')
+        if not Semester.objects.filter(pk=id).exists():
+            raise ValidationError("No such semester exists")
+        if Semester.objects.get(pk=id).projects.exists():
+            raise ValidationError("Some projects are tied with this semester, you cannot delete it.")
+        return cleaned_data

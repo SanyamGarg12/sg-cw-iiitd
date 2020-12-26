@@ -17,4 +17,19 @@
 
     </form>
 
+    {% for semester in semesters %}
+        <form action="{% url 'update-semester' id=semester.id%}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ semester.id }}">
+            <input type="text" name="label" value="{{ semester.label }}">
+            <input type="checkbox" name="show_to_students" {% if semester.show_to_students %} checked {% endif %}>
+            <button type="submit">Update</button>
+        </form>
+        <form action="{% url 'delete-semester' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ semester.id }}">
+            <button type="submit">Delete this semester</button>
+        </form>
+    {% endfor %}
+
 {% endblock %}

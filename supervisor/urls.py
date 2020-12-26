@@ -30,7 +30,9 @@ urlpatterns = (
     url(r'^toggle_allow_project/$', views.toggle_allow_project, name='toggle_allow_project'),
 
     url(r'^new_sem_page/$', views.new_sem_page, name='new_sem_page'),
-    url(r'^create_new_semester/$', views.create_new_semester, name='create_new_semester'),
+    url(r'^create_new_semester/$', views.all_semesters, name='create_new_semester'),
+    url('update_semester/<int:id>', views.update_semester, name='update-semester'),
+    url('delete_semester/', views.delete_semester, name='delete-semester'),
 
     url(r'^example/$', views.example_projects, name='example_projects'),
     url(r'^addtoexamples/(?P<project_id>[0-9]+)/$', views.add_to_examples, name='addtoexamples'),

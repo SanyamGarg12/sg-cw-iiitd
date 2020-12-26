@@ -11,16 +11,16 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils import timezone
 
 from CW_Portal import settings, access_cache
-from studentportal.models import Project, NGO, Category, Document, project_stage, _project_stage_mapping
+from studentportal.models import Project, NGO, Category, Document, project_stage, _project_stage_mapping, Semester
 from supervisor.communication import send_email_to_all
 from supervisor.decorators import supervisor_logged_in
 from supervisor.forms import AdvanceSearchForm, NewsForm, NewCategoryForm, NewNGOForm, EmailProjectForm, TAForm, \
-    ReportForm, SemesterForm
+    ReportForm, SemesterForm, SemesterDeletionForm
 from supervisor.methods import filtered_projects
 from supervisor.models import Example, News, Notification, TA, diff_type, add_diff, add_notification, Flag
 from supervisor.models import notification_type as nt
@@ -791,7 +791,7 @@ def new_sem_page(request):
 
 
 @supervisor_logged_in
-def create_new_semester(request):
+def all_semesters(request):
     if not (request.method == "POST" or request.is_ajax()):
         messages.warning(request, "There was an error in the request received.")
         return HttpResponseRedirect(reverse('index'))
@@ -804,4 +804,33 @@ def create_new_semester(request):
         else:
             messages.warning(request, "There was some error in the data submitted.")
         return HttpResponseRedirect(reverse('index'))
-    return render(request, 'create_new_semester.html', context={'form': form})
+    semesters = Semester.objects.all()
+    return render(request, 'create_new_semester.html', context={'form': form,
+                                                                'semesters': semesters})
+
+
+@supervisor_logged_in
+def update_semester(request, id):
+    if request.method == 'POST':
+        semester = get_object_or_404(Semester, pk=id)
+        updation_form = SemesterForm(request.POST, instance=semester)
+        if updation_form.is_valid():
+            updation_form.save()
+            messages.success(request, 'Updation successful!')
+        else:
+            messages.error(request, 'Updation failed.')
+    return redirect('create_new_semester')
+
+
+@supervisor_logged_in
+def delete_semester(request):
+    if request.method == 'POST':
+        deletion_form = SemesterDeletionForm(request.POST)
+        if deletion_form.is_valid():
+            id = deletion_form.cleaned_data.get("id")
+            semester = get_object_or_404(Semester, pk=id)
+            semester.delete()
+            messages.success(request, "Semester has been successfully deleted.")
+        else:
+            messages.error(request, "Cannot delete the semester.")
+    return redirect('create_new_semester')
