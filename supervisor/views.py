@@ -787,14 +787,16 @@ def update_batch(request):
 @supervisor_logged_in
 def new_sem_page(request):
     form = SemesterForm()
-    return render(request, 'create_new_semester.html', context={'form': form})
+    semesters = Semester.objects.all()
+    return render(request, 'create_new_semester.html', context={'form': form,
+                                                                'semesters': semesters})
 
 
 @supervisor_logged_in
 def all_semesters(request):
-    # if not request.method == "POST":
-    #     messages.warning(request, "There was an error in the request received.")
-    #     return HttpResponseRedirect(reverse('index'))
+    if not request.method == "POST":
+        messages.warning(request, "There was an error in the request received.")
+        return HttpResponseRedirect(reverse('index'))
     form = SemesterForm()
     if request.method == "POST":
         form = SemesterForm(request.POST)
