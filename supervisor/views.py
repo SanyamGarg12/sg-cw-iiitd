@@ -61,10 +61,26 @@ def verify_project(request, project_id):
     add_diff(diff_type.PROJECT_VERIFIED, person=request.user, project=project)
     messages.success(request, "You have verified the project %s." % project.title)
 
-    send_cw_sg_email(request, "Congrats.. " + project.title + " Approved :)",
-                     "Congratulations, your project has has been verified. Now start working and make a difference. " +
+    send_cw_sg_email(request, "Congrats.. " + project.category + ": " + project.title + " Approved :)",
+                     "Congratulations, your project has has been verified. " +
                      "Please reply to this mail for any assistance. \n\n" +
-                     "Please register for SG/CW on the ERP Portal too. ", recipients=[str(project.student.email)],
+                     "Title: " + project.title + "\n" +
+                     "Credits: " + project.credits + "\n" +
+                     "Semester: " + project.semester + "\n" +
+                     "Created: " + project.date_created + "\n" +
+                     "\n" +
+                     "Name: " + project.student.first_name + " " + project.student.last_name + "\n" +
+                     "Roll Number: " + project.get_rollno() + "\n" +
+                     "Email: " + project.student.email + "\n" +
+                     "Batch: " + project.student.batch_number + "\n" +
+                     "\n" +
+                     "Organization: " + project.NGO_name + "\n" +
+                     "Organization Details: " + project.NGO_details + "\n" +
+                     "Supervisor: " + project.NGO_super + "\n" +
+                     "Supervisor Contact: " + project.NGO_super_contact + "\n" +
+                     "\n" +
+                     "Please follow the next steps as described in the guidelines" + "\n" +
+                     "Please register the SG/CW credits on the ERP Portal too. ", recipients=[str(project.student.email)],
                      project_id=project_id)
 
     return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project.id}))
