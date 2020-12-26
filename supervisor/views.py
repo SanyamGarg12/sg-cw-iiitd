@@ -175,7 +175,7 @@ def remove_from_examples(request, example_project_id):
     example_project = Example.objects.get(pk=example_project_id)
     p_id = example_project.project.id
 
-    send_cw_sg_email(request, str(example_project.category.name) + ": " + str(example_project.title),
+    send_cw_sg_email(request, str(example_project.project.category) + ": " + str(example_project.title),
                      "Your project has has been removed by the admin from the example project. " +
                      "Thank you for contributing to the community. Keep it up.",
                      recipients=[str(Project.objects.get(pk=p_id).student.email)], project_id=p_id)
