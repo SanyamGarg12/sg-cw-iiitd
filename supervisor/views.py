@@ -61,9 +61,10 @@ def verify_project(request, project_id):
     add_diff(diff_type.PROJECT_VERIFIED, person=request.user, project=project)
     messages.success(request, "You have verified the project %s." % project.title)
 
-    send_cw_sg_email(request, "Congrats.. " + str(project.category.name) + ": " + str(project.title) + " Approved :)",
+    send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title) + "Project",
                      "Congratulations, your project has has been verified. " +
-                     "Please reply to this mail for any assistance. \n\n" +
+                     "Please reply to this mail for any assistance. \n" +
+                     "\n" +
                      "Title: " + str(project.title) + "\n" +
                      "Category: " + str(project.category.description) + "\n"
                      "Credits: " + str(project.credits) + "\n" +
@@ -96,7 +97,7 @@ def unverify_project(request, project_id):
     add_diff(diff_type.PROJECT_UNVERIFIED, person=request.user, project=project)
     messages.warning(request, "You have unverified the project %s." % project.title)
 
-    send_cw_sg_email(request, project.title + " Unapproved :(",
+    send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title) + "Project",
                      "It seems that the supervisor has unapproved your project. " +
                      "Reply to this email for assistance.", recipients=[str(project.student.email)],
                      project_id=project_id)
@@ -147,7 +148,7 @@ def add_to_examples(request, project_id):
     add_diff(diff_type.ADDED_AS_EXAMPLE, person=request.user, project=project)
     messages.success(request, "You have marked the project '%s' as an example project." % project.title)
 
-    send_cw_sg_email(request, "Congrats.. " + project.title + " Added to Examples :)",
+    send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title) + "Project",
                      "Congratulations, your project has has been selected by the supervisor as an example project. " +
                      "You must have done a mighty fine job. Keep it up.",
                      recipients=[str(project.student.email)], project_id=project_id)
@@ -174,7 +175,7 @@ def remove_from_examples(request, example_project_id):
     example_project = Example.objects.get(pk=example_project_id)
     p_id = example_project.project.id
 
-    send_cw_sg_email(request, example_project.project.title + " removed from Examples",
+    send_cw_sg_email(request, str(example_project.category.name) + ": " + str(example_project.title) + "Project",
                      "Your project has has been removed by the admin from the example project. " +
                      "Thank you for contributing to the community. Keep it up.",
                      recipients=[str(Project.objects.get(pk=p_id).student.email)], project_id=p_id)
@@ -243,13 +244,10 @@ def complete(request, project_id):
     add_diff(diff_type.PROJECT_COMPLETED, person=request.user, project=project)
     messages.success(request, "You have marked the Project as completed and finished.")
 
-    send_cw_sg_email(request, "Congrats.. " + project.title + " Completed :)",
-                     "Congratulations, your completed project has has been accepted by the admin. " +
-                     " Please fill the feedback at %(feedback_link)s. \n\n " +
-                     "Thanks for giving back to the community. Keep it up." % {
-                         'feedback_link': request.build_absolute_uri(
-                             reverse('feedback', kwargs={'project_id': project.pk}))
-                     }, recipients=[str(project.student.email)], project_id=project_id)
+    send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title) + "Project",
+                     "Congratulations, your project has been accepted " +
+                     "and marked completed by the admin. ",
+                     recipients=[str(project.student.email)], project_id=project_id)
 
     return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project_id}))
 
@@ -362,8 +360,12 @@ def accept_NGO(request, noti_id):
                        details=noti.NGO_details,
                        category=Category.objects.last())
 
-    send_cw_sg_email(request, noti.NGO_name + " Accepted",
-                     "We have added the Organization you suggested as a trusted Organization",
+    send_cw_sg_email(request, "Organization: " + str(noti.NGO_name),
+                     "We have added the Organization suggested by you as a trusted Organization \n" +
+                     "Org Name: " + str(noti.NGO_name) + "\n" +
+                     "Org Details: " + str(noti.NGO_details) + "\n" +
+                     "Org Link: " + str(noti.NGO_link) + "\n"
+                     "Suggested By: " + str(noti.NGO_sugg_by.name) + "\n",
                      recipients=[str(noti.NGO_sugg_by.email)], notif_id=noti_id)
 
     messages.success(request, "%s is now a trusted Organization." % noti.NGO_name)
@@ -376,7 +378,7 @@ def reject_NGO(request, noti_id):
     noti = get_object_or_404(Notification, pk=noti_id)
     messages.info(request, "You have rejected the suggestion of adding %s as a trusted NGO." % noti.NGO_name)
 
-    send_cw_sg_email(request, noti.NGO_name + " Rejected :(",
+    send_cw_sg_email(request, "Organization: " + str(noti.NGO_name),
                      "We have reviewed your suggestion for the Organization but as of now have to reject it. " +
                      "But thank you for your suggestion", recipients=[str(noti.NGO_sugg_by.email)], notif_id=noti_id)
 
@@ -497,7 +499,7 @@ def email_project(request, project_id):
                                 "please reply to this mail, unless explicitly asked to create a new email thread, " +
                                 "for proper redressal."])
 
-            send_cw_sg_email(request, project.get_category() + " Project '%s' " % project.title, text,
+            send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title) + "Project", text,
                              recipients=[form.cleaned_data['to']], project_id=project_id)
 
             messages.success(request, "E-mail sent.")
