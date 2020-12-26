@@ -89,7 +89,7 @@ class Semester(models.Model):
     show_to_students = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.label
+        return " " + self.label + " "
 
 
 class Project(models.Model):

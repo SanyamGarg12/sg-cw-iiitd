@@ -11,29 +11,36 @@
 
         {{ form }}
 
+        &nbsp;
+        &nbsp;
+        &nbsp;
+
         <button type="submit" class="btn btn-info btn-sm">
             New Semester
         </button>
 
     </form>
 
-    <br>
+    <h4>All Semesters</h4>
 
     {% for semester in semesters %}
 
-        <p>1</p>
-
-        <form action="{% url 'update-semester' id=semester.id%}" method="post">
+        <form action="{% url 'update-semester' id=semester.id%}" method="post" style="display: inline">
             {% csrf_token %}
             <input type="hidden" name="id" value="{{ semester.id }}">
             <input type="text" name="label" value="{{ semester.label }}">
             <input type="checkbox" name="show_to_students" {% if semester.show_to_students %} checked {% endif %}>
-            <button type="submit">Update</button>
+            <button type="submit">Update Semester</button>
         </form>
-        <form action="{% url 'delete-semester' %}" method="post">
+
+        &nbsp;
+        &nbsp;
+        &nbsp;
+
+        <form action="{% url 'delete-semester' %}" method="post" style="display: inline">
             {% csrf_token %}
             <input type="hidden" name="id" value="{{ semester.id }}">
-            <button type="submit">Delete this semester</button>
+            <button type="submit">Delete Semester</button>
         </form>
     {% endfor %}
 

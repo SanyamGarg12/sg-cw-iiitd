@@ -794,9 +794,6 @@ def new_sem_page(request):
 
 @supervisor_logged_in
 def all_semesters(request):
-    # if not request.method == "POST":
-        # messages.warning(request, "There was an error in the request received.")
-        # return HttpResponseRedirect(reverse('index'))
     form = SemesterForm()
     if request.method == "POST":
         form = SemesterForm(request.POST)
