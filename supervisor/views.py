@@ -365,7 +365,7 @@ def accept_NGO(request, noti_id):
                      "Org Name: " + str(noti.NGO_name) + "\n" +
                      "Org Details: " + str(noti.NGO_details) + "\n" +
                      "Org Link: " + str(noti.NGO_link) + "\n"
-                     "Suggested By: " + str(noti.NGO_sugg_by.name) + "\n",
+                     "Suggested By: " + str(noti.NGO_sugg_by) + "\n",
                      recipients=[str(noti.NGO_sugg_by.email)], notif_id=noti_id)
 
     messages.success(request, "%s is now a trusted Organization." % noti.NGO_name)
