@@ -61,7 +61,7 @@ def verify_project(request, project_id):
     add_diff(diff_type.PROJECT_VERIFIED, person=request.user, project=project)
     messages.success(request, "You have verified the project %s." % project.title)
 
-    send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title) + "Project",
+    send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title),
                      "Congratulations, your project has has been verified. " +
                      "Please reply to this mail for any assistance. \n" +
                      "\n" +
@@ -97,7 +97,7 @@ def unverify_project(request, project_id):
     add_diff(diff_type.PROJECT_UNVERIFIED, person=request.user, project=project)
     messages.warning(request, "You have unverified the project %s." % project.title)
 
-    send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title) + "Project",
+    send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title),
                      "It seems that the supervisor has unapproved your project. " +
                      "Reply to this email for assistance.", recipients=[str(project.student.email)],
                      project_id=project_id)
@@ -148,7 +148,7 @@ def add_to_examples(request, project_id):
     add_diff(diff_type.ADDED_AS_EXAMPLE, person=request.user, project=project)
     messages.success(request, "You have marked the project '%s' as an example project." % project.title)
 
-    send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title) + "Project",
+    send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title),
                      "Congratulations, your project has has been selected by the supervisor as an example project. " +
                      "You must have done a mighty fine job. Keep it up.",
                      recipients=[str(project.student.email)], project_id=project_id)
@@ -175,7 +175,7 @@ def remove_from_examples(request, example_project_id):
     example_project = Example.objects.get(pk=example_project_id)
     p_id = example_project.project.id
 
-    send_cw_sg_email(request, str(example_project.category.name) + ": " + str(example_project.title) + "Project",
+    send_cw_sg_email(request, str(example_project.category.name) + ": " + str(example_project.title),
                      "Your project has has been removed by the admin from the example project. " +
                      "Thank you for contributing to the community. Keep it up.",
                      recipients=[str(Project.objects.get(pk=p_id).student.email)], project_id=p_id)
@@ -244,7 +244,7 @@ def complete(request, project_id):
     add_diff(diff_type.PROJECT_COMPLETED, person=request.user, project=project)
     messages.success(request, "You have marked the Project as completed and finished.")
 
-    send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title) + "Project",
+    send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title),
                      "Congratulations, your project has been accepted " +
                      "and marked completed by the admin. ",
                      recipients=[str(project.student.email)], project_id=project_id)
@@ -499,7 +499,7 @@ def email_project(request, project_id):
                                 "please reply to this mail, unless explicitly asked to create a new email thread, " +
                                 "for proper redressal."])
 
-            send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title) + "Project", text,
+            send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title), text,
                              recipients=[form.cleaned_data['to']], project_id=project_id)
 
             messages.success(request, "E-mail sent.")
