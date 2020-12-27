@@ -19,6 +19,10 @@ from supervisor.forms import NewCommentForm
 from supervisor.models import Example, News, Like, Comment, add_notification, notification_type, \
     diff_type, add_diff, Flag
 
+from django.core.mail import send_mail
+
+import credentials
+
 from studentportal.quotes import quotes
 from random import randint
 
@@ -50,6 +54,25 @@ def home(request):
         return render(request, 'studenthome.html',
                       {'news': access_cache.get_news(), 'stages': project_stage})
 
+@login_required
+def send_cw_sg_email(request, subject, text, recipients, project_id=None):
+    ta_email = None
+    ta_pass = None
+
+    project = None
+
+    if project_id is not None:
+        project = get_object_or_404(Project, pk=project_id)
+
+    if project is not None:
+        if project.get_category() == "SG":
+            ta_email = credentials.EMAIL_SG_USER
+            ta_pass = credentials.EMAIL_SG_PASSWORD
+        else:
+            ta_email = credentials.EMAIL_CW_USER
+            ta_pass = credentials.EMAIL_CW_PASSWORD
+
+        send_mail(subject, text, ta_email, recipients, auth_user=ta_email, auth_password=ta_pass)
 
 @login_required
 def addproject(request):
@@ -64,6 +87,34 @@ def addproject(request):
                 add_notification(notification_type.NEW_PROJECT, project=project)
                 add_diff(diff_type.PROJECT_ADDED, person=request.user, project=project)
                 messages.success(request, 'Your project was added successfully.')
+
+                send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title),
+                                 "Congratulations, your project has been added successfully. " +
+                                 "It will be approved shortly. " +
+                                 "Please reply to this mail for any assistance. \n" +
+                                 "\n" +
+                                 "Title: " + str(project.title) + "\n" +
+                                 "Category: " + str(project.category.description) + "\n"
+                                                                                    "Credits: " + str(
+                                     project.credits) + "\n" +
+                                 "Semester: " + str(project.semester) + "\n" +
+                                 "Created: " + str(project.date_created) + "\n" +
+                                 "\n" +
+                                 "Name: " + str(project.student.first_name) + " " + str(
+                                     project.student.last_name) + "\n" +
+                                 "Roll Number: " + str(project.get_rollno()) + "\n" +
+                                 "Email: " + str(project.student.email) + "\n" +
+                                 "Batch: " + str(project.student.batch_number) + "\n" +
+                                 "\n" +
+                                 "Organization: " + str(project.NGO_name) + "\n" +
+                                 "Organization Details: " + str(project.NGO_details) + "\n" +
+                                 "Supervisor: " + str(project.NGO_super) + "\n" +
+                                 "Supervisor Contact: " + str(project.NGO_super_contact) + "\n" +
+                                 "\n" +
+                                 "Please wait while the admin approves your project",
+                                 recipients=[str(project.student.email)],
+                                 project_id=project.id)
+
                 return HttpResponseRedirect(reverse('view_project_NGO', kwargs={
                     'project_id': project.pk}))
         else:

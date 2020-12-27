@@ -62,7 +62,7 @@ def verify_project(request, project_id):
     messages.success(request, "You have verified the project %s." % project.title)
 
     send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title),
-                     "Congratulations, your project has has been verified. " +
+                     "Congratulations, your project has been verified. " +
                      "Please reply to this mail for any assistance. \n" +
                      "\n" +
                      "Title: " + str(project.title) + "\n" +
