@@ -63,27 +63,12 @@ def verify_project(request, project_id):
 
     send_cw_sg_email(request, str(project.category.name) + ": " + str(project.title),
                      "Congratulations, your project has been verified. " +
+                     "You have to present your work at the beginning of the subsequent semester " +
+                     "failing which you will be awarded with X grade. " +
                      "Please reply to this mail for any assistance. \n" +
-                     "\n" +
-                     "Title: " + str(project.title) + "\n" +
-                     "Category: " + str(project.category.description) + "\n"
-                     "Credits: " + str(project.credits) + "\n" +
-                     "Semester: " + str(project.semester) + "\n" +
-                     "Created: " + str(project.date_created) + "\n" +
-                     "\n" +
-                     "Name: " + str(project.student.first_name) + " " + str(project.student.last_name) + "\n" +
-                     "Roll Number: " + str(project.get_rollno()) + "\n" +
-                     "Email: " + str(project.student.email) + "\n" +
-                     "Batch: " + str(project.student.batch_number) + "\n" +
-                     "\n" +
-                     "Organization: " + str(project.NGO_name) + "\n" +
-                     "Organization Details: " + str(project.NGO_details) + "\n" +
-                     "Supervisor: " + str(project.NGO_super) + "\n" +
-                     "Supervisor Contact: " + str(project.NGO_super_contact) + "\n" +
-                     "\n" +
-                     "Please follow the next steps as described in the guidelines" + "\n" +
-                     "Please register the SG/CW credits on the ERP Portal too. ", recipients=[str(project.student.email)],
-                     project_id=project_id)
+                     "Please follow the next steps as described in the guidelines. \n" +
+                     "Please register the SG/CW credits on the ERP Portal too.",
+                     recipients=[str(project.student.email)], project_id=project_id)
 
     return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project.id}))
 
