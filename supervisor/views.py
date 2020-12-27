@@ -28,6 +28,17 @@ from supervisor.validators import is_int
 from django.core.mail import send_mail
 
 import credentials
+from supervisor.async_helper import AsyncMethod
+
+
+def Async(fnc=None, callback=None):
+    if fnc is None:
+        def AddAsyncCallback(fnc):
+            return AsyncMethod(fnc, callback)
+
+        return AddAsyncCallback
+    else:
+        return AsyncMethod(fnc, callback)
 
 
 @supervisor_logged_in
@@ -350,7 +361,7 @@ def accept_NGO(request, noti_id):
                      "Org Name: " + str(noti.NGO_name) + "\n" +
                      "Org Details: " + str(noti.NGO_details) + "\n" +
                      "Org Link: " + str(noti.NGO_link) + "\n"
-                     "Suggested By: " + str(noti.NGO_sugg_by) + "\n",
+                                                         "Suggested By: " + str(noti.NGO_sugg_by) + "\n",
                      recipients=[str(noti.NGO_sugg_by.email)], notif_id=noti_id)
 
     messages.success(request, "%s is now a trusted Organization." % noti.NGO_name)
@@ -712,6 +723,7 @@ def get_TA_logs(request, ta_id):
         'ta': ta, 'diffs': diffs})
 
 
+@Async
 @supervisor_logged_in
 def send_cw_sg_email(request, subject, text, recipients, project_id=None, notif_id=None):
     ta_email = None

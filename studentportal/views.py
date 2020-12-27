@@ -20,6 +20,7 @@ from supervisor.models import Example, News, Like, Comment, add_notification, no
     diff_type, add_diff, Flag
 
 from django.core.mail import send_mail
+from supervisor.async_helper import AsyncMethod
 
 import credentials
 
@@ -27,6 +28,16 @@ from studentportal.quotes import quotes
 from random import randint
 
 diff_worker = diff_match_patch.diff_match_patch()
+
+
+def Async(fnc=None, callback=None):
+    if fnc is None:
+        def AddAsyncCallback(fnc):
+            return AsyncMethod(fnc, callback)
+
+        return AddAsyncCallback
+    else:
+        return AsyncMethod(fnc, callback)
 
 
 def index(request):
@@ -54,6 +65,8 @@ def home(request):
         return render(request, 'studenthome.html',
                       {'news': access_cache.get_news(), 'stages': project_stage})
 
+
+@Async
 @login_required
 def send_cw_sg_email(request, subject, text, recipients, project_id=None):
     ta_email = None
@@ -73,6 +86,7 @@ def send_cw_sg_email(request, subject, text, recipients, project_id=None):
             ta_pass = credentials.EMAIL_CW_PASSWORD
 
         send_mail(subject, text, ta_email, recipients, auth_user=ta_email, auth_password=ta_pass)
+
 
 @login_required
 def addproject(request):
