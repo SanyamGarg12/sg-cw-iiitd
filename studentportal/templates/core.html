@@ -9,6 +9,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <title>SG/CW - IIIT Delhi</title>
         <!-- Bootstrap core CSS -->
         <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
@@ -65,6 +67,7 @@
                     width: 50%; /* 6 columns */
                 }
             }
+
             .ajaxify-btn {
             }
         </style>
@@ -93,7 +96,8 @@
                                     class="glyphicon glyphicon-user"></span> {{ user.first_name }} <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{% url 'studentprofile' %}">My Projects</a></li>
-                                <li><a class="btn ajaxify-btn" style="text-align: left" data-link="{% url 'update_batch_student' %}">Update Profile</a></li>
+                                <li><a class="btn ajaxify-btn" style="text-align: left"
+                                       data-link="{% url 'update_batch_student' %}">Update Profile</a></li>
                                 <li class="divider"></li>
                                 <li><a href="{% url 'logout' %}">Logout</a></li>
                             </ul>
