@@ -10,5 +10,5 @@ venv
 credentials.py
 .idea/
 sg-cw-portal-iiitd-key.json
-static/
+/static/
 *.xls
