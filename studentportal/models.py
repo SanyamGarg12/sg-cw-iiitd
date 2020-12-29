@@ -133,8 +133,8 @@ class Project(models.Model):
         return "".join(["BTech 20", self.student.email.split('@')[0][-5:-3]])
 
     def get_NGO(self):
-        if self.NGO:
-            return ''.join(["<strong>", self.NGO.name, " |", "</strong>", " ", self.NGO_name])
+        # if self.NGO:
+            # return ''.join(["<strong>", self.NGO.name, " |", "</strong>", " ", self.NGO_name])
         return self.NGO_name
 
     def is_submittable(self):
