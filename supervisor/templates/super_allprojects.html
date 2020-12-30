@@ -78,8 +78,7 @@
             <div class="pagination">
                 <span class="step-links">
                     {% if projects.has_previous %}
-                        <a class="btn btn-warning" role="button" href="?page={{ projects.previous_page_number }}"
-                           style="float:left;">Previous</a>
+                        <a class="btn btn-warning" role="button" href="?page={{ projects.previous_page_number }}">Previous</a>
                     {% endif %}
 
                     &nbsp;&nbsp;&nbsp;
@@ -89,8 +88,7 @@
                     &nbsp;&nbsp;&nbsp;
 
                     {% if projects.has_next %}
-                        <a class="btn btn-warning" role="button" href="?page={{ projects.next_page_number }}"
-                           style="float:right;">Next</a>
+                        <a class="btn btn-warning" role="button" href="?page={{ projects.next_page_number }}">Next</a>
                     {% endif %}
                 </span>
             </div>
