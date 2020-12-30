@@ -179,9 +179,6 @@ def editproject(request, project_id):
         if request.method == 'POST':
             form = ProjectForm(request.POST, instance=instance)
 
-            print('instance', str(instance))
-            print('form', str(form))
-
             # get edits
             # fields = instance._meta.get_all_field_names()
             fields = ['title', 'credits', 'schedule_text', 'goals', 'NGO_name', 'NGO_super', 'NGO_super_contact',
@@ -193,7 +190,7 @@ def editproject(request, project_id):
 
             if form.is_valid():
                 new_instance = form.save(student=request.user)
-                messages.success(request, "Your project details have been succesfully updated.")
+                messages.success(request, "Your project details have been successfully updated.")
                 add_diff(diff_type.PROJECT_EDITED, person=request.user, project=new_instance)
 
                 # save edit information
