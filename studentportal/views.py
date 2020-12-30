@@ -179,6 +179,9 @@ def editproject(request, project_id):
         if request.method == 'POST':
             form = ProjectForm(request.POST, instance=instance)
 
+            print('instance', str(instance))
+            print('form', str(form))
+
             # get edits
             # fields = instance._meta.get_all_field_names()
             fields = ['title', 'credits', 'schedule_text', 'goals', 'NGO_name', 'NGO_super', 'NGO_super_contact',
@@ -206,8 +209,7 @@ def editproject(request, project_id):
                 return HttpResponseRedirect(reverse('viewproject', kwargs={'project_id': project_id}))
             else:
                 messages.warning(request, "There was something wrong in the provided details.")
-        return render(request, 'editproject.html',
-                      {'form': form, 'instance': instance})
+        return render(request, 'editproject.html', {'form': form, 'instance': instance})
     return HttpResponseRedirect(reverse('index'))
 
 
@@ -522,8 +524,7 @@ def delete_comment(request, comment_id):
 
 
 def handle404_LnF(request, *args, **kwargs):
-
-    quote_id = randint(0, len(quotes)-1)
+    quote_id = randint(0, len(quotes) - 1)
     quote = quotes[quote_id][0]
     author = quotes[quote_id][1]
 

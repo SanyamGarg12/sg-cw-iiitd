@@ -4,24 +4,22 @@
     <div class="container" style="width:60%">
         <div class="row">
             <div class="span12">
-                <form action="{% url 'editproject' form.instance.id %}" method="POST" class="form"
-                      role="form"> {% csrf_token %}
-                    <div class="tab-content">
+                <form action="{% url 'editproject' form.instance.id %}" method="POST" class="form" role="form">
+                    {% csrf_token %}
 
-                        {#                        {{ form.category|bootstrap }}#}
-                        {{ form.title|bootstrap }}
-                        {{ form.credits|bootstrap }}
-                        {{ form.NGO_name|bootstrap }}
-                        {{ form.NGO_details|bootstrap }}
-                        {{ form.NGO_super|bootstrap }}
-                        {{ form.NGO_super_contact|bootstrap }}
-                        {{ form.goals|bootstrap }}
-                        {{ form.schedule_text|bootstrap }}
-                        {#                        {{ form.semester| bootstrap }}#}
+                    {#                        {{ form.category|bootstrap }}#}
+                    {{ form.title|bootstrap }}
+                    {{ form.credits|bootstrap }}
+                    {{ form.NGO_name|bootstrap }}
+                    {{ form.NGO_details|bootstrap }}
+                    {{ form.NGO_super|bootstrap }}
+                    {{ form.NGO_super_contact|bootstrap }}
+                    {{ form.goals|bootstrap }}
+                    {{ form.schedule_text|bootstrap }}
+                    {#                        {{ form.semester| bootstrap }}#}
 
-                        <input type='submit' value='Edit' class="btn btn-info btn-lg"
-                               style="float:right; margin-top:10px;"/>
-                    </div>
+                    <input type='submit' value='Edit' class="btn btn-info btn-lg"
+                           style="float:right; margin-top:10px;"/>
                 </form>
             </div>
         </div>
