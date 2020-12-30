@@ -4,14 +4,6 @@
     <div class="container" style="width:60%">
         <div class="row">
             <div class="span12">
-                <ul class="nav nav-tabs nav-justified" role="tablist">
-                    <li class="active"><a href="#1" role="tab" data-toggle="tab">
-                        Basic Information
-                    </a>
-                    <li><a href="#2" role="tab" data-toggle="tab">
-                        More Information
-                    </a>
-                </ul>
                 <form action="{% url 'editproject' form.instance.id %}" method="POST" class="form"
                       role="form"> {% csrf_token %}
                     <div class="tab-content">
