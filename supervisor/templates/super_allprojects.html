@@ -69,26 +69,30 @@
                             {% ifequal p.stage stages.COMPLETED %}
                                 Completed
                             {% endifequal %}
-{#                        <td>{{ stage_int }}</td>#}
+                            {#                        <td>{{ stage_int }}</td>#}
                         </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
             <div class="pagination">
-    <span class="step-links">
-        {% if projects.has_previous %}
-            <a class="btn btn-warning" role="button" href="?page={{ projects.previous_page_number }}">Previous</a>
-        {% endif %}
+                <span class="step-links">
+                    {% if projects.has_previous %}
+                        <a class="btn btn-warning" role="button" href="?page={{ projects.previous_page_number }}"
+                           style="float:left;">Previous</a>
+                    {% endif %}
 
-        <span class="current">
-            Page <b>{{ projects.number }}</b> of {{ projects.paginator.num_pages }}
-        </span>
+                    &nbsp;&nbsp;&nbsp;
+                    <span class="current">
+                        Page <b>{{ projects.number }}</b> of {{ projects.paginator.num_pages }}
+                    </span>
+                    &nbsp;&nbsp;&nbsp;
 
-        {% if projects.has_next %}
-            <a class="btn btn-warning" role="button" href="?page={{ projects.next_page_number }}" style="float:right;">Next</a>
-        {% endif %}
-    </span>
+                    {% if projects.has_next %}
+                        <a class="btn btn-warning" role="button" href="?page={{ projects.next_page_number }}"
+                           style="float:right;">Next</a>
+                    {% endif %}
+                </span>
             </div>
         </div>
     {% else %}
