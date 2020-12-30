@@ -18,6 +18,7 @@ from studentportal.models import Project, Document, NGO, document_type, project_
 from supervisor.forms import NewCommentForm
 from supervisor.models import Example, News, Like, Comment, add_notification, notification_type, \
     diff_type, add_diff, Flag
+from studentportal.models import project_stage
 
 from django.core.mail import send_mail
 from supervisor.async_helper import AsyncMethod
@@ -171,6 +172,14 @@ def view_project_NGO(request, project_id):
     return HttpResponseRedirect(reverse('studenthome'))
 
 
+_project_stage_mapping = {
+    project_stage.TO_BE_VERIFIED: "Yet to be verified",
+    project_stage.ONGOING: "Ongoing",
+    project_stage.SUBMITTED: "Submitted for final check",
+    project_stage.COMPLETED: "Completed"
+}
+
+
 @login_required
 def editproject(request, project_id):
     instance = Project.get_student_viewable_project(project_id)
@@ -202,7 +211,30 @@ def editproject(request, project_id):
                         edit_history = '<MULTIPLE_FIELDS_SEPARATOR>'.join([_, edit_history])
                     Edit.objects.create(project=new_instance, diff_text=edit_history)
 
-                # add_notification(notification_type.PROJECT_EDITED, project=instance)
+                send_cw_sg_email(request, str(new_instance.category.name) + ": " + str(new_instance.title),
+                                 "Congratulations, your project has been edited successfully. " +
+                                 "Please reply to this mail for any assistance. \n" +
+                                 "\n" +
+                                 "Title: " + str(new_instance.title) + "\n" +
+                                 "Category: " + str(new_instance.category.description) + "\n"
+                                                                                         "Credits: " + str(
+                                     new_instance.credits) + "\n" +
+                                 "Semester: " + str(new_instance.semester) + "\n" +
+                                 "Created: " + str(new_instance.date_created) + "\n" +
+                                 "Stage: " + str(_project_stage_mapping[new_instance.stage]) + "\n" +
+                                 "\n" +
+                                 "Name: " + str(new_instance.student.first_name) + " " + str(
+                                     new_instance.student.last_name) + "\n" +
+                                 "Roll Number: " + str(new_instance.get_rollno()) + "\n" +
+                                 "Email: " + str(new_instance.student.email) + "\n" +
+                                 "Batch: " + str(new_instance.student.batch_number) + "\n" +
+                                 "\n" +
+                                 "Organization: " + str(new_instance.NGO_name) + "\n" +
+                                 "Organization Details: " + str(new_instance.NGO_details) + "\n" +
+                                 "Supervisor: " + str(new_instance.NGO_super) + "\n" +
+                                 "Supervisor Contact: " + str(new_instance.NGO_super_contact),
+                                 recipients=[str(new_instance.student.email)],
+                                 project_id=new_instance.id)
                 return HttpResponseRedirect(reverse('viewproject', kwargs={'project_id': project_id}))
             else:
                 messages.warning(request, "There was something wrong in the provided details.")
