@@ -12,3 +12,4 @@ credentials.py
 sg-cw-portal-iiitd-key.json
 /static/
 *.xls
+django.log.*

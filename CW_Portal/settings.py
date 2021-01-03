@@ -156,7 +156,7 @@ SOCIALACCOUNT_PROVIDERS = {
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
-DB_URL = os.environ.get('DATABASE_URL')
+DB_URL = credentials.DATABASE_URL
 DATABASES = {'default': dj_database_url.parse(DB_URL, conn_max_age=600)}
 
 # Internationalization
