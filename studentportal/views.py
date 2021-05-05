@@ -12,7 +12,7 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.urls import reverse
 
 from CW_Portal import access_cache, settings, diff_match_patch
-from studentportal.forms import ProjectForm, FeedbackForm, UploadDocumentForm, BugsForm, suggest_NGOForm, \
+from studentportal.forms import ProjectForm, EditProjectForm, FeedbackForm, UploadDocumentForm, BugsForm, suggest_NGOForm, \
     BatchUpdateForm
 from studentportal.models import Project, Document, NGO, document_type, project_stage, Edit
 from supervisor.forms import NewCommentForm
@@ -184,9 +184,9 @@ _project_stage_mapping = {
 def editproject(request, project_id):
     instance = Project.get_student_viewable_project(project_id)
     if instance.student == request.user:
-        form = ProjectForm(None, instance=instance)
+        form = EditProjectForm(None, instance=instance)
         if request.method == 'POST':
-            form = ProjectForm(request.POST, instance=instance)
+            form = EditProjectForm(request.POST, instance=instance)
 
             # get edits
             # fields = instance._meta.get_all_field_names()
