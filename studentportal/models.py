@@ -134,7 +134,7 @@ class Project(models.Model):
 
     def get_NGO(self):
         # if self.NGO:
-            # return ''.join(["<strong>", self.NGO.name, " |", "</strong>", " ", self.NGO_name])
+        # return ''.join(["<strong>", self.NGO.name, " |", "</strong>", " ", self.NGO_name])
         return self.NGO_name
 
     def is_submittable(self):
@@ -148,7 +148,8 @@ class Project(models.Model):
     def get_student_viewable_project(kls, pk):
         # allow exceptions to be raised up
         project = get_object_or_404(kls, pk=pk)
-        if not project.is_viewable_by_student(): raise Http404
+        if not project.is_viewable_by_student():
+            raise Http404
         return project
 
     def final_submission_document(self):
