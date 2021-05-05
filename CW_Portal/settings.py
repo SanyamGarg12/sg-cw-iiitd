@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import json
 import os
 
+import dj_database_url
 import django
 
 import credentials
@@ -155,24 +156,8 @@ SOCIALACCOUNT_PROVIDERS = {
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
-DATABASES = {
-    # 'default': {
-    #    'ENGINE': 'django.db.backends.sqlite3',
-    #    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # },
-    'default': {
-        # TODO: Change values here
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cw_portal',
-        'USER': 'cw',
-        'PASSWORD': 'test',
-        # 'NAME': os.environ['DB_NAME'],
-        # 'USER': os.environ['DB_USER'],
-        # 'PASSWORD': os.environ['DB_PASSWORD'],
-        'HOST': 'localhost',  # Or an IP Address that your DB is hosted on WILL CHANGE
-        'PORT': '3306',
-    }
-}
+DB_URL = credentials.DATABASE_URL
+DATABASES = {'default': dj_database_url.parse(DB_URL, conn_max_age=600)}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/

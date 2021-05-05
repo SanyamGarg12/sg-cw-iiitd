@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
-echo "Setting up virtual environment..."
-python3 -m venv env
-source env/bin/activate
 
 echo "Installing pip3..."
 sudo apt install python3-pip
+
+echo "Setting up virtual environment..."
+python3 -m venv env
+source env/bin/activate
 
 echo "Installing requirements..."
 pip3 install requirements.txt
