@@ -38,7 +38,7 @@ class document_type(object):
     PROPOSAL, LOG, FINAL_REPORT, POSTER = range(1, 5)
     mapping = {
         PROPOSAL: "Proposal",
-        LOG: "Log",
+        LOG: "Log/Certificate",
         FINAL_REPORT: "Final Report",
         POSTER: "Presentation/Poster"
     }
