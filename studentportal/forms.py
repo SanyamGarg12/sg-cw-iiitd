@@ -86,13 +86,13 @@ class EditProjectForm(forms.ModelForm):
 
 
 class UploadDocumentForm(forms.Form):
-    document = forms.FileField(label='Select a file',
-                               help_text='max. 10 Mb.')
+    document = forms.FileField(label='File',
+                               help_text='Max Size: 10 MB')
     CHOICES = tuple([(i, Document.get_document_type(i)) for i in [
         document_type.PROPOSAL, document_type.LOG,
         document_type.FINAL_REPORT, document_type.POSTER]])
     category = forms.ChoiceField(choices=CHOICES,
-                                 help_text='Type of Document')
+                                 help_text='You can upload multiple files under every category.')
 
 
 class suggest_NGOForm(forms.Form):

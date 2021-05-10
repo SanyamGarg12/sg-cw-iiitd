@@ -3,16 +3,17 @@
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
             class="sr-only">Close</span></button>
-    <h4 class="modal-title" id="ModalLabel"><strong>Upload a file for your project</strong></h4>
+    <h4 class="modal-title" id="ModalLabel"><strong>Upload a File for your Project</strong></h4>
 </div>
 
 <div class="modal-body clearfix">
-    <form action="{% url 'upload_document' id %}" method="post" enctype="multipart/form-data"> {% csrf_token %}
+    <form action="{% url 'upload_document' id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
         {{ form|bootstrap_horizontal }}
-        <input id="upload_button" type='submit' value='Upload' class="btn btn-info btn-lg"
+        <input id="upload_button" type='submit' value='Upload' class="btn btn-info"
                style="margin-top:10px; float:right;"/>
         <span style="color:red; display: none;" id="upload_size_warning">The file size is <span
-                id="upload_size_warning_size"></span> Mb. It would be rejected by the server.</span>
+                id="upload_size_warning_size"></span> MB. It is rejected by the server.</span>
     </form>
 </div>
 
