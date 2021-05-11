@@ -15,6 +15,7 @@
         .col-sm-offset-3 {
             margin-left: 0%;
         }
+
         .ajaxify-btn {
         }
     </style>
@@ -56,25 +57,27 @@
     <div class="col-sm-3 col-md-2 sidebar">
         <ul class="nav nav-sidebar">
             <li class="active"><strong>Projects</strong></li>
-            <li><a href="{% url 'ongoing_projects' %}">Ongoing Projects</a></li>
-{#            <li><a href="{% url 'example_projects' %}">Example Projects</a></li>#}
+            <li><a href="{% url 'ongoing_projects' %}">Ongoing Projects
+                {#            <li><a href="{% url 'example_projects' %}">Example Projects</a></li>#}
+            </a></li>
+            <li><a href="{% url 'unverified_projects' %}">New Proposals
+                {#                <span class="badge">{{ request.session.noti_count_proposal|add:"0" }}</span> #}
+            </a></li>
+            <li><a href="{% url 'submitted_projects' %}">Submitted Projects
+                {#                <span class="badge">{{ request.session.noti_count_submissions|add:"0" }}</span>#}
+            </a></li>
+            <li><a href="{% url 'super_allprojects' %}">All Projects</a></li>
         </ul>
         <ul class="nav nav-sidebar">
-            <li class="active"><strong>Notifications</strong></li>
-            <li><a href="{% url 'unverified_projects' %}">New Proposals
-{#                <span class="badge">{{ request.session.noti_count_proposal|add:"0" }}</span> #}
-            </a></li>
-            <li><a href="{% url 'submitted_projects' %}">Pending Projects
-{#                <span class="badge">{{ request.session.noti_count_submissions|add:"0" }}</span>#}
-            </a></li>
-            <li><a href="{% url 'super_suggested_ngos' %}">New NGOs
+            <li class="active"><strong>Organizations</strong></li>
+            <li><a href="{% url 'super_suggested_ngos' %}">New Organizations
                 <span class="badge">{{ request.session.noti_count_NGO|add:"0" }}</span>
             </a></li>
+            <li><a href="{% url 'super_all_NGO' %}">All Organizations</a></li>
         </ul>
         <ul></ul>
         <ul class="nav nav-sidebar">
-            <li><a href="{% url 'super_allprojects' %}">All Projects</a></li>
-            <li><a href="{% url 'super_all_NGO' %}">All NGOs</a></li>
+            <li class="active"><strong>Configuration</strong></li>
             <li><a href="{% url 'super_allcategories' %}">All Categories</a></li>
             <li><a href="{% url 'all_news' %}">All News</a></li>
             <li><a href="{% url 'TA' %}">Teaching Assistants</a></li>
