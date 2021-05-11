@@ -27,7 +27,7 @@
                 <tr>
                     <th>#</th>
                     <th>Name</th>
-                    <th>Link</th>
+                    <th>Contact</th>
                     <th>Description</th>
                 </tr>
                 </thead>
@@ -35,8 +35,8 @@
                 {% for n in NGOs %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td><a href="{% url 'super_view_ngo' n.id %}">{{ n.name }}</a></td>
-                        <td>{{ n.link }}</td>
+                        <td><a href="{% url 'super_view_ngo' n.id %}" style="text-decoration:none;">{{ n.name }}</a></td>
+                        <td>{{ n.link | urlize }}</td>
                         <td>{{ n.details|truncatechars:"100" }}</td>
                         <td>
                             <button class="btn-link glyphicon glyphicon-remove" style="color:red;" data-toggle="modal"
