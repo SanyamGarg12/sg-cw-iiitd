@@ -195,7 +195,7 @@ def submitted_projects(request):
 @supervisor_logged_in
 def allprojects(request):
     form = ReportForm()
-    paginator = Paginator(filtered_projects(request).order_by('id'), 50, orphans=5)
+    paginator = Paginator(filtered_projects(request).order_by('id').reverse(), 50, orphans=5)
 
     page = request.GET.get('page', None)
     try:
