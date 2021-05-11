@@ -50,9 +50,9 @@ class NewCategoryForm(forms.Form):
 
 
 class NewNGOForm(forms.Form):
-    name = forms.CharField(label="Name of the NGO")
-    link = forms.CharField(label="Link for the NGO", required=False)
-    details = forms.CharField(label="Something about the NGO", required=False)
+    name = forms.CharField(label="Name")
+    link = forms.CharField(label="Web Link", required=False)
+    details = forms.CharField(label="Details", required=False)
 
 
 class EmailProjectForm(forms.Form):
