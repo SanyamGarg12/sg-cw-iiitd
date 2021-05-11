@@ -52,20 +52,23 @@
                     {{ project.NGO_super_contact }}
                 </blockquote>
             </div>
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-radius:25px; border: 3px solid #F0F0F0; padding: 20px;">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"
+                 style="border-radius:25px; border: 3px solid #F0F0F0; padding: 20px;">
                 {% for stage in project_graph %}
                     <h1>
                         <span class="glyphicon glyphicon-{{ stage.stage_glyphicon }}"
-                              style="margin-right:10px; color:{% if stage.stage_cleared %}green{% else %}red{% endif %};"></span>
+                              style="margin-right:10px;
+                                      color:{% if stage.stage_cleared %}green{% else %}red{% endif %};">
+                        </span>
                         <span style="font-size:24px;">
-		      		{% ifequal project.get_project_status stage.stage_name %}
-                        <strong>
-                    {% endifequal %}
+                            {% ifequal project.get_project_status stage.stage_name %}
+                                <strong>
+                            {% endifequal %}
                             {{ stage.stage_name }}
                             {% ifequal project.get_project_status stage.stage_name %}
                                 </strong>
                             {% endifequal %}
-	      		</span>
+	      		        </span>
                     </h1>
                     {{ stage.info }}
                 {% endfor %}
@@ -74,7 +77,7 @@
                     <span class="glyphicon glyphicon-facetime-video"
                           style="margin-right:25px; color:{% if project.presented %}green{% else %}red{% endif %};"></span>
                     <span style="font-size:24px;">
-	      		{% if project.presented %}P{% else %}Not p{% endif %}resented
+	      		{% if project.presented %}P{% else %}Not P{% endif %}resented
 	      	</span>
                 </h1>
             </div>
@@ -163,12 +166,13 @@
         <hr/>
 
         <a class="btn btn-warning" role="button" href="{% url 'editproject' project.id %}">Edit Project details</a>
-        <a class="btn btn-primary ajaxify-btn" role="button" data-link="{% url 'upload_document' project.id %}">Upload
-            files</a>
-        <a class="btn btn-info" role="button" href="{% url 'submitproject' project.id %}">Submit project for final evaluation</a>
-{#        {% ifequal project.stage stages.COMPLETED %}{% if project.feedback.all %}{% else %}#}
-{#            <a class="btn btn-info" href="{% url 'feedback' project.id %}" role="button">Give feedback</a>#}
-{#        {% endif %}{% endifequal %}#}
+        <a class="btn btn-primary ajaxify-btn" role="button" data-link="{% url 'upload_document' project.id %}">
+            Upload Files</a>
+        <a class="btn btn-info" role="button" href="{% url 'submitproject' project.id %}">
+            Submit Project for final Evaluation</a>
+        {#        {% ifequal project.stage stages.COMPLETED %}{% if project.feedback.all %}{% else %}#}
+        {#            <a class="btn btn-info" href="{% url 'feedback' project.id %}" role="button">Give feedback</a>#}
+        {#        {% endif %}{% endifequal %}#}
         <div class="modal fade" id="confirm_delete_project_modal" tabindex="-1" role="dialog"
              aria-labelledby="ModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -189,8 +193,8 @@
             </div>
         </div>
 
-        <button class="btn btn-danger" data-toggle="modal" data-target="#confirm_delete_project_modal">Delete this
-            project
+        <button class="btn btn-danger" data-toggle="modal" data-target="#confirm_delete_project_modal">
+            Delete Project
         </button>
 
     </div>

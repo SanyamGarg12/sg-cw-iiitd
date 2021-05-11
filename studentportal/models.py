@@ -18,9 +18,9 @@ class project_stage(object):
 
 
 _project_stage_mapping = {
-    project_stage.TO_BE_VERIFIED: "Yet to be verified",
+    project_stage.TO_BE_VERIFIED: "Yet to be Verified",
     project_stage.ONGOING: "Ongoing",
-    project_stage.SUBMITTED: "Submitted for final check",
+    project_stage.SUBMITTED: "Submitted for Final Check",
     project_stage.COMPLETED: "Completed"
 }
 
@@ -256,7 +256,7 @@ class ProgressAnalyser(object):
     _all_unverified = "Your project has not been verified until now."
     _all_completed = "You have completed your project! :)"
 
-    _ongoing_submitted = "You submitted your project for final approval on %s."
+    _ongoing_submitted = "Project submitted for final approval on %s."
 
     _submitted_ongoing = "Please submit the project for final consideration by clicking on 'Submit Project'."
     _submitted_submitted = _ongoing_submitted
@@ -275,7 +275,7 @@ class ProgressAnalyser(object):
         if project.stage == project_stage.TO_BE_VERIFIED:
             return ProgressAnalyser._unverified
         time = [d for d in project.diff.all() if d.diff_type == diff_type().PROJECT_VERIFIED][0].when
-        return "Your proposal was accepted on %(accept_time)s." % {'accept_time': time.strftime('%d-%m-%Y')}
+        return "Proposal accepted on %(accept_time)s." % {'accept_time': time.strftime('%d-%m-%Y')}
 
     def _analyse_ongoing_stage(project):
         from supervisor.models import diff_type
