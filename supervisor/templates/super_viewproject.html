@@ -7,7 +7,6 @@
                   title="deleted"></span>
         {% endif %}
     </h2>
-    <hr/>
     {% ifequal project.stage project_stage.TO_BE_VERIFIED %}
         <a class="btn btn-warning" role="button" href="{% url 'verify_project' project.id %}">Verify Project</a>
     {% endifequal %}
@@ -122,7 +121,9 @@
         </button>
     {% endif %}
 
-        <h3>Student </h3>
+    <hr/>
+
+    <h3>Student </h3>
     <blockquote>
         <a href="{% url 'super_viewuser' project.student.pk %}"> {{ project.student.first_name }} {{ project.student.last_name }}</a>
         <br>
