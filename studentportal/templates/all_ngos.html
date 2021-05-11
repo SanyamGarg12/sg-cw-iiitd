@@ -2,8 +2,8 @@
 {% block content %}
     <div class="container">
         {% if user.is_authenticated %}
-            <a class="btn btn-default ajaxify-btn" style="float:right;" role="button" data-link="{% url 'suggest_ngo' %}">Suggest
-                an NGO</a>
+            <a class="btn btn-default ajaxify-btn" style="float:right;" role="button" data-link="{% url 'suggest_ngo' %}">
+                Suggest an Organization</a>
         {%  endif %}
         {% if NGOs %}
             <h2 class="sub-header">Verified Organizations</h2>
@@ -12,8 +12,8 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>NGO Name</th>
-                        <th>Link</th>
+                        <th>Name</th>
+                        <th>Contact</th>
                         <th>Details</th>
                     </tr>
                     </thead>
