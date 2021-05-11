@@ -614,7 +614,7 @@ def generateReport(request):
     semester = int(request.POST['semester'])
     batch = int(request.POST['batch'])
 
-    projects = filtered_projects(request).filter(~Q(stage=project_stage.TO_BE_VERIFIED))
+    projects = filtered_projects(request).all()
     projects = projects.filter(
         Q(finish_date__gte=datetime.datetime.now() - datetime.timedelta(months * 31)) |
         Q(finish_date=None))  # for incomplete projects
@@ -634,8 +634,10 @@ def generateReport(request):
 
     report = xlwt.Workbook(encoding="utf-8")
 
-    completed_sheet = report.add_sheet("Completed Projects")
+    unverified_sheet = report.add_sheet("Unverified Projects")
     ongoing_sheet = report.add_sheet("Ongoing Projects")
+    submitted_sheet = report.add_sheet("Submitted Projects")
+    completed_sheet = report.add_sheet("Completed Projects")
 
     headings = [
         "Name",
@@ -654,15 +656,26 @@ def generateReport(request):
 
     completed_projects_row = 0
     ongoing_projects_row = 0
+    submitted_projects_row = 0
+    unverified_projects_row = 0
+
     for project in projects:
         if project.stage == project_stage.COMPLETED:
             sheet = completed_sheet
             completed_projects_row += 1
             row = completed_projects_row
-        else:  # for both SUBMITTED as well as ONGOING
+        elif project.stage == project_stage.ONGOING:
             sheet = ongoing_sheet
             ongoing_projects_row += 1
             row = ongoing_projects_row
+        elif project.stage == project_stage.SUBMITTED:
+            sheet = submitted_sheet
+            submitted_projects_row += 1
+            row = submitted_projects_row
+        elif project.stage == project_stage.TO_BE_VERIFIED:
+            sheet = unverified_sheet
+            unverified_projects_row += 1
+            row = unverified_projects_row
 
         for col, x in enumerate([
             ' '.join([project.student.first_name, project.student.last_name]),
