@@ -653,6 +653,8 @@ def generateReport(request):
     for (index, h) in enumerate(headings):
         ongoing_sheet.write(0, index, h)
         completed_sheet.write(0, index, h)
+        unverified_sheet.write(0, index, h)
+        submitted_sheet.write(0, index, h)
 
     completed_projects_row = 0
     ongoing_projects_row = 0
