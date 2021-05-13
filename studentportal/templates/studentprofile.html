@@ -29,7 +29,7 @@
                                 <span class="glyphicon glyphicon-ok" title="Completed" style="color:green;"></span>
                             {% endifequal %}
                             <p>
-                                <a class="btn btn-link" href="{% url 'viewproject' p.id %}"
+                                <a href="{% url 'viewproject' p.id %}"
                                    style="text-decoration:none;">{{ p.title|truncatechars:100 }}</a>
                             </p>
                             <p style="color: gray; font-style: italic;">{{ p.category }}</p>
