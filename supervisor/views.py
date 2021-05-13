@@ -190,6 +190,13 @@ def submitted_projects(request):
     return render(request, 'super_submittedprojects.html',
                   {'projects': projects})
 
+@supervisor_logged_in
+def deleted_projects(request):
+    projects_filtered = filtered_projects(request)
+    projects = projects_filtered.filter(deleted=True)
+    return render(request, 'super_deletedprojects.html',
+                  {'projects': projects})
+
 
 @supervisor_logged_in
 def allprojects(request):
