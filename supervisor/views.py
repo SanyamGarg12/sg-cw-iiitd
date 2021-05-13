@@ -194,7 +194,7 @@ def submitted_projects(request):
 @supervisor_logged_in
 def deleted_projects(request):
     projects_filtered = filtered_projects(request)
-    projects = projects_filtered.filter(deleted='true')
+    projects = projects_filtered.filter(deleted=False)
     return render(request, 'super_deletedprojects.html',
                   {'projects': projects})
 
