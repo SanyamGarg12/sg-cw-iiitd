@@ -11,7 +11,7 @@
 
         {{ form | bootstrap }}
 
-        <button type="submit" class="btn btn-info btn-right">
+        <button type="submit" class="btn btn-info btn-lg btn-right">
             New Semester
         </button>
 
@@ -27,7 +27,7 @@
                 <th>#</th>
                 <th>Sem Label</th>
                 <th>Show to Students</th>
-                <th>Rename Semester</th>
+                <th>Update Semester</th>
                 <th>Delete Semester</th>
             </tr>
             </thead>
@@ -43,20 +43,20 @@
                         <td><label>
                             <input type="text" name="label" value="{{ semester.label }}">
                         </label></td>
-                        <td><label>
-                            <input type="checkbox" name="show_to_students" {% if semester.show_to_students %}
+                        <td style="text-align:center"><label>
+                            <input type="checkbox" class="checkbox" name="show_to_students" {% if semester.show_to_students %}
                                    checked {% endif %}>
                         </label></td>
-                        <td>
-                            <button type="submit">Update</button>
+                        <td style="text-align:center">
+                            <button type="submit" class="btn btn-success">Update</button>
                         </td>
                     </form>
 
                     <form action="{% url 'delete-semester' %}" method="post" style="display: inline">
                         {% csrf_token %}
                         <input type="hidden" name="id" value="{{ semester.id }}">
-                        <td>
-                            <button type="submit">Delete</button>
+                        <td style="text-align:center">
+                            <button type="submit" class="btn btn-warning">Delete</button>
                         </td>
                     </form>
                 </tr>
