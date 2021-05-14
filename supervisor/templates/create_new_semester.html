@@ -9,7 +9,7 @@
     <form action="{% url 'create_new_semester' %}" method="post">
         {% csrf_token %}
 
-        {{ form }}
+        {{ form | bootstrap }}
 
         &nbsp;
         &nbsp;
