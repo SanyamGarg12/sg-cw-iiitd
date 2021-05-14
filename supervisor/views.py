@@ -192,6 +192,14 @@ def submitted_projects(request):
 
 
 @supervisor_logged_in
+def completed_projects(request):
+    projects_filtered = filtered_projects(request)
+    projects = projects_filtered.filter(stage=project_stage.COMPLETED)
+    return render(request, 'super_completedprojects.html',
+                  {'projects': projects})
+
+
+@supervisor_logged_in
 def deleted_projects(request):
     projects_filtered = filtered_projects(request)
     projects = projects_filtered.filter(deleted=True)

@@ -10,6 +10,7 @@ urlpatterns = (
     url(r'^ongoing/$', views.ongoing_projects, name='ongoing_projects'),
     url(r'^unverified/$', views.unverified_projects, name='unverified_projects'),
     url(r'^submittedprojects/$', views.submitted_projects, name='submitted_projects'),
+    url(r'^completedprojects/$', views.completed_projects, name='completed_projects'),
     url(r'^deletedprojects/$', views.deleted_projects, name='deleted_projects'),
 
     url(r'^project/(?P<project_id>[0-9]+)/$', views.viewproject, name='super_viewproject'),
