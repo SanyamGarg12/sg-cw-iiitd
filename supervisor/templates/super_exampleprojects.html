@@ -11,6 +11,7 @@
                     <th>#</th>
                     <th>Student</th>
                     <th>Category</th>
+                    <th>Semester</th>
                     <th>Email</th>
                     <th>Roll</th>
                     <th>Title</th>
@@ -26,6 +27,7 @@
                                style="text-decoration:none;">{{ p.student.first_name }} {{ p.student.last_name }}</a>
                         </td>
                         <td>{{ p.category }}</td>
+                        <td>{{ p.semester }}</td>
                         <td>{{ p.student.email }}</td>
                         <td>{{ p.get_rollno }}</td>
                         <td><a href="{% url 'super_viewproject' p.id %}"
@@ -37,6 +39,6 @@
             </table>
         </div>
     {% else %}
-        You haven't added any example projects.
+        You haven't added any example projects or you aren't authorized to view them.
     {% endif %}
 {% endblock %}
