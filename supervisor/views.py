@@ -628,21 +628,18 @@ def generateReport(request):
     logger = logging.getLogger("generate-report")
     logger.warning(f"{request.POST}")
 
-    file_name = 'sgcw-report-'
+    file_name = 'sgcw-report-semester'
 
-    # months = int(request.POST['date'])
     semester = int(request.POST['semester'])
     batch = int(request.POST['batch'])
 
     projects = filtered_projects(request).all()
 
-    file_name += str(semester) + '-'
-
     projects = projects.filter(Q(semester_id=semester))
 
     if batch != 0:
 
-        file_name += str(batch)
+        file_name += '-' + str(batch)
 
         new_projects = []
 
@@ -733,7 +730,7 @@ def generateBatchReport(request):
     logger = logging.getLogger("generate-report")
     logger.warning(f"{request.POST}")
 
-    file_name = 'sgcw-report-'
+    file_name = 'sgcw-report-batch-'
 
     batch = int(request.POST['batch'])
 
