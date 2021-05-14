@@ -20,7 +20,7 @@ from studentportal.models import Project, NGO, Category, Document, project_stage
 from supervisor.communication import send_email_to_all
 from supervisor.decorators import supervisor_logged_in
 from supervisor.forms import AdvanceSearchForm, NewsForm, NewCategoryForm, NewNGOForm, EmailProjectForm, TAForm, \
-    ReportForm, SemesterForm, SemesterDeletionForm
+    ReportForm, SemesterForm, SemesterDeletionForm, BatchReportForm
 from supervisor.methods import filtered_projects
 from supervisor.models import Example, News, Notification, TA, diff_type, add_diff, add_notification, Flag
 from supervisor.models import notification_type as nt
@@ -210,6 +210,7 @@ def deleted_projects(request):
 @supervisor_logged_in
 def allprojects(request):
     form = ReportForm()
+    batch_form = BatchReportForm()
     paginator = Paginator(filtered_projects(request).order_by('id').reverse(), 50, orphans=5)
 
     page = request.GET.get('page', None)
@@ -225,6 +226,7 @@ def allprojects(request):
     return render(request, 'super_allprojects.html',
                   {'projects': projects,
                    'form': form,
+                   'batch_form': batch_form,
                    'stages': stages
                    })
 
@@ -626,19 +628,22 @@ def generateReport(request):
     logger = logging.getLogger("generate-report")
     logger.warning(f"{request.POST}")
 
+    file_name = 'sgcw-report-'
+
     # months = int(request.POST['date'])
     semester = int(request.POST['semester'])
     batch = int(request.POST['batch'])
 
     projects = filtered_projects(request).all()
-    # projects = projects.filter(
-    #     Q(finish_date__gte=datetime.datetime.now() - datetime.timedelta(months * 31)) |
-    #     Q(finish_date=None))  # for incomplete projects
 
-    # if semester != 0:
+    file_name += str(semester) + '-'
+
     projects = projects.filter(Q(semester_id=semester))
 
     if batch != 0:
+
+        file_name += str(batch)
+
         new_projects = []
 
         for project in projects:
@@ -713,20 +718,106 @@ def generateReport(request):
         ]):
             sheet.write(row, col, x)
 
-    report.save(os.path.join(BASE_DIR, 'report.xls'))
+    report.save(os.path.join(BASE_DIR, file_name + '.xls'))
 
-    encoding = ""
-    if sys.platform == "linux":
-        encoding = "utf8"
-    else:
-        encoding = "ISO-8859-1"
+    report_path = os.path.join(BASE_DIR, file_name + '.xls')
+    with open(report_path, 'rb') as file:
+        response = HttpResponse(file.read())
+        response['Content-Disposition'] = 'download; filename=' + os.path.basename(report_path)
+    return response
 
-    # report = open(os.path.join(BASE_DIR, 'report.xls'), 'r', encoding=encoding)
-    # response = StreamingHttpResponse(report)
-    # response['Content-Disposition'] = 'download; filename=report.xls'
-    # response['Content-Disposition'] = 'inline; filename=' + os.path.basename('Report.xls')
 
-    report_path = os.path.join(BASE_DIR, 'report.xls')
+@supervisor_logged_in
+def generateBatchReport(request):
+    BASE_DIR = getattr(settings, "BASE_DIR")
+    logger = logging.getLogger("generate-report")
+    logger.warning(f"{request.POST}")
+
+    file_name = 'sgcw-report-'
+
+    batch = int(request.POST['batch'])
+
+    file_name += str(batch)
+
+    projects = filtered_projects(request).all()
+
+    new_projects = []
+
+    for project in projects:
+        if project.student.batch_number == batch:
+            new_projects.append(project)
+
+    projects = new_projects
+
+    report = xlwt.Workbook(encoding="utf-8")
+
+    unverified_sheet = report.add_sheet("Unverified Projects")
+    ongoing_sheet = report.add_sheet("Ongoing Projects")
+    submitted_sheet = report.add_sheet("Submitted Projects")
+    completed_sheet = report.add_sheet("Completed Projects")
+
+    headings = [
+        "Name",
+        "Batch",
+        "Roll number",
+        "Email",
+        "Category",
+        "Organization",
+        "Title",
+        "Goals",
+        "Schedule",
+        "Started on",
+        "Presented",
+        "Semester"
+    ]
+    for (index, h) in enumerate(headings):
+        ongoing_sheet.write(0, index, h)
+        completed_sheet.write(0, index, h)
+        unverified_sheet.write(0, index, h)
+        submitted_sheet.write(0, index, h)
+
+    completed_projects_row = 0
+    ongoing_projects_row = 0
+    submitted_projects_row = 0
+    unverified_projects_row = 0
+
+    for project in projects:
+        if project.stage == project_stage.COMPLETED:
+            sheet = completed_sheet
+            completed_projects_row += 1
+            row = completed_projects_row
+        elif project.stage == project_stage.ONGOING:
+            sheet = ongoing_sheet
+            ongoing_projects_row += 1
+            row = ongoing_projects_row
+        elif project.stage == project_stage.SUBMITTED:
+            sheet = submitted_sheet
+            submitted_projects_row += 1
+            row = submitted_projects_row
+        elif project.stage == project_stage.TO_BE_VERIFIED:
+            sheet = unverified_sheet
+            unverified_projects_row += 1
+            row = unverified_projects_row
+
+        for col, x in enumerate([
+            ' '.join([project.student.first_name, project.student.last_name]),
+            project.get_batch(),
+            project.get_rollno(),
+            project.student.email,
+            project.get_category(),
+            project.get_NGO(),
+            project.title,
+            project.goals,
+            project.schedule_text,
+            project.date_created.strftime('%d-%m-%Y'),
+            "%s" % project.presented,
+            project.semester.label
+        ]):
+            sheet.write(row, col, x)
+
+    report.save(os.path.join(BASE_DIR, file_name + '.xls'))
+
+    report_path = os.path.join(BASE_DIR, file_name + '.xls')
     with open(report_path, 'rb') as file:
         response = HttpResponse(file.read())
         response['Content-Disposition'] = 'download; filename=' + os.path.basename(report_path)

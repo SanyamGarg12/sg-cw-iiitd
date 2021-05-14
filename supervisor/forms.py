@@ -68,12 +68,17 @@ class NewCommentForm(forms.ModelForm):
         fields = ['text']
 
 
+class BatchReportForm(forms.Form):
+    batch = forms.ChoiceField(label="Batch",
+                              choices=tuple([(x, str(x)) for x in range(2016, timezone.now().year + 1)]), required=True)
+
+
 class ReportForm(forms.Form):
     # date = forms.ChoiceField(label="Projects which were marked as complete within these past months : ",
     #                          choices=tuple([(x, x) for x in range(1, 13)]))
     semester = forms.ModelChoiceField(queryset=Semester.objects.all())
-    batch = forms.ChoiceField(label="Batch: ",
-                             choices=tuple([(0, "Any")] + [(x, str(x)) for x in range(2016, timezone.now().year + 1)]))
+    batch = forms.ChoiceField(label="Batch",
+                              choices=tuple([(0, "Any")] + [(x, str(x)) for x in range(2016, timezone.now().year + 1)]))
 
 
 class TAForm(forms.ModelForm):
