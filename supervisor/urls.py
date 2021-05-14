@@ -66,8 +66,8 @@ urlpatterns = (
     url(r'^TA/$', views.change_TA, name="TA"),
     url(r'^TA/(?P<TA_id>[0-9]+)/$', views.change_TA, name="TA_delete"),
 
-    url(r'^report/$', views.generateReport, name='generateReport'),
-    url(r'^report/$', views.generateBatchReport, name='generateBatchReport'),
+    url(r'^report_semester/$', views.generateReport, name='generateReport'),
+    url(r'^report_batch/$', views.generateBatchReport, name='generateBatchReport'),
 
     url(r'^logs/project/(?P<project_id>[0-9]+)/$', views.get_project_logs, name='super_project_logs'),
     url(r'^logs/TA/(?P<ta_id>[0-9]+)/$', views.get_TA_logs, name='super_TA_logs'),

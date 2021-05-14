@@ -724,13 +724,11 @@ def generateReport(request):
     with open(report_path, 'rb') as file:
         response = HttpResponse(file.read())
         response['Content-Disposition'] = 'download; filename=' + os.path.basename(report_path)
-    print('generate report')
     return response
 
 
 @supervisor_logged_in
 def generateBatchReport(request):
-    print('generate batch report')
     BASE_DIR = getattr(settings, "BASE_DIR")
     logger = logging.getLogger("generate-report")
     logger.warning(f"{request.POST}")
