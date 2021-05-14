@@ -43,20 +43,20 @@
                         <td><label>
                             <input type="text" name="label" value="{{ semester.label }}">
                         </label></td>
-                        <td style="text-align:center"><label>
+                        <td style="align-content: center"><label>
                             <input type="checkbox" class="checkbox" name="show_to_students" {% if semester.show_to_students %}
                                    checked {% endif %}>
                         </label></td>
-                        <td style="text-align:center">
-                            <button type="submit" class="btn btn-success">Update</button>
+                        <td style="align-content: center">
+                            <button type="submit" class="btn btn-sm btn-success">Update</button>
                         </td>
                     </form>
 
                     <form action="{% url 'delete-semester' %}" method="post" style="display: inline">
                         {% csrf_token %}
                         <input type="hidden" name="id" value="{{ semester.id }}">
-                        <td style="text-align:center">
-                            <button type="submit" class="btn btn-warning">Delete</button>
+                        <td style="align-content: center">
+                            <button type="submit" class="btn btn-sm btn-warning">Delete</button>
                         </td>
                     </form>
                 </tr>
