@@ -11,7 +11,8 @@
                 <td>link</td>
                 <td>Details</td>
                 <td>Suggested by</td>
-                <td>Actions</td>
+                <td>Accept</td>
+                <td>Reject</td>
                 </thead>
                 {% for noti in notifications %}
                     <tr>
@@ -21,8 +22,10 @@
                         <td>{{ noti.NGO_details }}</td>
                         <td>{{ noti.NGO_sugg_by }}</td>
                         <td>
-                            <a class="btn btn-warning btn-sm" role="button" href="{% url 'accept_NGO' noti.pk %}">Accept
-                            </a>
+                            <a class="btn btn-warning btn-sm" role="button"
+                               href="{% url 'accept_NGO' noti.pk %}">Accept</a>
+                        </td>
+                        <td>
                             <a class="btn btn-danger btn-sm" role="button"
                                href="{% url 'reject_NGO' noti.pk %}">Reject</a>
                         </td>
