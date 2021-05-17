@@ -80,7 +80,8 @@ def verify_project(request, project_id):
                      "Please register the SG/CW credits on the ERP Portal too.",
                      recipients=[str(project.student.email)], project_id=project_id)
 
-    return HttpResponseRedirect(request.path_info)
+    # return HttpResponseRedirect(request.path_info)
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
     # return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project.id}))
 
 
