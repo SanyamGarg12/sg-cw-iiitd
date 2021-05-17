@@ -34,7 +34,7 @@
                                style="text-decoration:none;">{{ p.title|truncatechars:60 }}</a></td>
                         <td>{{ p.credits }}</td>
                         <td>
-                            <a class="btn btn-danger" role="button"
+                            <a class="btn btn-danger btn-sm" role="button"
                                href="{% url 'unverify_project' p.id %}">Unverify</a>
                         </td>
                     </tr>

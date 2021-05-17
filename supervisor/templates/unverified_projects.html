@@ -33,7 +33,7 @@
                         <td><a href="{% url 'super_viewproject' p.id %}"
                                style="text-decoration:none;">{{ p.title|truncatechars:60 }}</a></td>
                         <td>{{ p.credits }}</td>
-                        <td><a class="btn btn-warning" role="button"
+                        <td><a class="btn btn-warning btn-sm" role="button"
                                href="{% url 'verify_project' p.id %}">Verify</a>
                         </td>
                     </tr>
