@@ -15,6 +15,7 @@
                     <th>Roll</th>
                     <th>Title</th>
                     <th>Credits</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -32,6 +33,10 @@
                         <td><a href="{% url 'super_viewproject' p.id %}"
                                style="text-decoration:none;">{{ p.title|truncatechars:60 }}</a></td>
                         <td>{{ p.credits }}</td>
+                        <td>
+                            <a class="btn btn-danger" role="button"
+                               href="{% url 'unverify_project' p.id %}">Unverify</a>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
