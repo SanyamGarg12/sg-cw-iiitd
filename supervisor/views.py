@@ -80,9 +80,7 @@ def verify_project(request, project_id):
                      "Please register the SG/CW credits on the ERP Portal too.",
                      recipients=[str(project.student.email)], project_id=project_id)
 
-    # return HttpResponseRedirect(request.path_info)
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-    # return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project.id}))
 
 
 @supervisor_logged_in
@@ -99,7 +97,7 @@ def unverify_project(request, project_id):
                      "Reply to this email for assistance.", recipients=[str(project.student.email)],
                      project_id=project_id)
 
-    return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project.id}))
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 
 @supervisor_logged_in
@@ -264,7 +262,7 @@ def complete(request, project_id):
                      "and marked completed by the admin. ",
                      recipients=[str(project.student.email)], project_id=project_id)
 
-    return HttpResponseRedirect(reverse('super_viewproject', kwargs={'project_id': project_id}))
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 
 @supervisor_logged_in
