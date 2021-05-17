@@ -15,7 +15,6 @@
                     <th>Roll</th>
                     <th>Title</th>
                     <th>Credits</th>
-                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -33,9 +32,6 @@
                         <td><a href="{% url 'super_viewproject' p.id %}"
                                style="text-decoration:none;">{{ p.title|truncatechars:60 }}</a></td>
                         <td>{{ p.credits }}</td>
-                        <td><a class="btn btn-warning" role="button" href="{% url 'complete' p.id %}"
-                               style="float:right;">Complete</a>
-                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
