@@ -2,7 +2,7 @@
 {% load bootstrap %}
 {% block content %}
 
-    <h3>Create New Semester</h3>
+    <h3 style="text-align: center">Create New Semester</h3>
 
     <br>
 
@@ -11,44 +11,88 @@
 
         {{ form | bootstrap }}
 
-        &nbsp;
-        &nbsp;
-        &nbsp;
-
-        <button type="submit" class="btn btn-info btn-sm">
+        <button type="submit" class="btn btn-info btn-lg btn-right">
             New Semester
         </button>
 
     </form>
 
-    <h4>All Semesters</h4>
+    <h3 style="text-align: center">All Semesters</h3>
 
-    {% for semester in semesters %}
+    <div class="table-responsive">
 
-        <form action="{% url 'update-semester' id=semester.id%}" method="post" style="display: inline">
-            {% csrf_token %}
-            <input type="hidden" name="id" value="{{ semester.id }}">
-            <input type="text" name="label" value="{{ semester.label }}">
-            <input type="checkbox" name="show_to_students" {% if semester.show_to_students %} checked {% endif %}>
-            <button type="submit">Update Semester</button>
-        </form>
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Sem Label</th>
+                <th>Show to Students</th>
+                <th>Update Semester</th>
+                <th>Delete Semester</th>
+            </tr>
+            </thead>
+            <tbody>
 
-        &nbsp;
-        &nbsp;
-        &nbsp;
+            {% for semester in semesters %}
 
-        <form action="{% url 'delete-semester' %}" method="post" style="display: inline">
-            {% csrf_token %}
-            <input type="hidden" name="id" value="{{ semester.id }}">
-            <button type="submit">Delete Semester</button>
-        </form>
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <form action="{% url 'update-semester' id=semester.id %}" method="post" style="display: inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ semester.id }}">
+                        <td><label>
+                            <input type="text" name="label" value="{{ semester.label }}">
+                        </label></td>
+                        <td style="align-content: center"><label>
+                            <input type="checkbox" class="checkbox" name="show_to_students" {% if semester.show_to_students %}
+                                   checked {% endif %}>
+                        </label></td>
+                        <td style="align-content: center">
+                            <button type="submit" class="btn btn-sm btn-success">Update</button>
+                        </td>
+                    </form>
 
-        <br>
-        &nbsp;
-        <br>
-    {% endfor %}
+                    <form action="{% url 'delete-semester' %}" method="post" style="display: inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ semester.id }}">
+                        <td style="align-content: center">
+                            <button type="submit" class="btn btn-sm btn-warning">Delete</button>
+                        </td>
+                    </form>
+                </tr>
+            {% endfor %}
 
-    <br>
+            </tbody>
+        </table>
+
+    </div>
+
+{#    {% for semester in semesters %}#}
+{##}
+{#        <form action="{% url 'update-semester' id=semester.id %}" method="post" style="display: inline">#}
+{#            {% csrf_token %}#}
+{#            <input type="hidden" name="id" value="{{ semester.id }}">#}
+{#            <input type="text" name="label" value="{{ semester.label }}">#}
+{#            <input type="checkbox" name="show_to_students" {% if semester.show_to_students %} checked {% endif %}>#}
+{#            <button type="submit">Update Semester</button>#}
+{#        </form>#}
+{##}
+{#        &nbsp;#}
+{#        &nbsp;#}
+{#        &nbsp;#}
+{##}
+{#        <form action="{% url 'delete-semester' %}" method="post" style="display: inline">#}
+{#            {% csrf_token %}#}
+{#            <input type="hidden" name="id" value="{{ semester.id }}">#}
+{#            <button type="submit">Delete Semester</button>#}
+{#        </form>#}
+{##}
+{#        <br>#}
+{#        &nbsp;#}
+{#        <br>#}
+{#    {% endfor %}#}
+{##}
+{#    <br>#}
 
     <p style="text-align: center; color: red">
         <strong>DISCLAIMER:</strong> Do NOT delete semesters for which a project is already proposed by someone.
