@@ -870,7 +870,7 @@ def send_cw_sg_email(request, subject, text, recipients, project_id=None, notif_
             ta_email = credentials.EMAIL_CW_USER
             ta_pass = credentials.EMAIL_CW_PASSWORD
 
-        text += '\n Action Performed By: ' + str(request.user.first_name) + ' ' + str(
+        text += '\n\nAction Performed By: ' + str(request.user.first_name) + ' ' + str(
             request.user.last_name) + ' - ' + str(request.user.email)
 
         send_mail(subject, text, ta_email, recipients, auth_user=ta_email, auth_password=ta_pass)
