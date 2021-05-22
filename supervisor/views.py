@@ -945,9 +945,8 @@ def all_semesters(request):
         form = SemesterForm(request.POST)
         if form.is_valid():
             form.save()
-            popup_message = "New semester created: " + str(form.cleaned_data.get("model"))
+            popup_message = "New semester created."
             send_admin_email(request, "[SG/CW] Semesters on Portal", popup_message)
-            # TODO: Send Email to Admins for creation of new sem, refer toggle_add_project
             messages.success(request, popup_message)
         else:
             messages.warning(request, "There was some error in the data submitted.")
@@ -964,8 +963,9 @@ def update_semester(request, id):
         updation_form = SemesterForm(request.POST, instance=semester)
         if updation_form.is_valid():
             updation_form.save()
-            # TODO: Send Email to Admins for updation of sem, refer toggle_add_project
-            messages.success(request, 'Update successful!')
+            popup_message = "Semester update successful: " + str(semester.label)
+            send_admin_email(request, "[SG/CW] Semesters on Portal", popup_message)
+            messages.success(request, popup_message)
         else:
             messages.error(request, 'Update failed.')
     return redirect('create_new_semester')
@@ -978,9 +978,11 @@ def delete_semester(request):
         if deletion_form.is_valid():
             id = deletion_form.cleaned_data.get("id")
             semester = get_object_or_404(Semester, pk=id)
+            semester_name = str(semester.label)
             semester.delete()
-            # TODO: Send Email to Admins for deletion of sem, refer toggle_add_project
-            messages.success(request, "Semester has been successfully deleted.")
+            popup_message = "Semester delete successful: " + str(semester_name)
+            send_admin_email(request, "[SG/CW] Semesters on Portal", popup_message)
+            messages.success(request, popup_message)
         else:
             messages.error(request, "Cannot delete the semester.")
     return redirect('create_new_semester')
