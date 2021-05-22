@@ -849,6 +849,20 @@ def get_TA_logs(request, ta_id):
 
 @Async
 @supervisor_logged_in
+def send_admin_email(request, subject, text):
+    recipients = credentials.ADMIN_RECIPIENTS
+
+    ta_email = credentials.EMAIL_SG_USER
+    ta_pass = credentials.EMAIL_SG_PASSWORD
+
+    text += '\n\nAction Performed By: ' + str(request.user.first_name) + ' ' + str(
+        request.user.last_name) + ' - ' + str(request.user.email)
+
+    send_mail(subject, text, ta_email, recipients, auth_user=ta_email, auth_password=ta_pass)
+
+
+@Async
+@supervisor_logged_in
 def send_cw_sg_email(request, subject, text, recipients, project_id=None, notif_id=None):
     ta_email = None
     ta_pass = None
@@ -882,7 +896,11 @@ def toggle_allow_project(request):
     allow_project_flag.value = not allow_project_flag.value
     allow_project_flag.save()
     context = {'value': allow_project_flag.value}
-    popup_message = "Projects allowed." if allow_project_flag.value else "Projects disallowed."
+    if allow_project_flag.value:
+        popup_message = "New projects allowed."
+    else:
+        popup_message = "New projects disallowed."
+    send_admin_email(request, "[SG/CW] Allow Projects", popup_message)
     messages.success(request, popup_message)
     return render(request, 'allow_project.html', context=context)
 
