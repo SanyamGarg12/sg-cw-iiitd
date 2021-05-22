@@ -921,15 +921,13 @@ def update_batch(request):
     student.batch_number = new_batch
     student.save()
 
-    # TODO: Send Email to Student in case of batch update
-
     popup_message = "Your batch updated on the portal to the Year " + str(new_batch)
 
     send_admin_email(request, "[SG/CW] Student Batch", popup_message, [str(student.email)])
 
     messages.info(request, "Batch updated!")
     return render(request, 'super_viewuser.html',
-                  {'student': student, 'projects': Project.all_projects.filter(student=student)})
+                  {'student': student, 'projects': filtered_projects(request).filter(student=student)})
 
 
 @supervisor_logged_in
