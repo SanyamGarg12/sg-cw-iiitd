@@ -70,6 +70,21 @@ def home(request):
 
 @Async
 @login_required
+def send_admin_email(request, subject, text, recipients=None):
+    if recipients is None:
+        recipients = credentials.ADMIN_RECIPIENTS
+
+    ta_email = credentials.EMAIL_SG_USER
+    ta_pass = credentials.EMAIL_SG_PASSWORD
+
+    text += '\n\nAction Performed By: ' + str(request.user.first_name) + ' ' + str(
+        request.user.last_name) + ' - ' + str(request.user.email)
+
+    send_mail(subject, text, ta_email, recipients, auth_user=ta_email, auth_password=ta_pass)
+
+
+@Async
+@login_required
 def send_cw_sg_email(request, subject, text, recipients, project_id=None):
     ta_email = None
     ta_pass = None
@@ -574,6 +589,10 @@ def update_batch_student(request):
         if form.is_valid():
             request.user.batch_number = form.cleaned_data.get('year')
             request.user.save()
+
+            popup_message = "Your batch updated on the portal to the Year " + str(request.user.batch_number)
+            send_admin_email(request, "[SG/CW] Student Batch", popup_message, [str(request.user.email)])
+
             messages.success(request, 'Batch number updated successfully!')
         else:
             messages.error(request, 'Batch number update failed!')
