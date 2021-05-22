@@ -945,8 +945,10 @@ def all_semesters(request):
         form = SemesterForm(request.POST)
         if form.is_valid():
             form.save()
+            popup_message = "New semester created: " + str(form.cleaned_data.get("model"))
+            send_admin_email(request, "[SG/CW] Semesters on Portal", popup_message)
             # TODO: Send Email to Admins for creation of new sem, refer toggle_add_project
-            messages.success(request, "New semester created")
+            messages.success(request, popup_message)
         else:
             messages.warning(request, "There was some error in the data submitted.")
         return HttpResponseRedirect(reverse('index'))
