@@ -849,8 +849,9 @@ def get_TA_logs(request, ta_id):
 
 @Async
 @supervisor_logged_in
-def send_admin_email(request, subject, text):
-    recipients = credentials.ADMIN_RECIPIENTS
+def send_admin_email(request, subject, text, recipients=None):
+    if recipients is None:
+        recipients = credentials.ADMIN_RECIPIENTS
 
     ta_email = credentials.EMAIL_SG_USER
     ta_pass = credentials.EMAIL_SG_PASSWORD
@@ -909,7 +910,6 @@ def toggle_allow_project(request):
 def allow_project(request):
     allow_project_flag = Flag.objects.get(key='add_project')
     context = {'value': allow_project_flag.value}
-    print(allow_project_flag)
     return render(request, 'allow_project.html', context=context)
 
 
@@ -920,6 +920,12 @@ def update_batch(request):
     student = get_object_or_404(get_user_model(), pk=user_id)
     student.batch_number = new_batch
     student.save()
+
+    # TODO: Send Email to Student in case of batch update
+
+    popup_message = "Your batch updated on the portal to the Year " + str(new_batch)
+
+    send_admin_email(request, "[SG/CW] Student Batch", popup_message, [str(student.email)])
 
     messages.info(request, "Batch updated!")
     return render(request, 'super_viewuser.html',
@@ -941,6 +947,7 @@ def all_semesters(request):
         form = SemesterForm(request.POST)
         if form.is_valid():
             form.save()
+            # TODO: Send Email to Admins for creation of new sem, refer toggle_add_project
             messages.success(request, "New semester created")
         else:
             messages.warning(request, "There was some error in the data submitted.")
@@ -957,6 +964,7 @@ def update_semester(request, id):
         updation_form = SemesterForm(request.POST, instance=semester)
         if updation_form.is_valid():
             updation_form.save()
+            # TODO: Send Email to Admins for updation of sem, refer toggle_add_project
             messages.success(request, 'Update successful!')
         else:
             messages.error(request, 'Update failed.')
@@ -971,6 +979,7 @@ def delete_semester(request):
             id = deletion_form.cleaned_data.get("id")
             semester = get_object_or_404(Semester, pk=id)
             semester.delete()
+            # TODO: Send Email to Admins for deletion of sem, refer toggle_add_project
             messages.success(request, "Semester has been successfully deleted.")
         else:
             messages.error(request, "Cannot delete the semester.")
