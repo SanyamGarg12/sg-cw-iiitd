@@ -507,7 +507,7 @@ def email_project(request, project_id):
         form = EmailProjectForm(request.POST)
         if form.is_valid():
             text = '\n\n'.join([form.cleaned_data['body'],
-                                "Please Note: This mail is generated via the SG/CW-portal. " +
+                                "Please Note: This mail is generated via the SG/CW portal. " +
                                 "For any further communication regarding the above mentioned issue(s), " +
                                 "please reply to this mail, unless explicitly asked to create a new email thread, " +
                                 "for proper redressal."])
