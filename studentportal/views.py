@@ -362,7 +362,7 @@ def download(request, document_id):
     doc = get_object_or_404(Document, pk=document_id)
     if doc.project.deleted: raise Http404
     if ((doc.project.student == request.user) or
-            (doc.project.get_project_status() == project_stage.COMPLETED and doc.category == document_type.FINAL_REPORT)
+            (doc.project.stage == project_stage.COMPLETED and doc.category == document_type.FINAL_REPORT)
     ):
         response = HttpResponse(doc.document)
         response['Content-Disposition'] = 'download; filename=%s' % doc.name
