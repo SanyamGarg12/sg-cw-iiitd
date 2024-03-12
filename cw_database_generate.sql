@@ -1,4 +1,7 @@
-use cw_portal;
+DROP DATABASE IF EXISTS `cw_portal`;
+CREATE SCHEMA IF NOT EXISTS `cw_portal` DEFAULT CHARACTER SET latin1 ;
+USE `cw_portal` ;
+
 CREATE TABLE IF NOT EXISTS auth_user (
 	id	integer NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	password	varchar(128) NOT NULL,
