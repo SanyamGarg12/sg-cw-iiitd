@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `cw_portal`.`studentportal_project` (
   `category_id` INT(11) NOT NULL,
   `deleted` TINYINT(1) NOT NULL,
   `presented` TINYINT(1) NOT NULL,
-  `semester` INT NOT NULL,
+  `semester_id` INT NOT NULL,  --UPDATED
   PRIMARY KEY (`id`),
   INDEX `studentportal_project_94741166` (`student_id` ASC) VISIBLE,
   INDEX `studentportal_project_0f7bcd35` (`NGO_id` ASC) VISIBLE,
